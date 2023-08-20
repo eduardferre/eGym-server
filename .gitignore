@@ -1,3 +1,6 @@
+# Other files that must be in local
+environment_variables.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
