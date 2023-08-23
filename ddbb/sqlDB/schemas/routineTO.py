@@ -1,6 +1,4 @@
-from routineTO import RoutineTO
-
-def routineTO_schema(routineTO) -> dict(RoutineTO): #NOSONAR
+def routineTO_schema(routineTO) -> dict: #NOSONAR
     return { 
             "id": str(routineTO["_id"]),
             "creator": routineTO["creator"],

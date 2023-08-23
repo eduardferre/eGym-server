@@ -1,6 +1,4 @@
-from exerciseTO import ExerciseTO
-
-def exerciseTO_schema(exerciseTO) -> dict(ExerciseTO): #NOSONAR
+def exerciseTO_schema(exerciseTO) -> dict: #NOSONAR
     return { 
             "id": str(exerciseTO["_id"]),
             "name": exerciseTO["name"],

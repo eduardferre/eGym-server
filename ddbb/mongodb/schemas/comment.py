@@ -1,6 +1,4 @@
-from comment import Comment
-
-def comment_schema(comment) -> dict(Comment):
+def comment_schema(comment) -> dict:
     return { 
             "id": str(comment["_id"]),
             "creator": comment["creator"],

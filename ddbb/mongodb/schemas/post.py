@@ -1,6 +1,4 @@
-from post import Post
-
-def post_schema(post) -> dict(Post):
+def post_schema(post) -> dict:
     return { 
             "id": str(post["_id"]),
             "creator": post["creator"],

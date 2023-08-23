@@ -1,11 +1,9 @@
-from userTO import UserTO
-
-def userTO_schema(userTO) -> dict(UserTO): #NOSONAR
+def userTO_schema(userTO) -> dict: #NOSONAR
     return { 
             "id": str(userTO["_id"]),
             "username": userTO["username"],
             "firstname": userTO["firstname"],
-            "surname": userTO["surname"],
+            "lastname": userTO["lastname"],
             "email": userTO["email"],
             "password": userTO["password"],
             "birthDate": userTO["birthDate"]

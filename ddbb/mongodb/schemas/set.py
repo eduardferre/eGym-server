@@ -1,6 +1,4 @@
-from set import Set
-
-def set_schema(set) -> dict(Set):
+def set_schema(set) -> dict:
     return { 
             "id": str(set["_id"]),
             "exerciseName": set["exerciseName"],

@@ -1,6 +1,4 @@
-from routine import Routine
-
-def routine_schema(routine) -> dict(Routine):
+def routine_schema(routine) -> dict:
     return { 
             "id": str(routine["_id"]),
             "creator": routine["creator"],

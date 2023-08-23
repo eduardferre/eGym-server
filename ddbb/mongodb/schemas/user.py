@@ -1,6 +1,4 @@
-from user import User
-
-def user_schema(user) -> dict(User):
+def user_schema(user) -> dict:
     return { 
             "id": str(user["_id"]),
             "username": user["username"],

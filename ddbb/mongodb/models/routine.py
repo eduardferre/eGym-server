@@ -1,12 +1,11 @@
 from user import User
 from exercise import Exercise
 
-import datetime
+from datetime import datetime
 
 from pydantic import BaseModel
 from typing import Optional
 
-# User entity
 class Routine(BaseModel):
     id: str
     creator: User

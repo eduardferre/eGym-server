@@ -1,6 +1,4 @@
-from exercise import Exercise
-
-def exercise_schema(exercise) -> dict(Exercise):
+def exercise_schema(exercise) -> dict:
     return { 
             "id": str(exercise["_id"]),
             "name": exercise["name"],
