@@ -5,6 +5,11 @@
         "dsfgd/dsfgd.sqlproj"
     ],
     "python.analysis.extraPaths": [
-        "./ddbb/sqlDB/models"
+        "./ddbb/sqlDB/models",
+        "./ddbb/sqlDB/models",
+        "./ddbb/mongodb/models",
+        "./ddbb/mongodb/models",
+        "./ddbb/mongodb/models",
+        "./ddbb/mongodb/models"
     ]
 }

@@ -1,9 +1,8 @@
 from pydantic import BaseModel
-from typing import Optional
 import datetime
 
 # User entity
-class UserTI(BaseModel):
+class UserTO(BaseModel):
     id: str
     username: str
     firstname: str

@@ -1,9 +1,9 @@
 from pymongo import MongoClient
-import environment_variables
+import environment
 
 # LOCAL DB
 # db_client = MongoClient().local
 
 # REMOTE DB
-db_client =  MongoClient(
-    "mongodb+srv://" + environment_variables.MONGO_USER + ":" + environment_variables.PASSWORD + "@egymcluster.gujw3ru.mongodb.net/").test
+mongodb_client =  MongoClient(
+    "mongodb+srv://" + environment.MONGO_USER + ":" + environment.PASSWORD + "@egymcluster.gujw3ru.mongodb.net/").test

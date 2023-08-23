@@ -1,10 +1,12 @@
+from set import Set
+
 from pydantic import BaseModel
 from typing import Optional
-from exerciseTI import ExerciseTI
 
-# User entity
-class RoutineTI(BaseModel):
+class Exercise(BaseModel):
     id: str
     name: str
     description: Optional (str)
-    exercises: list(ExerciseTI)
+    sets: list(Set)
+    liftedWeight: float
+    highestWeight: float
