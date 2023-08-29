@@ -1,6 +1,7 @@
 def exerciseTO_schema(exerciseTO) -> dict: #NOSONAR
     return { 
             "id": str(exerciseTO["_id"]),
+            "creator": exerciseTO["creator"],
             "name": exerciseTO["name"],
             "description": exerciseTO["description"]
             }

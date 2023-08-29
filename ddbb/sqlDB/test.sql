@@ -1,6 +1,6 @@
-INSERT dbo.exercises (exerciseName, exerciseDescription)
+INSERT dbo.exercises (creatorName, exerciseName, exerciseDescription)
 OUTPUT INSERTED.exerciseId
-VALUES ('Dead Lift', 'blablabla')
+VALUES ('eduardferre', 'Dead Lift', 'blablabla')
 
 SELECT * FROM dbo.exercises
 

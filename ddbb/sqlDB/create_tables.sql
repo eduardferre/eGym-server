@@ -3,7 +3,7 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='users' and xtype='U')
     CREATE TABLE dbo.users (
-        userId INT PRIMARY KEY IDENTITY(1,1),
+        id INT PRIMARY KEY IDENTITY(1,1),
         username VARCHAR(255) NOT NULL UNIQUE,
         firstName VARCHAR(255) NOT NULL,
         lastName VARCHAR(255) NOT NULL,
@@ -15,18 +15,28 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='exercises' and xtype='U')
     CREATE TABLE dbo.exercises (
-        exerciseId INT PRIMARY KEY IDENTITY(1,1),
-        exerciseName VARCHAR(255) NOT NULL UNIQUE,
-        exerciseDescription VARCHAR(255)
+        id INT PRIMARY KEY IDENTITY(1,1),
+        creator VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL UNIQUE,
+        description VARCHAR(255)
     )
 GO
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='routines' and xtype='U')
     CREATE TABLE dbo.routines (
-        routineId INT PRIMARY KEY IDENTITY(1,1),
-        creatorName VARCHAR(255) NOT NULL,
-        routineName VARCHAR(255) NOT NULL,
-        routineDescription VARCHAR(255),
-        routineExerciseId INT FOREIGN KEY REFERENCES exercises(exerciseId)
+        id INT PRIMARY KEY IDENTITY(1,1),
+        creator VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        description VARCHAR(255)
     )
 GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='relationRoutinesExercises' and xtype='U')
+    CREATE TABLE dbo.relationRoutinesExercises (
+        routineId INT NOT NULL,
+        exerciseId INT NOT NULL,
+
+        FOREIGN KEY (routineId) REFERENCES dbo.routines(id),
+        FOREIGN KEY (exerciseId) REFERENCES dbo.exercises(id),
+        UNIQUE (routineId, exerciseId)
+    )

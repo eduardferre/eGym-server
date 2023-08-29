@@ -1,4 +1,3 @@
-from bson import ObjectId
 from fastapi import APIRouter, HTTPException, status
 
 from ddbb.sqlDB.client import sqlserver_client
@@ -10,7 +9,7 @@ sql_cursor = sqlserver_client.cursor()
 
 router = APIRouter(prefix="/usersTO",
                    tags=["usersTO"],
-                   responses={status.HTTP_404_NOT_FOUND: { "message": "Not found" }})
+                   responses={ status.HTTP_404_NOT_FOUND: { "message": "Not found" } })
 
 @router.get("/", response_model=list[UserTO], status_code=status.HTTP_200_OK)
 async def getUsersTO(): #NOSONAR
@@ -29,7 +28,8 @@ async def getUsersTO(): #NOSONAR
 
 @router.get("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
 async def getUserTOById(id: int): #NOSONAR
-    query = f"SELECT * FROM dbo.users WHERE userId={id}"
+    query = f"SELECT * FROM dbo.users\
+                WHERE id={id}"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
     
@@ -39,7 +39,7 @@ async def getUserTOById(id: int): #NOSONAR
     return UserTO(**userTO_schema(tupleUserTOToDict(user)))
 
 @router.post("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
-async def postUserTO(userTO: UserTO):
+async def addUserTO(userTO: UserTO):
     if type(searchUserTO("username", userTO.username)) == UserTO:
         raise HTTPException(status_code=status.HTTP_226_IM_USED, detail=f"The user with username = {userTO.username} already exists")
     
@@ -61,7 +61,7 @@ async def updateUserTO(user_list: list[UserTO]):
     query = f"UPDATE dbo.users\
                 SET username = '{userTO_update.username}', firstName = '{userTO_update.firstname}', lastName = '{userTO_update.lastname}', email = '{userTO_update.email}', password = '{userTO_update.password}', birthDate = '{userTO_update.birthDate}'\
                 OUTPUT INSERTED.*\
-                WHERE userId={user_search.id}"
+                WHERE id={user_search.id}"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
     sqlserver_client.commit()
@@ -83,7 +83,8 @@ async def deleteUserTO(username: str):
 
 # Methods
 def searchUserTO(field: str, key):
-    query = f"SELECT * FROM dbo.users WHERE {field}='{key}'"
+    query = f"SELECT * FROM dbo.users\
+                WHERE {field}='{key}'"
     try:
         sql_cursor.execute(query)
         user = sql_cursor.fetchone()
