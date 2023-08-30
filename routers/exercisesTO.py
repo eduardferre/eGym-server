@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from ddbb.sqlDB.client import sqlserver_client
 from ddbb.sqlDB.models.exerciseTO import ExerciseTO
-from ddbb.sqlDB.schemas.exerciseTO import exerciseTO_schema, exercisesTO_schema
+from ddbb.sqlDB.schemas.exerciseTO import exerciseTO_schema
 
 sql_cursor = sqlserver_client.cursor()
 
@@ -15,14 +15,13 @@ async def getExercisesTO():
     query = f"SELECT * FROM dbo.exercises"
     sql_cursor.execute(query)
     exercises_list = list()
-    exercise = sql_cursor.fetchone()
+    exercise_response = sql_cursor.fetchall()
     
-    if exercise == None:
+    if len(exercise_response) == 0:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail="There are no exercises in the database")
     
-    while exercise:
+    for exercise in exercise_response:
         exercises_list.append(ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise))))
-        exercise = sql_cursor.fetchone()
     return exercises_list
 
 @router.get("/{id}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
@@ -37,10 +36,37 @@ async def getExerciseTOById(id: int):
     
     return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
 
+@router.get("/creator/{creator}", response_model=list[ExerciseTO], status_code=status.HTTP_200_OK)
+async def getExercisesTOByCreator(creator: str):
+    query = f"SELECT * FROM dbo.exercises\
+                WHERE creator='{creator}'"
+    sql_cursor.execute(query)
+    exercises_list = list()
+    exercise_response = sql_cursor.fetchall()
+    
+    if len(exercise_response) == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The user {creator} has not created any exercises yet")
+    
+    for exercise in exercise_response:
+        exercises_list.append(ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise))))
+    return exercises_list
+
+@router.get("/exerciseName/{name}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
+async def getExerciseTOByName(name: str):
+    query = f"SELECT * FROM dbo.exercises\
+                WHERE name='{name}'"
+    sql_cursor.execute(query)
+    exercise = sql_cursor.fetchone()
+    
+    if exercise == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The exercise {name} is not found in the list of exercises")
+    
+    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+
 @router.post("/", response_model=ExerciseTO, status_code=status.HTTP_201_CREATED)
 async def addExerciseTO(exerciseTO: ExerciseTO):
     if type(searchExerciseTO("name", exerciseTO.name)) == ExerciseTO:
-        raise HTTPException(status_code=status.HTTP_226_IM_USED, detail=f"The exercise = {exerciseTO.name} already exists")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The exercise = {exerciseTO.name} already exists")
     
     query = f"INSERT dbo.exercises (creator, name, description)\
                 OUTPUT INSERTED.*\
@@ -72,11 +98,16 @@ async def deleteExerciseTO(name: str):
     if type(exercise_search) != ExerciseTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=exercise_search["error"])
     
+    query = f"DELETE FROM dbo.relationRoutinesExercises\
+                WHERE exerciseId='{exercise_search.id}'"
+    sql_cursor.execute(query)
+    
     query = f"DELETE FROM dbo.exercises\
                 OUTPUT DELETED.*\
                 WHERE name='{name}'"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
+    sqlserver_client.commit()
     return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
 
 

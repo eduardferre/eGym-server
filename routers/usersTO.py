@@ -41,7 +41,7 @@ async def getUserTOById(id: int): #NOSONAR
 @router.post("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
 async def addUserTO(userTO: UserTO):
     if type(searchUserTO("username", userTO.username)) == UserTO:
-        raise HTTPException(status_code=status.HTTP_226_IM_USED, detail=f"The user with username = {userTO.username} already exists")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The user with username = {userTO.username} already exists")
     
     query = f"INSERT dbo.users (username, firstName, lastName, email, password, birthDate)\
                 OUTPUT INSERTED.*\
@@ -78,6 +78,7 @@ async def deleteUserTO(username: str):
                 WHERE username='{username}'"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
+    sqlserver_client.commit()
     return UserTO(**userTO_schema(tupleUserTOToDict(user)))
 
 

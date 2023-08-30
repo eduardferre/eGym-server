@@ -5,6 +5,6 @@ INSERT dbo.relationRoutinesExercises (routineId, exerciseId)
 VALUES (1, 2)
 
 INSERT dbo.relationRoutinesExercises (routineId, exerciseId)
-VALUES (1, 3)
+VALUES (1, 4)
 
 SELECT * FROM dbo.relationRoutinesExercises
