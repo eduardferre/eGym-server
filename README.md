@@ -11,7 +11,7 @@ The API is formed by the following endpoints with their respective methods.
 |---------|----------|-------------|--------|--------|
 | GET       | usersTO/ | -                    | 200_OK / 204_NO_CONTENT | Get all users |
 | GET       | usersTO/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
-| POST    | usersTO/ | -                     | 201_CREATED / 226_IM_USED | Add user |
+| POST    | usersTO/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
 | PUT       | usersTO/ | -                    | 201_CREATED / 404_NOT_FOUND | Update user info |
 | DELETE | usersTO/ | {username}  | 200_OK / 404_NOT_FOUND | Delete a user by username |
 
@@ -21,9 +21,9 @@ The API is formed by the following endpoints with their respective methods.
 |---------|----------|-------------|--------|--------|
 | GET       | exercisesTO/ | -                    | 200_OK / 204_NO_CONTENT | Get all exercises |
 | GET       | exercisesTO/ | {id}                | 200_OK / 404_NOT_FOUND | Get exercise by id |
-| GET       | exercisesTO/ | {creator}                | 200_OK / 404_NOT_FOUND | Get exercises by creator |
-| GET       | exercisesTO/ | {name}                | 200_OK / 404_NOT_FOUND | Get exercises by name |
-| POST    | exercisesTO/ | -                     | 201_CREATED / 226_IM_USED | Add exercise |
+| GET       | exercisesTO/creator/ | {creator}                | 200_OK / 404_NOT_FOUND | Get exercises by creator |
+| GET       | exercisesTO/exerciseName/ | {name}                | 200_OK / 404_NOT_FOUND | Get exercises by name |
+| POST    | exercisesTO/ | -                     | 201_CREATED / 409_CONFLICT | Add exercise |
 | PUT       | exercisesTO/ | -                    | 201_CREATED / 404_NOT_FOUND | Update exercise info |
 | DELETE | exercisesTO/ | {name}  | 200_OK / 404_NOT_FOUND | Delete an exercise by name |
 
@@ -33,8 +33,9 @@ The API is formed by the following endpoints with their respective methods.
 |---------|----------|-------------|--------|--------|
 | GET       | routinesTO/ | -                    | 200_OK / 204_NO_CONTENT | Get all routines |
 | GET       | routinesTO/ | {id}                | 200_OK / 404_NOT_FOUND | Get routine by id |
-| GET       | routinesTO/ | {creator}                | 200_OK / 404_NOT_FOUND | Get routines by creator |
-| GET       | routinesTO/ | {name}                | 200_OK / 404_NOT_FOUND | Get routines by name |
+| GET       | routinesTO/creator/ | {creator}                | 200_OK / 404_NOT_FOUND | Get routines by creator |
+| GET       | routinesTO/routineName/ | {name}                | 200_OK / 404_NOT_FOUND | Get routines by name |
 | POST    | routinesTO/ | -                     | 201_CREATED | Add routine |
+| POST    | routinesTO/ | {routineId}_{exerciseId}                     | 201_CREATED / 409_CONFLICT | Add exercise to routine |
 | PUT       | routinesTO/ | -                    | 201_CREATED / 404_NOT_FOUND | Update routine info |
 | DELETE | routinesTO/ | {id}  | 200_OK / 404_NOT_FOUND | Delete a routine by id |
