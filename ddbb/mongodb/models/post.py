@@ -1,6 +1,4 @@
-from user import User
-from comment import Comment
-
+from __future__ import annotations
 from pydantic import BaseModel
 from typing import Optional
 
@@ -10,4 +8,8 @@ class Post(BaseModel):
     url: str
     caption: str
     likes: int
-    comments: list(Comment)
+    comments: list[Comment]
+
+from ddbb.mongodb.models.user import User
+from ddbb.mongodb.models.comment import Comment
+Post.update_forward_refs()

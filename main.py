@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from routers import usersTO, exercisesTO, routinesTO
+from routers import users
 
 
 # Documentation with Swagger: http://localhost:8000/docs
@@ -12,6 +13,8 @@ app = FastAPI() # uvicorn main:app --reload
 app.include_router(usersTO.router)
 app.include_router(exercisesTO.router)
 app.include_router(routinesTO.router)
+
+app.include_router(users.router)
 
 @app.get("/")
 async def root():
