@@ -12,7 +12,7 @@ The API is formed by the following endpoints with their respective methods.
 | GET       | usersTO/ | -                    | 200_OK / 204_NO_CONTENT | Get all users |
 | GET       | usersTO/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
 | POST    | usersTO/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
-| PUT       | usersTO/ | -                    | 201_CREATED / 404_NOT_FOUND | Update user info |
+| PUT       | usersTO/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT | Update user info |
 | DELETE | usersTO/ | {username}  | 200_OK / 404_NOT_FOUND | Delete a user by username |
 
 
@@ -39,3 +39,13 @@ The API is formed by the following endpoints with their respective methods.
 | POST    | routinesTO/ | {routineId}_{exerciseId}                     | 201_CREATED / 409_CONFLICT | Add exercise to routine |
 | PUT       | routinesTO/ | -                    | 201_CREATED / 404_NOT_FOUND | Update routine info |
 | DELETE | routinesTO/ | {id}  | 200_OK / 404_NOT_FOUND | Delete a routine by id |
+
+
+### ***Users** - MONGODB DATABASE*
+| Method | Path        | Subpath       | Codes | Description |
+|---------|----------|-------------|--------|--------|
+| GET       | users/ | -                    | 200_OK / 204_NO_CONTENT | Get all users |
+| GET       | users/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
+| POST    | users/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
+| PUT       | users/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT | Update user info |
+| DELETE | users/ | {username}  | 200_OK / 404_NOT_FOUND | Delete a user by username |
