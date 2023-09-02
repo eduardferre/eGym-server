@@ -40,8 +40,8 @@ async def getUserTOById(id: int): #NOSONAR
 
 @router.post("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
 async def addUserTO(userTO: UserTO):
-    if type(searchUserTO("username", userTO.username)) == UserTO:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The user with username = {userTO.username} already exists")
+    if type(searchUserTO("id", userTO.id)) == UserTO:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The user with id = {userTO.id} already exists")
     
     query = f"INSERT dbo.users (username, firstName, lastName, email, password, birthDate)\
                 OUTPUT INSERTED.*\
@@ -52,30 +52,29 @@ async def addUserTO(userTO: UserTO):
     return UserTO(**userTO_schema(tupleUserTOToDict(user)))
 
 @router.put("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
-async def updateUserTO(user_list: list[UserTO]):
-    userTO_original, userTO_update = user_list[0], user_list[1]
-    user_search = searchUserTO("username", userTO_original.username)
+async def updateUserTO(user: UserTO):
+    user_search = searchUserTO("id", user.id)
     if type(user_search) != UserTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=user_search["error"])
     
     query = f"UPDATE dbo.users\
-                SET username = '{userTO_update.username}', firstName = '{userTO_update.firstname}', lastName = '{userTO_update.lastname}', email = '{userTO_update.email}', password = '{userTO_update.password}', birthDate = '{userTO_update.birthDate}'\
+                SET username = '{user.username}', firstName = '{user.firstname}', lastName = '{user.lastname}', email = '{user.email}', password = '{user.password}', birthDate = '{user.birthDate}'\
                 OUTPUT INSERTED.*\
-                WHERE id={user_search.id}"
+                WHERE id={user.id}"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
     sqlserver_client.commit()
     return UserTO(**userTO_schema(tupleUserTOToDict(user)))
 
-@router.delete("/{username}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def deleteUserTO(username: str):
-    user_search = searchUserTO("username", username)
+@router.delete("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
+async def deleteUserTO(id: int):
+    user_search = searchUserTO("id", id)
     if type(user_search) != UserTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=user_search["error"])
     
     query = f"DELETE FROM dbo.users\
                 OUTPUT DELETED.*\
-                WHERE username='{username}'"
+                WHERE id={id}"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
     sqlserver_client.commit()

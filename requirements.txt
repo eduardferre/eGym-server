@@ -1,4 +1,6 @@
 fastapi
+motor
+certifi
 python-jose
 passlib
 pymongo

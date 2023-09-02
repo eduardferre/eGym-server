@@ -11,3 +11,5 @@ OUTPUT INSERTED.id
 VALUES ('eduardferre', 'Low-bar Squad', '')
 
 SELECT * FROM dbo.exercises
+
+SELECT * FROM dbo.relationRoutinesExercises

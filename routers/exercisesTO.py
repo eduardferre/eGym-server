@@ -65,8 +65,8 @@ async def getExerciseTOByName(name: str):
 
 @router.post("/", response_model=ExerciseTO, status_code=status.HTTP_201_CREATED)
 async def addExerciseTO(exerciseTO: ExerciseTO):
-    if type(searchExerciseTO("name", exerciseTO.name)) == ExerciseTO:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The exercise = {exerciseTO.name} already exists")
+    if type(searchExerciseTO("id", exerciseTO.id)) == ExerciseTO:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"The exercise with id = {exerciseTO.id} already exists")
     
     query = f"INSERT dbo.exercises (creator, name, description)\
                 OUTPUT INSERTED.*\
@@ -77,34 +77,33 @@ async def addExerciseTO(exerciseTO: ExerciseTO):
     return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
 
 @router.put("/", response_model=ExerciseTO, status_code=status.HTTP_201_CREATED)
-async def updateExerciseTO(exercises_list: list[ExerciseTO]):
-    exerciseTO_original, exerciseTO_update = exercises_list[0], exercises_list[1]
-    exercise_search = searchExerciseTO("name", exerciseTO_original.name)
+async def updateExerciseTO(exercise: ExerciseTO):
+    exercise_search = searchExerciseTO("id", exercise.id)
     if type(exercise_search) != ExerciseTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=exercise_search["error"])
     
     query = f"UPDATE dbo.exercises\
-                SET creator = '{exerciseTO_update.creator}', name = '{exerciseTO_update.name}', description = '{exerciseTO_update.description}'\
+                SET creator = '{exercise.creator}', name = '{exercise.name}', description = '{exercise.description}'\
                 OUTPUT INSERTED.*\
-                WHERE id={exercise_search.id}"
+                WHERE id={exercise.id}"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
     sqlserver_client.commit()
     return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
 
-@router.delete("/{name}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
-async def deleteExerciseTO(name: str):
-    exercise_search = searchExerciseTO("name", name)
+@router.delete("/{id}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
+async def deleteExerciseTO(id: int):
+    exercise_search = searchExerciseTO("id", id)
     if type(exercise_search) != ExerciseTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=exercise_search["error"])
     
     query = f"DELETE FROM dbo.relationRoutinesExercises\
-                WHERE exerciseId='{exercise_search.id}'"
+                WHERE exerciseId={id}"
     sql_cursor.execute(query)
     
     query = f"DELETE FROM dbo.exercises\
                 OUTPUT DELETED.*\
-                WHERE name='{name}'"
+                WHERE id={id}"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
     sqlserver_client.commit()

@@ -1,5 +1,7 @@
 # Other files that must be in local
-environment_variables.py
+environment.py
+.vscode
+.vscode/settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

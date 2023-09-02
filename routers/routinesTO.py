@@ -109,16 +109,15 @@ async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
     return searchRoutineTO("id", routineId)
 
 @router.put("/", response_model=RoutineTO, status_code=status.HTTP_201_CREATED)
-async def updateRoutineTO(routines_list: list[RoutineTO]):
-    routineTO_original, routineTO_update = routines_list[0], routines_list[1]
-    routine_search = searchRoutineTO("name", routineTO_original.name)
+async def updateRoutineTO(routine: RoutineTO):
+    routine_search = searchRoutineTO("id", routine.id)
     if type(routine_search) != RoutineTO:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=routine_search["error"])
     
     query = f"UPDATE dbo.routines\
-                SET creator = '{routineTO_update.creator}', name = '{routineTO_update.name}', description = '{routineTO_update.description}'\
+                SET creator = '{routine.creator}', name = '{routine.name}', description = '{routine.description}'\
                 OUTPUT INSERTED.*\
-                WHERE id={routine_search.id}"
+                WHERE id={routine.id}"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
