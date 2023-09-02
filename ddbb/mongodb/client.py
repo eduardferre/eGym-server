@@ -3,7 +3,7 @@ import certifi
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-import environment
+from utils import environment
 
 # LOCAL DB
 # mongodb_client = AsyncIOMotorClient(
@@ -18,14 +18,6 @@ mongodb_client = AsyncIOMotorClient(
     + ":"
     + environment.MONGO_PASSWORD
     + "@egymcluster.gujw3ru.mongodb.net/?retryWrites=true&w=majority",
-    
-    
-    
     tlsCAFile=certifi.where(),
-    
-    
-    
-    
-    
     server_api=ServerApi("1"),
 ).test
