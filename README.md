@@ -46,6 +46,19 @@ The API is formed by the following endpoints with their respective methods.
 |---------|----------|-------------|--------|--------|
 | GET       | users/ | -                    | 200_OK / 204_NO_CONTENT | Get all users |
 | GET       | users/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
+| GET       | users/username/ | {username}                | 200_OK / 404_NOT_FOUND | Get user by username |
 | POST    | users/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
 | PUT       | users/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT | Update user info |
-| DELETE | users/ | {username}  | 200_OK / 404_NOT_FOUND | Delete a user by username |
+| DELETE | users/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a user by id |
+
+
+### ***Posts** - MONGODB DATABASE*
+| Method | Path        | Subpath       | Codes | Description |
+|---------|----------|-------------|--------|--------|
+| GET       | posts/ | -                    | 200_OK / 204_NO_CONTENT | Get all posts |
+| GET       | posts/ | {id}                | 200_OK / 404_NOT_FOUND | Get post by id |
+| GET       | posts/creator | {creator}    | 200_OK / 204_NO_CONTENT | Get posts by creator |
+| POST    | posts/ | -                     | 201_CREATED / 404_NOT_FOUND | Add post |
+| PUT       | posts/ | -                    | 201_CREATED / 404_NOT_FOUND | Update user info |
+| DELETE | posts/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a post by id |
+| DELETE | posts/creatorPosts | {creator}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete creator's posts |
