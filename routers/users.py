@@ -33,11 +33,25 @@ async def getUserById(id: str):
     logging.info(f"GET /users/{id}")
     user = await search_user("_id", ObjectId(id))
 
-    if user == None:
+    if type(user) != User:
         logging.info(f"The user with id = {id} does not exist")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The user with id = {id} does not exist",
+        )
+    return user
+
+
+@router.get("/username/{username}", response_model=User, status_code=status.HTTP_200_OK)
+async def getUserByUsername(username: str):
+    logging.info(f"GET /users/username/{username}")
+    user = await search_user("username", username)
+
+    if type(user) != User:
+        logging.info(f"The user {username} does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user {username} does not exist",
         )
     return user
 
@@ -93,7 +107,9 @@ async def updateUser(user: User):
     del user_dict["id"]
 
     try:
-        await mongodb_client.users.find_one_and_replace({"_id": ObjectId(user.id)}, user_dict)
+        await mongodb_client.users.find_one_and_replace(
+            {"_id": ObjectId(user.id)}, user_dict
+        )
         logging.info(f"The user with id = {user.id} has been updated")
     except:
         logging.info(f"The user with id = {user.id} has not been updated")

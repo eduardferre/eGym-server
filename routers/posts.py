@@ -7,6 +7,7 @@ from ddbb.mongodb.client import mongodb_client
 from ddbb.mongodb.models.post import Post
 from ddbb.mongodb.schemas.post import posts_schema, post_schema
 from ddbb.mongodb.schemas.user import user_schema
+from user import User
 
 
 router = APIRouter(
@@ -35,7 +36,7 @@ async def getPostById(id: str):
     logging.info(f"GET /posts/{id}")
     post = await search_post("_id", ObjectId(id))
 
-    if post == None:
+    if type(post) != Post:
         logging.info(f"The post with id = {id} does not exist")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -64,7 +65,7 @@ async def getPostsByCreator(creator: str):
 async def addPost(post: Post):
     logging.info("POST /posts/")
     user = await mongodb_client.users.find_one({"username": post.creator})
-    if user == None:
+    if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -97,7 +98,7 @@ async def updatePost(post: Post):
         )
 
     user = await mongodb_client.users.find_one({"username": post.creator})
-    if user == None:
+    if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -152,7 +153,7 @@ async def deleteAllCreatorPosts(creator: str):
     logging.info(f"DELETE /posts/creatorPosts/{creator}")
     user = await mongodb_client.users.find_one({"username": creator})
 
-    if user == None:
+    if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
