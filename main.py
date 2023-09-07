@@ -2,7 +2,7 @@ import uvicorn
 import logging
 from fastapi import FastAPI
 from routers import usersTO, exercisesTO, routinesTO
-from routers import users
+from routers import users, posts
 
 
 logging.basicConfig(
@@ -26,6 +26,7 @@ app.include_router(exercisesTO.router)
 app.include_router(routinesTO.router)
 
 app.include_router(users.router)
+app.include_router(posts.router)
 
 
 # Router: root

@@ -7,6 +7,7 @@ class User(BaseModel):
     username: str
     fullname: str
     email: str
+    phone: str
     age: int
     height: float #cm
     weight: float #kg
