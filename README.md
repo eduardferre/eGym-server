@@ -57,8 +57,21 @@ The API is formed by the following endpoints with their respective methods.
 |---------|----------|-------------|--------|--------|
 | GET       | posts/ | -                    | 200_OK / 204_NO_CONTENT | Get all posts |
 | GET       | posts/ | {id}                | 200_OK / 404_NOT_FOUND | Get post by id |
-| GET       | posts/creator | {creator}    | 200_OK / 204_NO_CONTENT | Get posts by creator |
+| GET       | posts/creator/ | {creator}    | 200_OK / 204_NO_CONTENT | Get posts by creator |
 | POST    | posts/ | -                     | 201_CREATED / 404_NOT_FOUND | Add post |
 | PUT       | posts/ | -                    | 201_CREATED / 404_NOT_FOUND | Update user info |
 | DELETE | posts/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a post by id |
-| DELETE | posts/creatorPosts | {creator}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete creator's posts |
+| DELETE | posts/creatorPosts/ | {creator}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete creator's posts |
+
+
+### ***Comments** - MONGODB DATABASE*
+| Method | Path        | Subpath       | Codes | Description |
+|---------|----------|-------------|--------|--------|
+| GET       | comments/ | -                    | 200_OK / 204_NO_CONTENT | Get all comments |
+| GET       | comments/ | {id}                | 200_OK / 404_NOT_FOUND | Get post by id |
+| GET       | comments/creator/ | {creator}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get comments by creator |
+| GET       | comments/post/ | {postId}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get comments by post |
+| POST    | comments/post/ | {postId}      | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add comment to post |
+| PUT       | comments/post/ | {postId}    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update comment |
+| DELETE | comments/post/{postId}/comment/ | {commentId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
+| DELETE | comments/postComments/ | {postId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete post's comments |
