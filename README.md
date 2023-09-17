@@ -48,7 +48,7 @@ The API is formed by the following endpoints with their respective methods.
 | GET       | users/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
 | GET       | users/username/ | {username}                | 200_OK / 404_NOT_FOUND | Get user by username |
 | POST    | users/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
-| PUT       | users/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT | Update user info |
+| PUT       | users/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
 | DELETE | users/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a user by id |
 
 
@@ -73,5 +73,5 @@ The API is formed by the following endpoints with their respective methods.
 | GET       | comments/post/ | {postId}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get comments by post |
 | POST    | comments/post/ | {postId}      | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add comment to post |
 | PUT       | comments/post/ | {postId}    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update comment |
-| DELETE | comments/post/{postId}/comment/ | {commentId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
+| DELETE | comments/post/ | {postId}/comment/{commentId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
 | DELETE | comments/postComments/ | {postId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete post's comments |
