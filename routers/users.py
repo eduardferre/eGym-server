@@ -1,10 +1,12 @@
-import logging
+from utils.logger import logging
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
 from ddbb.mongodb.client import mongodb_client
 from ddbb.mongodb.models.user import User
 from ddbb.mongodb.schemas.user import users_schema, user_schema
+import routers.posts as posts
+import routers.comments as comments
 
 
 router = APIRouter(
@@ -85,7 +87,7 @@ async def addUser(user: User):
     return User(**user_schema(new_user))
 
 
-@router.put("/", response_model=User, status_code=status.HTTP_200_OK)
+@router.put("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def updateUser(user: User):
     logging.info("PUT /users/")
     user_search = await search_user("_id", ObjectId(user.id))
@@ -96,16 +98,41 @@ async def updateUser(user: User):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The user with id = '{user.id}' does not exist",
         )
-    if user.username == user_search.username:
-        logging.info(f"The username '{user.username}' is already used")
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"The username '{user.username}' is already used",
-        )
 
     user_dict = dict(user)
     del user_dict["id"]
 
+    if user.username != user_search.username:
+        if type(await search_user("username", user.username)) == User:
+            logging.info(f"The username '{user.username}' is already used")
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"The username '{user.username}' is already used",
+            )
+        else:
+            posts_list = list()
+            for post in user.postsLog:
+                post.creator = user.username
+                post_dict = dict(post)
+                await mongodb_client.posts.find_one_and_replace(
+                    {"_id": ObjectId(post.id)}, post_dict
+                )
+                posts_list.append(post_dict)
+
+            comments_list = comments.getCommentsByCreator(user_search.username)
+            for comment in comments_list:
+                comment.creator = user.username
+                comments.updateCommentFromPost(comment.postId, comment)
+
+            user_dict["postsLog"] = posts_list
+    else:
+        posts_list = list()
+        for post in user.postsLog:
+            post_dict = dict(post)
+            posts_list.append(post_dict)
+            
+        user_dict["postsLog"] = posts_list
+        
     try:
         await mongodb_client.users.find_one_and_replace(
             {"_id": ObjectId(user.id)}, user_dict
@@ -133,9 +160,17 @@ async def deleteUser(id: str):
         )
 
     try:
+        logging.info(f"Deleting user posts")
+        await posts.deleteAllCreatorPosts(user_search.username)
+
         await mongodb_client.users.find_one_and_delete({"_id": ObjectId(id)})
         logging.info(f"The user with id = {id} has been deleted")
     except:
+        for post in user_search.postsLog:
+            post_dict = dict(post)
+            await mongodb_client.posts.insert_one(post_dict)
+        logging.info("Posts have not been deleted")
+
         logging.info(f"The user with id = {id} has not been deleted")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -162,6 +197,3 @@ async def search_users():
 
     logging.info(f"The number of users found in the database is {len(users_list)}")
     return users_list
-
-
-# def populate_users(users_list: list):

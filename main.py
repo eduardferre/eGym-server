@@ -1,19 +1,11 @@
 import uvicorn
-import logging
+from utils.logger import logging
 from fastapi import FastAPI
 from routers import usersTO, exercisesTO, routinesTO
-from routers import users, posts
+from routers import users, posts, comments, routines
 
-
-logging.basicConfig(
-    # filename="logs.log",
-    format="%(asctime)s | %(module)s.py (LINE %(lineno)d) - %(levelname)s - %(message)s",
-    datefmt="%d-%b-%y %H:%M:%S",
-    level=logging.INFO,
-)
 
 logging.info("Started!")
-
 
 # Documentation with Swagger: http://localhost:8000/docs
 # Documentation with Redocly: http://localhost:8000/redoc
@@ -27,6 +19,8 @@ app.include_router(routinesTO.router)
 
 app.include_router(users.router)
 app.include_router(posts.router)
+app.include_router(comments.router)
+app.include_router(routines.router)
 
 
 # Router: root

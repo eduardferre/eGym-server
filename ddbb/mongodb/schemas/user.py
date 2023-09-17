@@ -12,7 +12,8 @@ def user_schema(user) -> dict:
         "role": user["role"],
         "followers": user["followers"],
         "postsLog": user["postsLog"],
-        "routinesLog": user["routinesLog"],
+        "trainingsLog": user["trainingsLog"],
+        "routines": user["routines"],
         "profilePicture": user["profilePicture"],
         "backgroundPicture": user["backgroundPicture"],
     }

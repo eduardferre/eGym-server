@@ -1,4 +1,4 @@
-import logging
+from utils.logger import logging
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
@@ -6,8 +6,9 @@ from bson import ObjectId
 from ddbb.mongodb.client import mongodb_client
 from ddbb.mongodb.models.post import Post
 from ddbb.mongodb.schemas.post import posts_schema, post_schema
-from ddbb.mongodb.schemas.user import user_schema
-from user import User
+from ddbb.mongodb.models.user import User
+import routers.users as users
+import routers.comments as comments
 
 
 router = APIRouter(
@@ -35,7 +36,6 @@ async def getPosts():
 async def getPostById(id: str):
     logging.info(f"GET /posts/{id}")
     post = await search_post("_id", ObjectId(id))
-
     if type(post) != Post:
         logging.info(f"The post with id = {id} does not exist")
         raise HTTPException(
@@ -50,6 +50,15 @@ async def getPostById(id: str):
 )
 async def getPostsByCreator(creator: str):
     logging.info(f"GET /posts/creator/{creator}")
+    user = await users.search_user("username", creator)
+
+    if type(user) != User:
+        logging.info(f"The user specified does not exist in the database")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user specified does not exist in the database",
+        )
+
     posts_list = await search_posts("creator", creator)
 
     if len(posts_list) == 0:
@@ -64,8 +73,8 @@ async def getPostsByCreator(creator: str):
 @router.post("/", response_model=Post, status_code=status.HTTP_201_CREATED)
 async def addPost(post: Post):
     logging.info("POST /posts/")
-    user = await mongodb_client.users.find_one({"username": post.creator})
-    if type(user) != User:
+    search_user = await users.search_user("username", post.creator)
+    if type(search_user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -75,17 +84,43 @@ async def addPost(post: Post):
     logging.info(f"The post is being processed")
 
     post_dic = dict(post)
+    user_post = post_dic.copy()
     del post_dic["id"]
 
-    result = await mongodb_client.posts.insert_one(post_dic)
-    id = result.inserted_id
+    try:
+        result = await mongodb_client.posts.insert_one(post_dic)
+        id = result.inserted_id
+        user_post["id"] = str(id)
 
-    logging.info(f"The post {ObjectId(id)} has been inserted correctly in the database")
+        logging.info(
+            f"The post {ObjectId(id)} has been inserted correctly in the database"
+        )
+    except:
+        logging.info("The post has not been uploaded")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="The post has not been uploaded",
+        )
+
+    try:
+        search_user.postsLog.append(user_post)
+        await users.updateUser(search_user)
+        logging.info(
+            f"Post '{ObjectId(id)}' has been posted in user '{search_user.id}'"
+        )
+    except:
+        await deletePost(ObjectId(id))
+        logging.info(f"The post '{ObjectId(id)}' has not been uploaded")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"The post '{ObjectId(id)}' has not been uploaded",
+        )
+
     new_post = await mongodb_client.posts.find_one({"_id": ObjectId(id)})
     return Post(**post_schema(new_post))
 
 
-@router.put("/", response_model=Post, status_code=status.HTTP_200_OK)
+@router.put("/", response_model=Post, status_code=status.HTTP_201_CREATED)
 async def updatePost(post: Post):
     logging.info("PUT /posts/")
     post_search = await search_post("_id", ObjectId(post.id))
@@ -97,13 +132,20 @@ async def updatePost(post: Post):
             detail=f"The post with id = '{post.id}' does not exist",
         )
 
-    user = await mongodb_client.users.find_one({"username": post.creator})
+    user = await users.search_user("username", post.creator)
+    # user = await mongodb_client.users.find_one({"username": post.creator})
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The user specified does not exist in the database",
         )
+
+    dict_comments = list()
+    for comment in post.comments:
+        dict_comments.append(dict(comment))
+    post.comments.clear()
+    post.comments = dict_comments
 
     post_dic = dict(post)
     del post_dic["id"]
@@ -113,7 +155,8 @@ async def updatePost(post: Post):
             {"_id": ObjectId(post.id)}, post_dic
         )
         logging.info(f"The post with id = {post.id} has been updated")
-    except:
+    except Exception as e:
+        print(e)
         logging.info(f"The post with id = {post.id} has not been updated")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -135,9 +178,17 @@ async def deletePost(id: str):
         )
 
     try:
+        logging.info(f"Deleting post comments")
+        await comments.deleteAllPostComments(id)
+
         await mongodb_client.posts.find_one_and_delete({"_id": ObjectId(id)})
         logging.info(f"The post with id = {id} has been deleted")
     except:
+        for comment in post_search.comments:
+            comment_dict = dict(comment)
+            await mongodb_client.comments.insert_one(comment_dict)
+        logging.info("Comments have not been deleted")
+
         logging.info(f"The post with id = {id} has not been deleted")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -151,7 +202,8 @@ async def deletePost(id: str):
 )
 async def deleteAllCreatorPosts(creator: str):
     logging.info(f"DELETE /posts/creatorPosts/{creator}")
-    user = await mongodb_client.users.find_one({"username": creator})
+    user = await users.search_user("username", creator)
+    # user = await mongodb_client.users.find_one({"username": creator})
 
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
@@ -164,7 +216,7 @@ async def deleteAllCreatorPosts(creator: str):
 
     if len(result) == 0:
         logging.info(f"The user {creator} has no posts, so, anything will be deleted")
-        HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The user {creator} has no posts, so, anything will be deleted",
         )
