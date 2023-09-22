@@ -16,7 +16,7 @@ class User(BaseModel):
     role: str
     followers: int
     postsLog: list[Post]
-    trainingsLog: list[Routine]
+    routinesLog: list[Routine]
     routines: list[RoutineTO]
     profilePicture: str
     backgroundPicture: str

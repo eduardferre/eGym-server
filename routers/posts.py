@@ -35,6 +35,12 @@ async def getPosts():
 @router.get("/{id}", response_model=Post, status_code=status.HTTP_200_OK)
 async def getPostById(id: str):
     logging.info(f"GET /posts/{id}")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     post = await search_post("_id", ObjectId(id))
     if type(post) != Post:
         logging.info(f"The post with id = {id} does not exist")
@@ -123,6 +129,12 @@ async def addPost(post: Post):
 @router.put("/", response_model=Post, status_code=status.HTTP_201_CREATED)
 async def updatePost(post: Post):
     logging.info("PUT /posts/")
+    if not ObjectId.is_valid(post.id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     post_search = await search_post("_id", ObjectId(post.id))
 
     if type(post_search) != Post:
@@ -168,6 +180,12 @@ async def updatePost(post: Post):
 @router.delete("/{id}", response_model=Post, status_code=status.HTTP_200_OK)
 async def deletePost(id: str):
     logging.info(f"DELETE /posts/{id}")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     post_search = await search_post("_id", ObjectId(id))
 
     if type(post_search) != Post:

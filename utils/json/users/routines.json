@@ -1,0 +1,47 @@
+[
+    {
+        "id": "507f1f77bcf86cd799439011",
+        "creator": "eduardferre",
+        "name": "Leg Day",
+        "description": "leg day",
+        "exercises": [],
+        "liftedWeight": 200.5,
+        "date": "2023-08-23 15:30:45.123456"
+    },
+    {
+        "id": "507f1f77bcf86cd799439012",
+        "creator": "johndoe",
+        "name": "Chest Workout",
+        "description": "building chest muscles",
+        "exercises": [],
+        "liftedWeight": 180.0,
+        "date": "2023-08-24 16:45:30.987654"
+    },
+    {
+        "id": "507f1f77bcf86cd799439013",
+        "creator": "alicefit",
+        "name": "Core Strength",
+        "description": "strengthening the core",
+        "exercises": [],
+        "liftedWeight": 0.0,
+        "date": "2023-08-25 12:15:10.555555"
+    },
+    {
+        "id": "507f1f77bcf86cd799439014",
+        "creator": "healthyguy",
+        "name": "Nutrition Plan",
+        "description": "customized nutrition plan",
+        "exercises": [],
+        "liftedWeight": 0.0,
+        "date": "2023-08-26 09:20:00.123123"
+    },
+    {
+        "id": "507f1f77bcf86cd799439015",
+        "creator": "fitexplorer",
+        "name": "Outdoor Workout",
+        "description": "exercise in nature",
+        "exercises": [],
+        "liftedWeight": 0.0,
+        "date": "2023-08-27 14:10:15.789789"
+    }
+]

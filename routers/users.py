@@ -33,6 +33,12 @@ async def getUsers():
 @router.get("/{id}", response_model=User, status_code=status.HTTP_200_OK)
 async def getUserById(id: str):
     logging.info(f"GET /users/{id}")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     user = await search_user("_id", ObjectId(id))
 
     if type(user) != User:
@@ -90,6 +96,12 @@ async def addUser(user: User):
 @router.put("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def updateUser(user: User):
     logging.info("PUT /users/")
+    if not ObjectId.is_valid(user.id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     user_search = await search_user("_id", ObjectId(user.id))
 
     if type(user_search) != User:
@@ -130,9 +142,16 @@ async def updateUser(user: User):
         for post in user.postsLog:
             post_dict = dict(post)
             posts_list.append(post_dict)
-            
+
         user_dict["postsLog"] = posts_list
-        
+
+        routines_list = list()
+        for routine in user.routinesLog:
+            routine_dict = dict(routine)
+            routines_list.append(routine_dict)
+
+        user_dict["routinesLog"] = routines_list
+
     try:
         await mongodb_client.users.find_one_and_replace(
             {"_id": ObjectId(user.id)}, user_dict
@@ -150,6 +169,12 @@ async def updateUser(user: User):
 @router.delete("/{id}", response_model=User, status_code=status.HTTP_200_OK)
 async def deleteUser(id: str):
     logging.info(f"DELETE /users/{id}")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     user_search = await search_user("_id", ObjectId(id))
 
     if type(user_search) != User:
@@ -183,7 +208,7 @@ async def deleteUser(id: str):
 async def search_user(field: str, key):
     try:
         user = await mongodb_client.users.find_one({field: key})
-        logging.info(f"The user with {field} = {key} exists in the database")
+        if User != None: logging.info(f"The user with {field} = {key} exists in the database")
         return User(**user_schema(user))
     except:
         return {"error": f"There's not any user with {field} -> {key}"}

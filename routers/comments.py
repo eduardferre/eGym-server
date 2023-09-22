@@ -36,6 +36,12 @@ async def getComments():
 @router.get("/{id}", response_model=Comment, status_code=status.HTTP_200_OK)
 async def getCommentById(id: str):
     logging.info(f"GET /comments/{id}")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     comment = await search_comment("_id", ObjectId(id))
 
     if type(comment) != Comment:
@@ -131,6 +137,12 @@ async def addCommentToPost(postId: str, comment: Comment):
 )
 async def updateCommentFromPost(postId: str, comment: Comment):
     logging.info("PUT /comments/post/{postId}")
+    if not ObjectId.is_valid(comment.id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     comment_search = await search_comment("_id", ObjectId(comment.id))
 
     if type(comment_search) != Comment:
@@ -198,6 +210,12 @@ async def updateCommentFromPost(postId: str, comment: Comment):
 )
 async def deleteCommentFromPost(postId: str, commentId: str):
     logging.info(f"DELETE /comments/post/{postId}/comment/{commentId}")
+    if not ObjectId.is_valid(commentId):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     comment_search = await search_comment("_id", ObjectId(commentId))
 
     if type(comment_search) != Comment:
@@ -251,6 +269,12 @@ async def deleteCommentFromPost(postId: str, commentId: str):
 )
 async def deleteAllPostComments(postId: str):
     logging.info(f"DELETE /comments/postComments/{postId}")
+    if not ObjectId.is_valid(postId):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     post = await posts.search_post("_id", ObjectId(postId))
 
     if type(post) != Post:
