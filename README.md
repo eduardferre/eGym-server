@@ -75,3 +75,15 @@ The API is formed by the following endpoints with their respective methods.
 | PUT       | comments/post/ | {postId}    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update comment |
 | DELETE | comments/post/ | {postId}/comment/{commentId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
 | DELETE | comments/postComments/ | {postId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete post's comments |
+
+
+### ***Routines** - MONGODB DATABASE*
+| Method | Path        | Subpath       | Codes | Description |
+|---------|----------|-------------|--------|--------|
+| GET       | routines/ | -                    | 200_OK / 204_NO_CONTENT | Get all routines |
+| GET       | routines/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get post by id |
+| GET       | routines/creator/ | {creator}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get routines by creator |
+| POST    | routines/ | -                    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add routine |
+| PUT       | routines/ | -                  | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update routine |
+| DELETE | routines/ | {id}  | 200_OK / 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete routine by id |
+| DELETE | routines/creatorRoutines/ | {creator}  | 200_OK / 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete user's routines |
