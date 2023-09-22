@@ -7,6 +7,7 @@ from ddbb.mongodb.models.user import User
 from ddbb.mongodb.schemas.user import users_schema, user_schema
 import routers.posts as posts
 import routers.comments as comments
+import routers.routines as routines
 
 
 router = APIRouter(
@@ -188,6 +189,9 @@ async def deleteUser(id: str):
         logging.info(f"Deleting user posts")
         await posts.deleteAllCreatorPosts(user_search.username)
 
+        logging.info(f"Deleting user routines")
+        await routines.deleteAllCreatorRoutines(user_search.username)
+
         await mongodb_client.users.find_one_and_delete({"_id": ObjectId(id)})
         logging.info(f"The user with id = {id} has been deleted")
     except:
@@ -195,6 +199,11 @@ async def deleteUser(id: str):
             post_dict = dict(post)
             await mongodb_client.posts.insert_one(post_dict)
         logging.info("Posts have not been deleted")
+
+        for routine in user_search.routinesLog:
+            routine_dict = dict(routine)
+            await mongodb_client.routines.insert_one(routine_dict)
+        logging.info("Routines logs have not been deleted")
 
         logging.info(f"The user with id = {id} has not been deleted")
         raise HTTPException(
@@ -208,7 +217,8 @@ async def deleteUser(id: str):
 async def search_user(field: str, key):
     try:
         user = await mongodb_client.users.find_one({field: key})
-        if User != None: logging.info(f"The user with {field} = {key} exists in the database")
+        if User != None:
+            logging.info(f"The user with {field} = {key} exists in the database")
         return User(**user_schema(user))
     except:
         return {"error": f"There's not any user with {field} -> {key}"}
