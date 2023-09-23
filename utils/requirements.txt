@@ -7,3 +7,5 @@ pymongo
 python-multipart
 pydantic[email]
 cloudinary
+pytest
+pytest-cov
