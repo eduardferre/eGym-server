@@ -2,6 +2,7 @@ from __future__ import annotations
 from pydantic import BaseModel
 from typing import Optional
 
+
 class Exercise(BaseModel):
     id: str
     name: str
@@ -10,5 +11,7 @@ class Exercise(BaseModel):
     liftedWeight: float
     highestWeight: float
 
-from ddbb.mongodb.models.set import Set
+
+from db.mongodb.models.set import Set
+
 Exercise.update_forward_refs()

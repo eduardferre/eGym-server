@@ -3,11 +3,11 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from ddbb.mongodb.client import mongodb_client
-from ddbb.mongodb.models.comment import Comment
-from ddbb.mongodb.models.post import Post
-from ddbb.mongodb.models.user import User
-from ddbb.mongodb.schemas.comment import comments_schema, comment_schema
+from db.mongodb.client import mongodb_client
+from db.mongodb.models.comment import Comment
+from db.mongodb.models.post import Post
+from db.mongodb.models.user import User
+from db.mongodb.schemas.comment import comments_schema, comment_schema
 import routers.posts as posts
 import routers.users as users
 

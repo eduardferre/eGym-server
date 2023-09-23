@@ -3,10 +3,10 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from ddbb.mongodb.client import mongodb_client
-from ddbb.mongodb.models.routine import Routine
-from ddbb.mongodb.schemas.routine import routines_schema, routine_schema
-from ddbb.mongodb.models.user import User
+from db.mongodb.client import mongodb_client
+from db.mongodb.models.routine import Routine
+from db.mongodb.schemas.routine import routines_schema, routine_schema
+from db.mongodb.models.user import User
 import routers.users as users
 
 

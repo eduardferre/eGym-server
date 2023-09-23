@@ -14,6 +14,6 @@ class Routine(BaseModel):
     date: datetime
 
 
-from ddbb.mongodb.models.exercise import Exercise
+from db.mongodb.models.exercise import Exercise
 
 Routine.update_forward_refs()

@@ -2,9 +2,9 @@ from utils.logger import logging
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from ddbb.mongodb.client import mongodb_client
-from ddbb.mongodb.models.user import User
-from ddbb.mongodb.schemas.user import users_schema, user_schema
+from db.mongodb.client import mongodb_client
+from db.mongodb.models.user import User
+from db.mongodb.schemas.user import users_schema, user_schema
 import routers.posts as posts
 import routers.comments as comments
 import routers.routines as routines

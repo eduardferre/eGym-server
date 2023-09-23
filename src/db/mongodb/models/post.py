@@ -2,6 +2,7 @@ from __future__ import annotations
 from pydantic import BaseModel
 from typing import Optional
 
+
 class Post(BaseModel):
     id: str
     creator: str
@@ -11,5 +12,6 @@ class Post(BaseModel):
     comments: list[Comment]
 
 
-from ddbb.mongodb.models.comment import Comment
+from db.mongodb.models.comment import Comment
+
 Post.update_forward_refs()

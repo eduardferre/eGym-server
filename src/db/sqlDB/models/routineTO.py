@@ -1,7 +1,8 @@
-from ddbb.sqlDB.models.exerciseTO import ExerciseTO
+from db.sqlDB.models.exerciseTO import ExerciseTO
 
 from pydantic import BaseModel
 from typing import Optional
+
 
 class RoutineTO(BaseModel):
     id: str
