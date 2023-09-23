@@ -1,0 +1,9 @@
+fastapi
+motor
+certifi
+python-jose
+passlib
+pymongo
+python-multipart
+pydantic[email]
+cloudinary

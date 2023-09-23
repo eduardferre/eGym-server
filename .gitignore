@@ -1,3 +1,9 @@
+# Other files that must be in local
+environment.py
+.vscode
+.vscode/settings.json
+tests.mongodb.js
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
