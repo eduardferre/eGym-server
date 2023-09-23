@@ -144,14 +144,22 @@ async def updatePost(post: Post):
             detail=f"The post with id = '{post.id}' does not exist",
         )
 
-    user = await users.search_user("username", post.creator)
-    # user = await mongodb_client.users.find_one({"username": post.creator})
-    if type(user) != User:
+    if post_search == post:
+        logging.info(f"The post '{post.id}' has not been changed so no update required")
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail=f"The post '{post.id}' has not been changed so no update required",
+        )
+
+    search_user = await users.search_user("username", post.creator)
+    if type(search_user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The user specified does not exist in the database",
         )
+
+    logging.info("The post is being processed")
 
     dict_comments = list()
     for comment in post.comments:
@@ -163,6 +171,8 @@ async def updatePost(post: Post):
     del post_dic["id"]
 
     try:
+        user_search = await users.getUserByUsername(post_search.creator)
+
         await mongodb_client.posts.find_one_and_replace(
             {"_id": ObjectId(post.id)}, post_dic
         )
@@ -174,6 +184,15 @@ async def updatePost(post: Post):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"The post with id = {post.id} has not been updated",
         )
+    else:
+        for post_for in search_user.postsLog:
+            if post.id == post_for.id:
+                index = search_user.postsLog.index(post_for)
+                search_user.postsLog.insert(index, post)
+                search_user.postsLog.remove(post_for)
+
+        await users.updateUser(user_search)
+        logging.info(f"Routine logs of '{user_search.username}' has been updated")
     return await search_post("_id", ObjectId(post.id))
 
 

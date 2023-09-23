@@ -247,7 +247,6 @@ async def deleteRoutine(id: str):
 async def deleteAllCreatorRoutines(creator: str):
     logging.info(f"DELETE /routines/creatorRoutines/{creator}")
     user = await users.search_user("username", creator)
-    # user = await mongodb_client.users.find_one({"username": creator})
 
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")

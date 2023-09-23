@@ -16,8 +16,8 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[UserTO], status_code=status.HTTP_200_OK)
-async def getUsersTO():  # NOSONAR
-    query = f"SELECT * FROM dbo.users"  # NOSONAR
+async def getUsersTO():
+    query = f"SELECT * FROM dbo.users"
     sql_cursor.execute(query)
     users_list = list()
     user = sql_cursor.fetchone()
@@ -35,7 +35,7 @@ async def getUsersTO():  # NOSONAR
 
 
 @router.get("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def getUserTOById(id: int):  # NOSONAR
+async def getUserTOById(id: int):
     query = f"SELECT * FROM dbo.users\
                 WHERE id={id}"
     sql_cursor.execute(query)
