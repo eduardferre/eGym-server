@@ -45,36 +45,36 @@ The API is formed by the following endpoints with their respective methods.
 | Method | Path        | Subpath       | Codes | Description |
 |---------|----------|-------------|--------|--------|
 | GET       | users/ | -                    | 200_OK / 204_NO_CONTENT | Get all users |
-| GET       | users/ | {id}                | 200_OK / 404_NOT_FOUND | Get user by id |
+| GET       | users/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get user by id |
 | GET       | users/username/ | {username}                | 200_OK / 404_NOT_FOUND | Get user by username |
 | POST    | users/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
-| PUT       | users/ | -                    | 201_CREATED / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
-| DELETE | users/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a user by id |
+| PUT       | users/ | -                    | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
+| DELETE | users/ | {id}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a user by id |
 
 
 ### ***Posts** - MONGODB DATABASE*
 | Method | Path        | Subpath       | Codes | Description |
 |---------|----------|-------------|--------|--------|
 | GET       | posts/ | -                    | 200_OK / 204_NO_CONTENT | Get all posts |
-| GET       | posts/ | {id}                | 200_OK / 404_NOT_FOUND | Get post by id |
-| GET       | posts/creator/ | {creator}    | 200_OK / 204_NO_CONTENT | Get posts by creator |
-| POST    | posts/ | -                     | 201_CREATED / 404_NOT_FOUND | Add post |
-| PUT       | posts/ | -                    | 201_CREATED / 404_NOT_FOUND | Update user info |
-| DELETE | posts/ | {id}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a post by id |
-| DELETE | posts/creatorPosts/ | {creator}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete creator's posts |
+| GET       | posts/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get post by id |
+| GET       | posts/creator/ | {creator}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get posts by creator |
+| POST    | posts/ | -                      | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / 500_INTERNAL_SERVER_ERROR | Add post |
+| PUT       | posts/ | -                    | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
+| DELETE | posts/ | {id}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a post by id |
+| DELETE | posts/creatorPosts/ | {creator}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete creator's posts |
 
 
 ### ***Comments** - MONGODB DATABASE*
 | Method | Path        | Subpath       | Codes | Description |
 |---------|----------|-------------|--------|--------|
 | GET       | comments/ | -                    | 200_OK / 204_NO_CONTENT | Get all comments |
-| GET       | comments/ | {id}                | 200_OK / 404_NOT_FOUND | Get post by id |
+| GET       | comments/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get post by id |
 | GET       | comments/creator/ | {creator}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get comments by creator |
-| GET       | comments/post/ | {postId}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get comments by post |
-| POST    | comments/post/ | {postId}      | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add comment to post |
-| PUT       | comments/post/ | {postId}    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update comment |
-| DELETE | comments/post/ | {postId}/comment/{commentId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
-| DELETE | comments/postComments/ | {postId}  | 200_OK / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete post's comments |
+| GET       | comments/post/ | {postId}    | 200_OK / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND | Get comments by post |
+| POST    | comments/post/ | {postId}      | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add comment to post |
+| PUT       | comments/post/ | {postId}    | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update comment |
+| DELETE | comments/post/ | {postId}/comment/{commentId}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a comment from post by id |
+| DELETE | comments/postComments/ | {postId}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete post's comments |
 
 
 ### ***Routines** - MONGODB DATABASE*
@@ -83,7 +83,7 @@ The API is formed by the following endpoints with their respective methods.
 | GET       | routines/ | -                    | 200_OK / 204_NO_CONTENT | Get all routines |
 | GET       | routines/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get post by id |
 | GET       | routines/creator/ | {creator}    | 200_OK / 204_NO_CONTENT / 404_NOT_FOUND | Get routines by creator |
-| POST    | routines/ | -                    | 201_CREATED / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Add routine |
-| PUT       | routines/ | -                  | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Update routine |
-| DELETE | routines/ | {id}  | 200_OK / 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete routine by id |
-| DELETE | routines/creatorRoutines/ | {creator}  | 200_OK / 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete user's routines |
+| POST    | routines/ | -                    | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Add routine |
+| PUT       | routines/ | -                  | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update routine |
+| DELETE | routines/ | {id}                  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Delete routine by id |
+| DELETE | routines/creatorRoutines/ | {creator}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Delete user's routines |
