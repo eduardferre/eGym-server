@@ -13,4 +13,4 @@ pytest
 pytest-cov
 httpx
 pymssql
-dotenv
+python-dotenv
