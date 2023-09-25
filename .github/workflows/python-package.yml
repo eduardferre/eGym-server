@@ -32,13 +32,12 @@ jobs:
 
       - name: Setup docker
         run: |
-          sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=dbatools.IO" -p 1433:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest
+          docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=dbatools.I0" -p 1433:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest
 
       # Execute sqlcmd against the container
       - name: Run tests
         run: |
-          sqlcmd -S localhost -U sa -P dbatools.IO -Q "SELECT 1"
-
+          sqlcmd -S localhost -U sa -P dbatools.I0 -Q "SELECT 1"
 
       # - name: Run pytest with coverage
       #   run: |
