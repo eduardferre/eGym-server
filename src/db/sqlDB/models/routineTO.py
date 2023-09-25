@@ -1,4 +1,4 @@
-from src.sqlDB.models.exerciseTO import ExerciseTO
+from src.db.sqlDB.models.exerciseTO import ExerciseTO
 
 from pydantic import BaseModel
 from typing import Optional

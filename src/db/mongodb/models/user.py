@@ -24,6 +24,6 @@ class User(BaseModel):
 
 from src.db.mongodb.models.post import Post
 from src.db.mongodb.models.routine import Routine
-from src.sqlDB.models.routineTO import RoutineTO
+from src.db.sqlDB.models.routineTO import RoutineTO
 
 User.update_forward_refs()
