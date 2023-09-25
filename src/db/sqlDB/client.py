@@ -1,4 +1,20 @@
+import os
 import pymssql
-from utils import environment
+from dotenv import load_dotenv
 
-sqlserver_client = pymssql.connect(server='localhost', user=environment.SQL_USER, password=environment.SQL_PASSWORD, database='TestDB')
+load_dotenv()
+
+if os.getenv("TEST_ENABLED") == "FALSE":
+    sqlserver_client = pymssql.connect(
+        server="localhost",
+        user=os.getenv("SQL_USER"),
+        password=os.getenv("SQL_PASSWORD"),
+        database="LocalDB",
+    )
+else:
+    sqlserver_client = pymssql.connect(
+        server="localhost",
+        user=os.getenv("SQL_USER"),
+        password=os.getenv("SQL_PASSWORD"),
+        database="TestDB",
+    )

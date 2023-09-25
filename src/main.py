@@ -1,10 +1,13 @@
 import sys
 import os
 
+
 # Add the parent directory of your project to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
+
+os.environ["TEST_ENABLED"] = "FALSE"
 
 import uvicorn
 from utils.logger import logging
