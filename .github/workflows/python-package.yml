@@ -36,7 +36,7 @@ jobs:
           install: sqlengine, sqlpackage
 
       - name: Run sqlclient
-        run: sqlcmd -S localhost -U sa -P dbatools.I0 -d tempdb -Q "SELECT @@version;" 
+        run: sqlcmd -S localhost -U sa -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;" 
 
       # - name: Setup Docker
       #   run: |

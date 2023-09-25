@@ -52,3 +52,4 @@ WHERE name='relationRoutinesExercises' and xtype='U')
     FOREIGN KEY (exerciseId) REFERENCES dbo.exercises(id),
     UNIQUE (routineId, exerciseId)
 )
+GO
