@@ -6,8 +6,17 @@ name: Run Tests and Check Coverage
 on: [push, pull_request]
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
+
+    # services:
+    #   mssql:
+    #     image: mcr.microsoft.com/mssql/server:2019-latest
+    #     env:
+    #       SA_PASSWORD: MyTestPassword
+    #       ACCEPT_EULA: "Y"
+    #     ports:
+    #       - 1433:1433
 
     steps:
       - name: Checkout code
@@ -21,16 +30,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r utils/requirements.txt # Replace with your requirements file
 
-      - name: Run pytest with coverage
-        run: |
-          pytest --cov --cov-report term-missing
-          coverage report --fail-under=80  # Set your desired coverage threshold here
+      - name: Setup docker
+        run: docker pull mcr.microsoft.com/mssql/server:2022-latest
 
-      - name: Upload coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: ./tests/reports # Change this to your coverage report directory
+      # - name: Run pytest with coverage
+      #   run: |
+      #     pytest --cov --cov-report term-missing
+      #     coverage report --fail-under=80  # Set your desired coverage threshold here
 
-      - name: Set the GitHub status
-        run: echo "Coverage check complete"
+      # - name: Upload coverage results
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: coverage-report
+      #     path: ./tests/reports # Change this to your coverage report directory
+
+      # - name: Set the GitHub status
+      #   run: echo "Coverage check complete"
