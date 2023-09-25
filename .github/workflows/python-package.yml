@@ -31,8 +31,14 @@ jobs:
         run: pip install -r utils/requirements.txt # Replace with your requirements file
 
       - name: Setup docker
-        run: docker pull mcr.microsoft.com/mssql/server:2022-latest
+        run: |
+          sudo docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=dbatools.IO" -p 1433:1433 --name sql1 -h sql1 -d mcr.microsoft.com/mssql/server:2019-latest
+          Start-Sleep 10
 
+      # Execute sqlcmd against the container
+      - name: run tests
+        run: |
+          sqlcmd -S localhost -U sa -P dbatools.IO -Q "SELECT 1"
       # - name: Run pytest with coverage
       #   run: |
       #     pytest --cov --cov-report term-missing
