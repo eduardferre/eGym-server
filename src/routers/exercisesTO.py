@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 
-from db.sqlDB.client import sqlserver_client
-from db.sqlDB.models.exerciseTO import ExerciseTO
-from db.sqlDB.schemas.exerciseTO import exerciseTO_schema
+from src.sqlDB.client import sqlserver_client
+from src.sqlDB.models.exerciseTO import ExerciseTO
+from src.sqlDB.schemas.exerciseTO import exerciseTO_schema
 
 sql_cursor = sqlserver_client.cursor()
 

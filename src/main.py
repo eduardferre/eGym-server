@@ -12,8 +12,8 @@ os.environ["TEST_ENABLED"] = "FALSE"
 import uvicorn
 from utils.logger import logging
 from fastapi import FastAPI
-from routers import usersTO, exercisesTO, routinesTO
-from routers import users, posts, comments, routines
+from src.routers import usersTO, exercisesTO, routinesTO
+from src.routers import users, posts, comments, routines
 
 
 logging.info("Started!")

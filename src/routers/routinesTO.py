@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, status
 
-from db.sqlDB.client import sqlserver_client
-from db.sqlDB.models.routineTO import RoutineTO
-from db.sqlDB.schemas.routineTO import routineTO_schema
-from routers.exercisesTO import searchExerciseTO
+from src.sqlDB.client import sqlserver_client
+from src.sqlDB.models.routineTO import RoutineTO
+from src.sqlDB.schemas.routineTO import routineTO_schema
+from src.routers.exercisesTO import searchExerciseTO
 
 sql_cursor = sqlserver_client.cursor()
 sql_cursor_async = sqlserver_client.cursor()

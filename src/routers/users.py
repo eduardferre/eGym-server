@@ -2,12 +2,12 @@ from utils.logger import logging
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from db.mongodb.client import mongodb_client
-from db.mongodb.models.user import User
-from db.mongodb.schemas.user import users_schema, user_schema
-import routers.posts as posts
-import routers.comments as comments
-import routers.routines as routines
+from src.db.mongodb.client import mongodb_client
+from src.db.mongodb.models.user import User
+from src.db.mongodb.schemas.user import users_schema, user_schema
+import src.routers.posts as posts
+import src.routers.comments as comments
+import src.routers.routines as routines
 
 
 router = APIRouter(

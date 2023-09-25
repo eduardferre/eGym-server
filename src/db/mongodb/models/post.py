@@ -12,6 +12,6 @@ class Post(BaseModel):
     comments: list[Comment]
 
 
-from db.mongodb.models.comment import Comment
+from src.db.mongodb.models.comment import Comment
 
 Post.update_forward_refs()

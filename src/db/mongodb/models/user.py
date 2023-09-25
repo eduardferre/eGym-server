@@ -22,8 +22,8 @@ class User(BaseModel):
     backgroundPicture: str
 
 
-from db.mongodb.models.post import Post
-from db.mongodb.models.routine import Routine
-from db.sqlDB.models.routineTO import RoutineTO
+from src.db.mongodb.models.post import Post
+from src.db.mongodb.models.routine import Routine
+from src.sqlDB.models.routineTO import RoutineTO
 
 User.update_forward_refs()

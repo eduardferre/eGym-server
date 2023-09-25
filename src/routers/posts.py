@@ -3,12 +3,12 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from db.mongodb.client import mongodb_client
-from db.mongodb.models.post import Post
-from db.mongodb.schemas.post import posts_schema, post_schema
-from db.mongodb.models.user import User
-import routers.users as users
-import routers.comments as comments
+from src.db.mongodb.client import mongodb_client
+from src.db.mongodb.models.post import Post
+from src.db.mongodb.schemas.post import posts_schema, post_schema
+from src.db.mongodb.models.user import User
+import src.routers.users as users
+import src.routers.comments as comments
 
 
 router = APIRouter(

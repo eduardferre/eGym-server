@@ -2,9 +2,9 @@ import logging
 import os
 from fastapi import APIRouter, HTTPException, status
 
-from db.sqlDB.client import sqlserver_client
-from db.sqlDB.models.userTO import UserTO
-from db.sqlDB.schemas.userTO import userTO_schema, usersTO_schema
+from src.sqlDB.client import sqlserver_client
+from src.sqlDB.models.userTO import UserTO
+from src.sqlDB.schemas.userTO import userTO_schema, usersTO_schema
 
 sql_cursor = sqlserver_client.cursor()
 
