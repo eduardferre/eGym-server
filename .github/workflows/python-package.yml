@@ -6,7 +6,7 @@ name: Run Tests and Check Coverage
 on: [push, pull_request]
 
 jobs:
-  coverage:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +23,14 @@ jobs:
 
       - name: Run pytest with coverage
         run: |
-          coverage run -m pytest
-          coverage report -m --fail-under=80  # Set your desired coverage threshold here
+          pytest --cov --cov-report term-missing
+          coverage report --fail-under=80  # Set your desired coverage threshold here
 
       - name: Upload coverage results
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./htmlcov # Change this to your coverage report directory
+          path: ./tests/reports # Change this to your coverage report directory
 
       - name: Set the GitHub status
         run: echo "Coverage check complete"
