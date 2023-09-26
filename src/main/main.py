@@ -6,14 +6,13 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-
-os.environ["TEST_ENABLED"] = "FALSE"
+sys.path.append("/Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server")
 
 import uvicorn
 from utils.logger import logging
 from fastapi import FastAPI
-from src.routers import usersTO, exercisesTO, routinesTO
-from src.routers import users, posts, comments, routines
+from src.main.routers import usersTO, exercisesTO, routinesTO
+from src.main.routers import users, posts, comments, routines
 
 
 logging.info("Started!")

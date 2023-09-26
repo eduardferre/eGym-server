@@ -2,12 +2,12 @@ from utils.logger import logging
 from fastapi import APIRouter, HTTPException, status
 from bson import ObjectId
 
-from src.db.mongodb.client import mongodb_client
-from src.db.mongodb.models.user import User
-from src.db.mongodb.schemas.user import users_schema, user_schema
-import src.routers.posts as posts
-import src.routers.comments as comments
-import src.routers.routines as routines
+from db.mongodb.client import mongodb_client
+from db.mongodb.models.user import User
+from db.mongodb.schemas.user import users_schema, user_schema
+import src.main.routers.posts as posts
+import src.main.routers.comments as comments
+import src.main.routers.routines as routines
 
 
 router = APIRouter(
@@ -68,6 +68,7 @@ async def getUserByUsername(username: str):
 @router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def addUser(user: User):
     logging.info("POST /users/")
+    logging.info(mongodb_client)
     user_search = await search_user("username", user.username)
 
     if type(user_search) == User:
@@ -211,6 +212,20 @@ async def deleteUser(id: str):
             detail=f"The user with id = {id} has not been deleted",
         )
     return user_search
+
+
+@router.delete("/", response_model=list[User], status_code=status.HTTP_200_OK)
+async def deleteAllUsers():
+    logging.info(f"DELETE /users/")
+    list_users = await getUsers()
+
+    logging.info("Massive user deletion has been started")
+
+    for user in list_users:
+        user = User(**user)
+        await deleteUser(user.id)
+
+    return list_users
 
 
 # Methods

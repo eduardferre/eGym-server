@@ -12,6 +12,6 @@ class Exercise(BaseModel):
     highestWeight: float
 
 
-from src.db.mongodb.models.set import Set
+from db.mongodb.models.set import Set
 
 Exercise.update_forward_refs()
