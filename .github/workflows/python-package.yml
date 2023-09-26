@@ -32,6 +32,7 @@ jobs:
 
       - name: Create MS SQL Database
         run: |
+          sudo apt-get update && apt-get install freetds-dev
           sudo apt-get update && sudo apt-get install -y mssql-tools
           /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${{secrets.SQL_PASSWORD}}' -Q 'CREATE DATABASE TestDB'
 
