@@ -30,11 +30,16 @@ jobs:
       - name: Install dependencies
         run: pip install -r utils/requirements.txt # Replace with your requirements file
 
-      - name: Compile and Test from Build Script
-        shell: pwsh
-        run: .\build.ps1 ci-pr $
-        env:
-          ConnectionStrings__MyConnString: "Server=localhost,1433;Initial Catalog=MyTestDb;User Id=sa;Password=${{secrets.SQL_PASSWORD}};"
+      - name: Create MS SQL Database
+        run: |
+          sudo apt-get update && sudo apt-get install -y mssql-tools
+          /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '${{secrets.SQL_PASSWORD}}' -Q 'CREATE DATABASE TestDB'
+
+      # - name: Compile and Test from Build Script
+      #   shell: pwsh
+      #   run: .\build.ps1 ci-pr $
+      #   env:
+      #     ConnectionStrings__MyConnString: "Server=localhost,1433;Initial Catalog=TestDB;User Id=sa;Password=${{secrets.SQL_PASSWORD}};"
 
       #     - name: Run the action
       #   uses: potatoqualitee/mssqlsuite@v1.7
