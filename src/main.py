@@ -12,7 +12,7 @@ os.environ["TEST_ENABLED"] = "FALSE"
 import uvicorn
 from utils.logger import logging
 from fastapi import FastAPI
-from src.routers import usersTO, exercisesTO, routinesTO
+# from src.routers import usersTO, exercisesTO, routinesTO
 from src.routers import users, posts, comments, routines
 
 
@@ -24,9 +24,9 @@ logging.info("Started!")
 app = FastAPI()  # uvicorn main:app --reload
 
 # Routers
-app.include_router(usersTO.router)
-app.include_router(exercisesTO.router)
-app.include_router(routinesTO.router)
+# app.include_router(usersTO.router)
+# app.include_router(exercisesTO.router)
+# app.include_router(routinesTO.router)
 
 app.include_router(users.router)
 app.include_router(posts.router)
