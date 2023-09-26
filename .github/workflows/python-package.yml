@@ -40,7 +40,7 @@ jobs:
           collation: Latin1_General_BIN
 
       - name: Run sqlclient
-        run: sqlcmd -S localhost -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;" 
+        run: sqlcmd -S 127.0.0.1 -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;" 
 
       # - name: Setup Docker
       #   run: |
