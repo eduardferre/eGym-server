@@ -34,13 +34,13 @@ jobs:
         uses: potatoqualitee/mssqlsuite@v1.7
         with:
           install: sqlengine, sqlpackage
-          version: 2017
+          version: 2019
           sa-password: ${{secrets.SQL_PASSWORD}}
           show-log: true
           collation: Latin1_General_BIN
 
       - name: Run sqlclient
-        run: sqlcmd -S 127.0.0.1 -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;" 
+        run: sqlcmd -S localhost -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;"
 
       # - name: Setup Docker
       #   run: |
