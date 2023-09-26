@@ -33,10 +33,10 @@ app.include_router(comments.router)
 app.include_router(routines.router)
 
 
-# Router: root
-@app.get("/")
-async def root():
-    return "Welcome to eGym!"
+# # Router: root
+# @app.get("/")
+# async def root():
+#     return "Welcome to eGym!"
 
 
 if __name__ == "__main__":

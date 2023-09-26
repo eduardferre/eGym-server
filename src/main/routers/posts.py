@@ -249,18 +249,19 @@ async def deleteAllCreatorPosts(creator: str):
         )
 
     result = await search_posts("creator", creator)
+    posts_list = list()
 
     if len(result) == 0:
         logging.info(f"The user {creator} has no posts, so, anything will be deleted")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user {creator} has no posts, so, anything will be deleted",
-        )
-
-    post_search = posts_schema(result)
-    posts_list = list()
-    for post in post_search:
-        posts_list.append(await deletePost(post["id"]))
+        # raise HTTPException(
+        #     status_code=status.HTTP_404_NOT_FOUND,
+        #     detail=f"The user {creator} has no posts, so, anything will be deleted",
+        # )
+    else:
+        logging.info(f"The '{creator}' posts will be deleted")
+        post_search = posts_schema(result)
+        for post in post_search:
+            posts_list.append(await deletePost(post["id"]))
 
     return posts_list
 

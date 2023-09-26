@@ -64,10 +64,10 @@ async def getCommentsByCreator(creator: str):
 
     if len(comments_list) == 0:
         logging.info("There are no comments in the database made by this user")
-        raise HTTPException(
-            status_code=status.HTTP_204_NO_CONTENT,
-            detail="There are no comments in the database made by this user",
-        )
+        # raise HTTPException(
+        #     status_code=status.HTTP_204_NO_CONTENT,
+        #     detail="There are no comments in the database made by this user",
+        # )
     return comments_schema(comments_list)
 
 

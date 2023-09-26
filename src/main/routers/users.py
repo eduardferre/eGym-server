@@ -68,7 +68,6 @@ async def getUserByUsername(username: str):
 @router.post("/", response_model=User, status_code=status.HTTP_201_CREATED)
 async def addUser(user: User):
     logging.info("POST /users/")
-    logging.info(mongodb_client)
     user_search = await search_user("username", user.username)
 
     if type(user_search) == User:
@@ -106,6 +105,12 @@ async def updateUser(user: User):
 
     user_search = await search_user("_id", ObjectId(user.id))
 
+    if user_search == user:
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail=f"The user '{user.username}' has not been updated since there are no changes",
+        )
+
     if type(user_search) != User:
         logging.info(f"The user with id = '{user.id}' does not exist")
         raise HTTPException(
@@ -133,10 +138,10 @@ async def updateUser(user: User):
                 )
                 posts_list.append(post_dict)
 
-            comments_list = comments.getCommentsByCreator(user_search.username)
+            comments_list = await comments.getCommentsByCreator(user_search.username)
             for comment in comments_list:
                 comment.creator = user.username
-                comments.updateCommentFromPost(comment.postId, comment)
+                await comments.updateCommentFromPost(comment.postId, comment)
 
             user_dict["postsLog"] = posts_list
     else:
@@ -232,7 +237,7 @@ async def deleteAllUsers():
 async def search_user(field: str, key):
     try:
         user = await mongodb_client.users.find_one({field: key})
-        if User != None:
+        if user != None:
             logging.info(f"The user with {field} = {key} exists in the database")
         return User(**user_schema(user))
     except:

@@ -256,20 +256,21 @@ async def deleteAllCreatorRoutines(creator: str):
         )
 
     result = await search_routines("creator", creator)
+    routines_list = list()
 
     if len(result) == 0:
         logging.info(
             f"The user {creator} has no routines, so, anything will be deleted"
         )
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user {creator} has no routines, so, anything will be deleted",
-        )
-
-    routine_search = routines_schema(result)
-    routines_list = list()
-    for routine in routine_search:
-        routines_list.append(await deleteRoutine(routine["id"]))
+        # raise HTTPException(
+        #     status_code=status.HTTP_404_NOT_FOUND,
+        #     detail=f"The user {creator} has no routines, so, anything will be deleted",
+        # )
+    else:
+        logging.info(f"The {creator} routines will be deleted")
+        routine_search = routines_schema(result)
+        for routine in routine_search:
+            routines_list.append(await deleteRoutine(routine["id"]))
 
     return routines_list
 
