@@ -9,14 +9,14 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    # services:
-    #   mssql:
-    #     image: mcr.microsoft.com/mssql/server:2019-latest
-    #     env:
-    #       SA_PASSWORD: MyTestPassword
-    #       ACCEPT_EULA: "Y"
-    #     ports:
-    #       - 1433:1433
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: ${{secrets.SQL_PASSWORD}}
+          ACCEPT_EULA: "Y"
+        ports:
+          - 1433:1433
 
     steps:
       - name: Checkout code
@@ -30,17 +30,23 @@ jobs:
       - name: Install dependencies
         run: pip install -r utils/requirements.txt # Replace with your requirements file
 
-      - name: Run the action
-        uses: potatoqualitee/mssqlsuite@v1.7
-        with:
-          install: sqlengine, sqlclient, sqlpackage, localdb
-          version: 2019
-          sa-password: ${{secrets.SQL_PASSWORD}}
-          show-log: true
-          collation: Latin1_General_BIN
+      - name: Compile and Test from Build Script
+        shell: pwsh
+        run: .\build.ps1 ci-pr $
+        env:
+          ConnectionStrings__MyConnString: "Server=localhost,1433;Initial Catalog=MyTestDb;User Id=sa;Password=${{secrets.SQL_PASSWORD}};"
 
-      - name: Run sqlclient
-        run: sqlcmd -S localhost -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;"
+      #     - name: Run the action
+      #   uses: potatoqualitee/mssqlsuite@v1.7
+      #   with:
+      #     install: sqlengine, sqlclient, sqlpackage, localdb
+      #     version: 2019
+      #     sa-password: ${{secrets.SQL_PASSWORD}}
+      #     show-log: true
+      #     collation: Latin1_General_BIN
+
+      # - name: Run sqlclient
+      #   run: sqlcmd -S localhost -U ${{secrets.SQL_USER}} -P ${{secrets.SQL_PASSWORD}} -d tempdb -Q "SELECT @@version;"
 
       # - name: Setup Docker
       #   run: |
