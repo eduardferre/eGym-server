@@ -33,7 +33,7 @@ jobs:
       - name: Run the action
         uses: potatoqualitee/mssqlsuite@v1.7
         with:
-          install: sqlengine, sqlpackage
+          install: sqlengine, sqlclient, sqlpackage, localdb
           version: 2019
           sa-password: ${{secrets.SQL_PASSWORD}}
           show-log: true
