@@ -48,8 +48,9 @@ The API is formed by the following endpoints with their respective methods.
 | GET       | users/ | {id}                | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND | Get user by id |
 | GET       | users/username/ | {username}                | 200_OK / 404_NOT_FOUND | Get user by username |
 | POST    | users/ | -                     | 201_CREATED / 409_CONFLICT | Add user |
-| PUT       | users/ | -                    | 201_CREATED / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
+| PUT       | users/ | -                    | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update user info |
 | DELETE | users/ | {id}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete a user by id |
+| DELETE | users/ | -     | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / HTTP_500_INTERNAL_SERVER_ERROR | Delete all users |
 
 
 ### ***Posts** - MONGODB DATABASE*
