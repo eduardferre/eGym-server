@@ -58,7 +58,7 @@ user_update_conflict = User(
 )
 
 
-# @pytest.mark.order(2)
+@pytest.mark.order(1)
 @pytest.mark.asyncio
 async def test_addUser_Created():
     user_response = await users.addUser(user=user_add)
@@ -68,6 +68,7 @@ async def test_addUser_Created():
     assert isinstance(user_response, User)
 
 
+@pytest.mark.order(3)
 @pytest.mark.asyncio
 async def test_getUsers_Ok():
     users_list = await users.getUsers()

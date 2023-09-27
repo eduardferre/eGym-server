@@ -15,17 +15,17 @@ from fastapi import APIRouter, HTTPException, status
 from src.main.routers import comments
 
 
-# @pytest.mark.asyncio
-# async def test_getComments_NoContent():
-#     with pytest.raises(HTTPException) as exception:
-#         await comments.getComments()
-#     assert isinstance(exception.value, HTTPException)
-#     assert exception.value.status_code == 204
-#     assert exception.value.detail == "There are no comments in the database"
+@pytest.mark.asyncio
+async def test_getComments_NoContent():
+    with pytest.raises(HTTPException) as exception:
+        await comments.getComments()
+    assert isinstance(exception.value, HTTPException)
+    assert exception.value.status_code == 204
+    assert exception.value.detail == "There are no comments in the database"
 
-
-# @pytest.mark.asyncio
-# async def test_getCommentById_BadRequest():
-#     idTest = "1"
-#     with pytest.raises(HTTPException):
-#         await comments.getCommentById(idTest)
+@pytest.mark.order(2)
+@pytest.mark.asyncio
+async def test_getCommentById_BadRequest():
+    idTest = "1"
+    with pytest.raises(HTTPException):
+        await comments.getCommentById(idTest)
