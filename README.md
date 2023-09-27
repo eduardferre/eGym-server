@@ -94,7 +94,7 @@ The endpoints should be verified, this verification is done by using unit tests,
 
 ### **LAST PR COVERAGE REPORT *(src/tests/reports/index.html)* - `Coverage report: 50%`**
 
-<details open>
+<details>
 <summary>Check the last coverage report</summary>
 <br>
 
@@ -139,34 +139,72 @@ The following table is generated from *index.html* in this <kbd>[website](http:/
         
 </details>
 
-<details open>
+<details>
 <summary>Check the last coverage logs</summary>
 <br>
 
 ```
-src/tests/routers/users_test.py::test_addUser_Created PASSED             [  5%]
-src/tests/routers/comments_test.py::test_getCommentById_BadRequest PASSED [ 10%]
-src/tests/routers/users_test.py::test_getUsers_Ok PASSED                 [ 15%]
-src/tests/routers/comments_test.py::test_getComments_NoContent PASSED    [ 20%]
-src/tests/routers/users_test.py::test_addUser_Conflict PASSED            [ 25%]
-src/tests/routers/users_test.py::test_getUserById_Ok PASSED              [ 30%]
-src/tests/routers/users_test.py::test_getUserById_BadRequest PASSED      [ 35%]
-src/tests/routers/users_test.py::test_getUserById_NotFound PASSED        [ 40%]
-src/tests/routers/users_test.py::test_getUserByUsername_Ok PASSED        [ 45%]
-src/tests/routers/users_test.py::test_updateUser_NoContent PASSED        [ 50%]
-src/tests/routers/users_test.py::test_updateUser_Ok PASSED               [ 55%]
-src/tests/routers/users_test.py::test_getUserByUsername_NotFound PASSED  [ 60%]
-src/tests/routers/users_test.py::test_updateUser_BadRequest PASSED       [ 65%]
-src/tests/routers/users_test.py::test_updateUser_NotFound PASSED         [ 70%]
-src/tests/routers/users_test.py::test_updateUser_Conflict PASSED         [ 75%]
-src/tests/routers/users_test.py::test_deleteUser_Ok PASSED               [ 80%]
-src/tests/routers/users_test.py::test_deleteUser_BadRequest PASSED       [ 85%]
-src/tests/routers/users_test.py::test_deleteUser_NotFound PASSED         [ 90%]
-src/tests/routers/users_test.py::test_deleteAllUsers_Ok PASSED           [ 95%]
-src/tests/routers/users_test.py::test_getUsers_NoContent PASSED          [100%]
+src/tests/routers/comments_test.py::test_getComments_NoContent PASSED ✅ 		[  5%]
+src/tests/routers/comments_test.py::test_getCommentById_BadRequest PASSED ✅  		[ 10%]
+src/tests/routers/users_test.py::test_addUser_Created PASSED ✅          		[ 15%]
+src/tests/routers/users_test.py::test_getUsers_Ok PASSED ✅              		[ 20%]
+src/tests/routers/users_test.py::test_addUser_Conflict PASSED ✅         		[ 25%]
+src/tests/routers/users_test.py::test_getUserById_Ok PASSED ✅           		[ 30%]
+src/tests/routers/users_test.py::test_getUserById_BadRequest PASSED ✅   		[ 35%]
+src/tests/routers/users_test.py::test_getUserById_NotFound PASSED ✅     		[ 40%]
+src/tests/routers/users_test.py::test_getUserByUsername_Ok PASSED ✅     		[ 45%]
+src/tests/routers/users_test.py::test_updateUser_NoContent PASSED ✅     		[ 50%]
+src/tests/routers/users_test.py::test_updateUser_Ok PASSED ✅            		[ 55%]
+src/tests/routers/users_test.py::test_getUserByUsername_NotFound PASSED ✅  		[ 60%]
+src/tests/routers/users_test.py::test_updateUser_BadRequest PASSED ✅    		[ 65%]
+src/tests/routers/users_test.py::test_updateUser_NotFound PASSED ✅      		[ 70%]
+src/tests/routers/users_test.py::test_updateUser_Conflict PASSED ✅      		[ 75%]
+src/tests/routers/users_test.py::test_deleteUser_Ok PASSED ✅            		[ 80%]
+src/tests/routers/users_test.py::test_deleteUser_BadRequest PASSED ✅    		[ 85%]
+src/tests/routers/users_test.py::test_deleteUser_NotFound PASSED ✅      		[ 90%]
+src/tests/routers/users_test.py::test_deleteAllUsers_Ok PASSED ✅        		[ 95%]
+src/tests/routers/users_test.py::test_getUsers_NoContent PASSED ✅       		[100%]
 ```
 
 </details>
 
-The following tests have been stated: //TODO: Reorder for proper testing
+### UNIT TESTS IMPLEMENTED
+<details>
+<summary>The following tests have been stated `//TODO: Reorder for proper testing`</summary>
+<be>
 
+| Test name                         | Description                                      | ✅ / ❌ |
+| --------------------------------- | ------------------------------------------------ | :-----: |
+| `test_addUser_Created`            | Test adding a user (201 - Created).              |    ✅   |
+| `test_getUsers_Ok`                | Test getting users (200 - OK).                   |    ✅   |
+| `test_addUser_Conflict`           | Test adding a user (409 - Conflict).             |    ✅   |
+| `test_getUserById_Ok`             | Test getting a user by ID (200 - OK).            |    ✅   |
+| `test_getUserById_BadRequest`     | Test getting a user by ID (400 - Bad Request).   |    ✅   |
+| `test_getUserById_NotFound`       | Test getting a user by ID (404 - Not Found).     |    ✅   |
+| `test_getUserByUsername_Ok`       | Test getting a user by Username (200 - OK).      |    ✅   |
+| `test_updateUser_NoContent`       | Test updating a user (204 - No Content).         |    ✅   |
+| `test_updateUser_Ok`              | Test updating a user (200 - OK).                 |    ✅   |
+| `test_getUserByUsername_NotFound` | Test getting a user by Username (404 - Not Found)|    ✅   |
+| `test_updateUser_BadRequest`      | Test updating a user (400 - Bad Request).        |    ✅   |
+| `test_updateUser_NotFound`        | Test updating a user (404 - Not Found).          |    ✅   |
+| `test_updateUser_Conflict`        | Test updating a user (409 - Conflict).           |    ✅   |
+| `test_deleteUser_Ok`              | Test deleting a user (200 - OK).                 |    ✅   |
+| `test_deleteUser_BadRequest`      | Test deleting a user (400 - Bad Request).        |    ✅   |
+| `test_deleteUser_NotFound`        | Test deleting a user (404 - Not Found).          |    ✅   |
+| `test_deleteAllUsers_Ok`          | Test deleting all users (200 - OK).              |    ✅   |
+| `test_getUsers_NoContent`         | Test getting users (204 - No Content).           |    ✅   |
+| `test_getComments_NoContent`      | Test getting comments (204 - No Content).        |    ✅   |
+| `test_getCommentById_BadRequest`  | Test getting a comment by ID (400 - Bad Request).|    ✅   |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+| `test_`       | description   | ✅ / ❌ |
+
+</details>
