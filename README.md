@@ -95,226 +95,78 @@ The endpoints should be verified, this verification is done by using unit tests,
 ### **LAST PR COVERAGE REPORT *(src/tests/reports/index.html)* - `Coverage report: 50%`**
 
 <details open>
-<summary>Check the coverage report</summary>
+<summary>Check the last coverage report</summary>
 <br>
-<table class="index" data-sortable="">
-        <thead>
-            <tr class="tablehead" title="Click to sort">
-                <th class="name left" aria-sort="descending" data-shortcut="n">Module</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
-                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr class="file">
-                <td class="name left"><a href="d_c810615cce0f7acb_logger_py.html">utils/logger.py</a></td>
-                <td>20</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="20 20">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_4cb59d3976f21776_users_test_py.html">src/tests/routers/users_test.py</a></td>
-                <td>124</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="124 124">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_4cb59d3976f21776_comments_test_py.html">src/tests/routers/comments_test.py</a></td>
-                <td>23</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="23 23">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_4cb59d3976f21776___init___py.html">src/tests/routers/__init__.py</a></td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="0 0">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_08b4cb1648a15a99_main_test_py.html">src/tests/main_test.py</a></td>
-                <td>13</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="13 13">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_08b4cb1648a15a99___init___py.html">src/tests/__init__.py</a></td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="0 0">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_usersTO_py.html">src/main/routers/usersTO.py</a></td>
-                <td>72</td>
-                <td>52</td>
-                <td>0</td>
-                <td class="right" data-ratio="20 72">28%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_users_py.html">src/main/routers/users.py</a></td>
-                <td>148</td>
-                <td>30</td>
-                <td>0</td>
-                <td class="right" data-ratio="118 148">80%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_routinesTO_py.html">src/main/routers/routinesTO.py</a></td>
-                <td>122</td>
-                <td>95</td>
-                <td>0</td>
-                <td class="right" data-ratio="27 122">22%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_routines_py.html">src/main/routers/routines.py</a></td>
-                <td>174</td>
-                <td>135</td>
-                <td>0</td>
-                <td class="right" data-ratio="39 174">22%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_posts_py.html">src/main/routers/posts.py</a></td>
-                <td>166</td>
-                <td>126</td>
-                <td>0</td>
-                <td class="right" data-ratio="40 166">24%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_exercisesTO_py.html">src/main/routers/exercisesTO.py</a></td>
-                <td>86</td>
-                <td>64</td>
-                <td>0</td>
-                <td class="right" data-ratio="22 86">26%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_0967d60ec74c5f34_comments_py.html">src/main/routers/comments.py</a></td>
-                <td>186</td>
-                <td>136</td>
-                <td>0</td>
-                <td class="right" data-ratio="50 186">27%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_5f1512723eddbe79_main_py.html">src/main/main.py</a></td>
-                <td>22</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="21 22">95%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_3facd73e22d9d899_userTO_py.html">db/sqlDB/schemas/userTO.py</a></td>
-                <td>4</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="2 4">50%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_3facd73e22d9d899_routineTO_py.html">db/sqlDB/schemas/routineTO.py</a></td>
-                <td>4</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="2 4">50%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_3facd73e22d9d899_exerciseTO_py.html">db/sqlDB/schemas/exerciseTO.py</a></td>
-                <td>4</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="2 4">50%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_098731541c99038c_userTO_py.html">db/sqlDB/models/userTO.py</a></td>
-                <td>9</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="9 9">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_098731541c99038c_routineTO_py.html">db/sqlDB/models/routineTO.py</a></td>
-                <td>9</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="9 9">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_098731541c99038c_exerciseTO_py.html">db/sqlDB/models/exerciseTO.py</a></td>
-                <td>7</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="7 7">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_8bd27d18406d48c9_client_py.html">db/sqlDB/client.py</a></td>
-                <td>7</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="6 7">86%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_44ec700dd9da9519_user_py.html">db/mongodb/schemas/user.py</a></td>
-                <td>4</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 4">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_44ec700dd9da9519_routine_py.html">db/mongodb/schemas/routine.py</a></td>
-                <td>4</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="2 4">50%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_44ec700dd9da9519_post_py.html">db/mongodb/schemas/post.py</a></td>
-                <td>4</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="2 4">50%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_44ec700dd9da9519_comment_py.html">db/mongodb/schemas/comment.py</a></td>
-                <td>4</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="3 4">75%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_user_py.html">db/mongodb/models/user.py</a></td>
-                <td>24</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="24 24">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_set_py.html">db/mongodb/models/set.py</a></td>
-                <td>9</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="9 9">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_routine_py.html">db/mongodb/models/routine.py</a></td>
-                <td>14</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="14 14">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_post_py.html">db/mongodb/models/post.py</a></td>
-                <td>12</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="12 12">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_exercise_py.html">db/mongodb/models/exercise.py</a></td>
-                <td>12</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="12 12">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c86a4e7de3c3b4b2_comment_py.html">db/mongodb/models/comment.py</a></td>
-                <td>8</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="8 8">100%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="d_c88e774a1055ac67_client_py.html">db/mongodb/client.py</a></td>
-                <td>14</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="12 14">86%</td>
-            </tr><tr class="file">
-                <td class="name left"><a href="conftest_py.html">conftest.py</a></td>
-                <td>10</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="10 10">100%</td>
-            </tr></tbody>
-        <tfoot>
-            <tr class="total">
-                <td class="name left">Total</td>
-                <td>1319</td>
-                <td>653</td>
-                <td>0</td>
-                <td class="right" data-ratio="666 1319">50%</td>
-            </tr>
-        </tfoot>
-    </table>
+
+The following table is generated from *index.html* in this <kbd>[website](http://johnbeech.github.io/html-table-to-markdown-converter/index.html)</kbd>.
+
+| Module | statements | missing | excluded | coverage |
+| --- | --- | --- | --- | --- |
+| utils/logger.py | 20 | 0 | 0 | 100% |
+| src/tests/routers/users_test.py | 124 | 0 | 0 | 100% |
+| src/tests/routers/comments_test.py | 23 | 0 | 0 | 100% |
+| src/tests/routers/__init__.py | 0 | 0 | 0 | 100% |
+| src/tests/main_test.py | 13 | 0 | 0 | 100% |
+| src/tests/__init__.py | 0 | 0 | 0 | 100% |
+| src/main/routers/usersTO.py | 72 | 52 | 0 | 28% |
+| src/main/routers/users.py | 148 | 30 | 0 | 80% |
+| src/main/routers/routinesTO.py | 122 | 95 | 0 | 22% |
+| src/main/routers/routines.py | 174 | 135 | 0 | 22% |
+| src/main/routers/posts.py | 166 | 126 | 0 | 24% |
+| src/main/routers/exercisesTO.py | 86 | 64 | 0 | 26% |
+| src/main/routers/comments.py | 186 | 136 | 0 | 27% |
+| src/main/main.py | 22 | 1 | 0 | 95% |
+| db/sqlDB/schemas/userTO.py | 4 | 2 | 0 | 50% |
+| db/sqlDB/schemas/routineTO.py | 4 | 2 | 0 | 50% |
+| db/sqlDB/schemas/exerciseTO.py | 4 | 2 | 0 | 50% |
+| db/sqlDB/models/userTO.py | 9 | 0 | 0 | 100% |
+| db/sqlDB/models/routineTO.py | 9 | 0 | 0 | 100% |
+| db/sqlDB/models/exerciseTO.py | 7 | 0 | 0 | 100% |
+| db/sqlDB/client.py | 7 | 1 | 0 | 86% |
+| db/mongodb/schemas/user.py | 4 | 0 | 0 | 100% |
+| db/mongodb/schemas/routine.py | 4 | 2 | 0 | 50% |
+| db/mongodb/schemas/post.py | 4 | 2 | 0 | 50% |
+| db/mongodb/schemas/comment.py | 4 | 1 | 0 | 75% |
+| db/mongodb/models/user.py | 24 | 0 | 0 | 100% |
+| db/mongodb/models/set.py | 9 | 0 | 0 | 100% |
+| db/mongodb/models/routine.py | 14 | 0 | 0 | 100% |
+| db/mongodb/models/post.py | 12 | 0 | 0 | 100% |
+| db/mongodb/models/exercise.py | 12 | 0 | 0 | 100% |
+| db/mongodb/models/comment.py | 8 | 0 | 0 | 100% |
+| db/mongodb/client.py | 14 | 2 | 0 | 86% |
+| conftest.py | 10 | 0 | 0 | 100% |
+| Total | 1319 | 653 | 0 | 50% |
+        
 </details>
+
+<details open>
+<summary>Check the last coverage logs</summary>
+<br>
+
+```
+src/tests/routers/users_test.py::test_addUser_Created PASSED             [  5%]
+src/tests/routers/comments_test.py::test_getCommentById_BadRequest PASSED [ 10%]
+src/tests/routers/users_test.py::test_getUsers_Ok PASSED                 [ 15%]
+src/tests/routers/comments_test.py::test_getComments_NoContent PASSED    [ 20%]
+src/tests/routers/users_test.py::test_addUser_Conflict PASSED            [ 25%]
+src/tests/routers/users_test.py::test_getUserById_Ok PASSED              [ 30%]
+src/tests/routers/users_test.py::test_getUserById_BadRequest PASSED      [ 35%]
+src/tests/routers/users_test.py::test_getUserById_NotFound PASSED        [ 40%]
+src/tests/routers/users_test.py::test_getUserByUsername_Ok PASSED        [ 45%]
+src/tests/routers/users_test.py::test_updateUser_NoContent PASSED        [ 50%]
+src/tests/routers/users_test.py::test_updateUser_Ok PASSED               [ 55%]
+src/tests/routers/users_test.py::test_getUserByUsername_NotFound PASSED  [ 60%]
+src/tests/routers/users_test.py::test_updateUser_BadRequest PASSED       [ 65%]
+src/tests/routers/users_test.py::test_updateUser_NotFound PASSED         [ 70%]
+src/tests/routers/users_test.py::test_updateUser_Conflict PASSED         [ 75%]
+src/tests/routers/users_test.py::test_deleteUser_Ok PASSED               [ 80%]
+src/tests/routers/users_test.py::test_deleteUser_BadRequest PASSED       [ 85%]
+src/tests/routers/users_test.py::test_deleteUser_NotFound PASSED         [ 90%]
+src/tests/routers/users_test.py::test_deleteAllUsers_Ok PASSED           [ 95%]
+src/tests/routers/users_test.py::test_getUsers_NoContent PASSED          [100%]
+```
+
+</details>
+
+The following tests have been stated: //TODO: Reorder for proper testing
+
