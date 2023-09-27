@@ -3,7 +3,7 @@ Welcome to my thesis degree project, this repository contains all the specificat
 
 In this README you can find some important information about the creation of the backend itself. Information such which databases have been used, which API structure has been chosen and the deployment of the API.
 
-## **API**
+## **API ENDPOINTS**
 The API is formed by the following endpoints with their respective methods.
 
 ### ***UsersTO (Transfer Object)** - SQL DATABASE*
@@ -88,3 +88,6 @@ The API is formed by the following endpoints with their respective methods.
 | PUT       | routines/ | -                  | 201_CREATED / 204_NO_CONTENT / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Update routine |
 | DELETE | routines/ | {id}                  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Delete routine by id |
 | DELETE | routines/creatorRoutines/ | {creator}  | 200_OK / 400_BAD_REQUEST / 404_NOT_FOUND / 409_CONFLICT / HTTP_500_INTERNAL_SERVER_ERROR | Delete user's routines |
+
+## **API UNIT TESTS**
+The endpoints should be verified, so, the way that this verification is done is by using unit tests, developed with `pytest` library and its pluggings. The aim of using unit tests is to check that all the cases are supported by the server, meaning that in front any error or exception, the server is protected and the user experience won't be affected. To be sure about the coverage of the unit tests, the `pytest-cov` library has been used. It provides a widely report where the overall coverage can be checked. Furthermore, this add on shows visually which classes are not covered pointing the lines that should be revised by testing.
