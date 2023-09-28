@@ -92,7 +92,7 @@ The API is formed by the following endpoints with their respective methods.
 ## **API UNIT TESTS**
 The endpoints should be verified, this verification is done by using unit tests, developed with the `pytest` library and its pluggings. Using unit tests aims to check that all the cases are supported by the server, meaning that in front of any error or exception, the server is protected and the user experience won't be affected. The `pytest-cov` library has been used to ensure the coverage of the unit tests. It provides a wide report where the overall coverage can be checked. Furthermore, this add-on shows visually which classes are not covered pointing to the lines that should be revised by testing.
 
-### **LAST PR COVERAGE REPORT *(src/tests/reports/index.html)* - `Coverage report: 64%`**
+### **LAST COVERAGE REPORT *(src/tests/reports/index.html)* - `Coverage report: 64%`**
 
 <details>
 <summary>Check the last coverage report</summary>
@@ -191,7 +191,7 @@ src/tests/routers/users_test.py::test_getUsers_NoContent PASSED ✅       [100%]
 
 ### UNIT TESTS IMPLEMENTED
 <details>
-<summary>The following tests have been stated `//TODO: Reorder for proper testing`</summary>
+<summary>The following tests have been stated</summary>
 <be>
 
 | Test name                         | Description                                      | ✅ / ❌ |
