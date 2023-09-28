@@ -136,7 +136,6 @@ async def updatePost(post: Post):
         )
 
     post_search = await search_post("_id", ObjectId(post.id))
-
     if type(post_search) != Post:
         logging.info(f"The post with id = '{post.id}' does not exist")
         raise HTTPException(
@@ -191,8 +190,8 @@ async def updatePost(post: Post):
                 search_user.postsLog.insert(index, post)
                 search_user.postsLog.remove(post_for)
 
-        await users.updateUser(user_search)
-        logging.info(f"Routine logs of '{user_search.username}' has been updated")
+        await users.updateUser(search_user)
+        logging.info(f"Post logs of '{search_user.username}' has been updated")
     return await search_post("_id", ObjectId(post.id))
 
 
@@ -215,6 +214,8 @@ async def deletePost(id: str):
         )
 
     try:
+        search_user = await users.getUserByUsername(post_search.creator)
+
         logging.info(f"Deleting post comments")
         await comments.deleteAllPostComments(id)
 
@@ -231,6 +232,13 @@ async def deletePost(id: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"The post with id = {id} has not been deleted",
         )
+    else:
+        for post_for in search_user.postsLog:
+            if post_search.id == post_for.id:
+                search_user.postsLog.remove(post_for)
+
+        await users.updateUser(search_user)
+        logging.info(f"Post logs of '{search_user.username}' has been updated")
     return post_search
 
 

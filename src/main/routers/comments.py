@@ -287,30 +287,30 @@ async def deleteAllPostComments(postId: str):
     post_comments = post.comments.copy()
     if len(post_comments) == 0:
         logging.info(f"There are no comments in post '{post.id}")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"There are no comments in post '{post.id}",
-        )
+        # raise HTTPException(
+        #     status_code=status.HTTP_404_NOT_FOUND,
+        #     detail=f"There are no comments in post '{post.id}",
+        # )
+    else:
+        list_comments_id = list()
+        try:
+            for comment in post_comments:
+                list_comments_id.append(ObjectId(comment.id))
 
-    list_comments_id = list()
-    try:
-        for comment in post_comments:
-            list_comments_id.append(ObjectId(comment.id))
+            query = {"_id": {"$in": list_comments_id}}
 
-        query = {"_id": {"$in": list_comments_id}}
-
-        await mongodb_client.comments.delete_many(query)
-        post.comments.clear()
-        await posts.updatePost(post)
-        logging.info(f"All the comments of post {post.id} have been deleted")
-    except:
-        logging.info(
-            f"The comments of post '{post.id}' could not be deleted due to an issue"
-        )
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"The comments of post '{post.id}' could not be deleted due to an issue",
-        )
+            await mongodb_client.comments.delete_many(query)
+            post.comments.clear()
+            await posts.updatePost(post)
+            logging.info(f"All the comments of post {post.id} have been deleted")
+        except:
+            logging.info(
+                f"The comments of post '{post.id}' could not be deleted due to an issue"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"The comments of post '{post.id}' could not be deleted due to an issue",
+            )
 
     return post_comments
 

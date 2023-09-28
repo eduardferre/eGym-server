@@ -23,7 +23,7 @@ async def test_getComments_NoContent():
     assert exception.value.status_code == 204
     assert exception.value.detail == "There are no comments in the database"
 
-@pytest.mark.order(2)
+# @pytest.mark.order(2)
 @pytest.mark.asyncio
 async def test_getCommentById_BadRequest():
     idTest = "1"

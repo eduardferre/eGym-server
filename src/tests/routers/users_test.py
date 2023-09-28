@@ -58,7 +58,7 @@ user_update_conflict = User(
 )
 
 
-@pytest.mark.order(1)
+# @pytest.mark.order(1)
 @pytest.mark.asyncio
 async def test_addUser_Created():
     user_response = await users.addUser(user=user_add)
@@ -68,7 +68,7 @@ async def test_addUser_Created():
     assert isinstance(user_response, User)
 
 
-@pytest.mark.order(3)
+# @pytest.mark.order(3)
 @pytest.mark.asyncio
 async def test_getUsers_Ok():
     users_list = await users.getUsers()
@@ -116,6 +116,7 @@ async def test_getUserByUsername_Ok():
 @pytest.mark.asyncio
 async def test_updateUser_NoContent():
     user_add.id = id_test_Ok
+    user_add.username = "eduardferre"
     with pytest.raises(HTTPException) as exception:
         await users.updateUser(user_add)
     assert isinstance(exception.value, HTTPException)
@@ -192,12 +193,14 @@ async def test_deleteUser_NotFound():
     assert exception.value.status_code == 404
 
 
+@pytest.mark.order(before="test_getUsers_NoContent")
 @pytest.mark.asyncio
 async def test_deleteAllUsers_Ok():
     user_response = await users.deleteAllUsers()
     assert isinstance(user_response, list)
 
 
+@pytest.mark.order("last")
 @pytest.mark.asyncio
 async def test_getUsers_NoContent():
     with pytest.raises(HTTPException) as exception:
