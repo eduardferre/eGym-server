@@ -58,7 +58,14 @@ async def getCommentById(id: str):
 )
 async def getCommentsByCreator(creator: str):
     logging.info(f"GET /comments/creator/{creator}")
-    await users.getUserByUsername(creator)
+    user_search = await users.getUserByUsername(creator)
+
+    if type(user_search) != User:
+        logging.info(f"The user specified does not exist in the database")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user specified does not exist in the database",
+        )
 
     comments_list = await search_comments("creator", creator)
 
@@ -76,7 +83,20 @@ async def getCommentsByCreator(creator: str):
 )
 async def getPostComments(postId: str):
     logging.info(f"GET /post/{postId}")
+    if not ObjectId.is_valid(postId):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
     post = await posts.getPostById(postId)
+
+    if type(post) != Post:
+        logging.info(f"The post with id = {id} does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The post with id = {id} does not exist",
+        )
 
     if len(post.comments) == 0:
         logging.info(f"There are no comments for post {post.id}")

@@ -13,7 +13,8 @@ from utils.logger import logging
 from fastapi import APIRouter, HTTPException, status
 
 from db.mongodb.models.post import Post
-from src.main.routers import posts
+from src.main.routers import posts, users
+
 
 id_test_404 = "507f1f77bcf86cd799439011"
 post_add = Post(
@@ -108,8 +109,20 @@ async def test_getPostById_Ok():
 @pytest.mark.asyncio
 async def test_getPostByCreator_Ok():
     posts_list = await posts.getPostsByCreator("eduardferre")
+    for post in posts_list:
+        posts_list[posts_list.index(post)] = Post(**post)
+        logging.critical(type(posts_list))
     assert isinstance(posts_list, list)
     assert len(posts_list) > 0
+
+    user_update = await users.getUserByUsername("eduardferre")
+    assert user_update.postsLog == posts_list
+    user_update.username = "eduardferr"
+    user_response = await users.updateUser(user_update)
+    assert user_response.postsLog[0].creator == user_update.username
+
+    user_update.username = "eduardferre"
+    await users.updateUser(user_update)
 
 
 @pytest.mark.order(after="users_test.py::test_addUser_Created")
