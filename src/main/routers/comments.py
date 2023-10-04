@@ -113,6 +113,30 @@ async def getPostComments(postId: str):
 )
 async def addCommentToPost(postId: str, comment: Comment):
     logging.info("POST /comments/post/{postId}")
+    if not ObjectId.is_valid(postId) or postId != comment.postId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The id provided is not valid",
+        )
+
+    search_post = await posts.getPostById(postId)
+
+    if type(search_post) != Post:
+        logging.info(f"The post with id = {postId} does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The post with id = {postId} does not exist",
+        )
+
+    search_user = await users.getUserByUsername(comment.creator)
+
+    if type(search_user) != User:
+        logging.info(f"The user '{comment.creator}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user '{comment.creator}' does not exist",
+        )
+
     logging.info(f"Comment is being added to 'comments' collection")
 
     comment_dic = dict(comment)
@@ -136,7 +160,7 @@ async def addCommentToPost(postId: str, comment: Comment):
         )
 
     try:
-        search_post = await posts.getPostById(postId)
+        # search_post = await posts.getPostById(postId)
         search_post.comments.append(post_comment)
         await posts.updatePost(search_post)
         logging.info(f"Comment '{ObjectId(id)}' has been posted in post '{postId}'")
@@ -230,7 +254,7 @@ async def updateCommentFromPost(postId: str, comment: Comment):
 )
 async def deleteCommentFromPost(postId: str, commentId: str):
     logging.info(f"DELETE /comments/post/{postId}/comment/{commentId}")
-    if not ObjectId.is_valid(commentId):
+    if not ObjectId.is_valid(commentId) or not ObjectId.is_valid(postId):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The id provided is not valid",

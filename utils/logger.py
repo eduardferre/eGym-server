@@ -25,7 +25,7 @@ class CustomFormatter(logging_pkg.Formatter):
 
 
 # create logger with 'spam_application'
-logging = logging_pkg.getLogger("My_app")
+logging = logging_pkg.getLogger("eGym")
 logging.setLevel(logging_pkg.INFO)
 # create console handler with a higher log level
 ch = logging_pkg.StreamHandler()

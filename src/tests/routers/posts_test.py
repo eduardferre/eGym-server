@@ -111,7 +111,6 @@ async def test_getPostByCreator_Ok():
     posts_list = await posts.getPostsByCreator("eduardferre")
     for post in posts_list:
         posts_list[posts_list.index(post)] = Post(**post)
-        logging.critical(type(posts_list))
     assert isinstance(posts_list, list)
     assert len(posts_list) > 0
 
