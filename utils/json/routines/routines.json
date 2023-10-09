@@ -43,5 +43,32 @@
         "exercises": [],
         "liftedWeight": 0.0,
         "date": "2023-08-27 14:10:15.789789"
-    }
+    },
+    {
+        "id": "string",
+        "creator": "string",
+        "name": "string",
+        "description": "string",
+        "exercises": [
+          {
+            "id": "string",
+            "name": "string",
+            "description": "string",
+            "sets": [
+              {
+                "id": "string",
+                "weight": 0,
+                "reps": 0,
+                "rpe": 0,
+                "rir": 0,
+                "restTime": 0
+              }
+            ],
+            "liftedWeight": 0,
+            "highestWeight": 0
+          }
+        ],
+        "liftedWeight": 0,
+        "date": "2023-10-08T21:45:58.331Z"
+      }
 ]

@@ -11,6 +11,7 @@ class Exercise(BaseModel):
     liftedWeight: float
     highestWeight: float
 
+    
 
 from db.mongodb.models.set import Set
 

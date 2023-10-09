@@ -58,14 +58,14 @@ async def getCommentById(id: str):
 )
 async def getCommentsByCreator(creator: str):
     logging.info(f"GET /comments/creator/{creator}")
-    user_search = await users.getUserByUsername(creator)
+    await users.getUserByUsername(creator)
 
-    if type(user_search) != User:
-        logging.info(f"The user specified does not exist in the database")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user specified does not exist in the database",
-        )
+    # if type(user_search) != User:
+    #     logging.info(f"The user specified does not exist in the database")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f"The user specified does not exist in the database",
+    #     )
 
     comments_list = await search_comments("creator", creator)
 
@@ -91,12 +91,12 @@ async def getPostComments(postId: str):
 
     post = await posts.getPostById(postId)
 
-    if type(post) != Post:
-        logging.info(f"The post with id = {id} does not exist")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The post with id = {id} does not exist",
-        )
+    # if type(post) != Post:
+    #     logging.info(f"The post with id = {id} does not exist")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f"The post with id = {id} does not exist",
+    #     )
 
     if len(post.comments) == 0:
         logging.info(f"There are no comments for post {post.id}")
@@ -121,21 +121,21 @@ async def addCommentToPost(postId: str, comment: Comment):
 
     search_post = await posts.getPostById(postId)
 
-    if type(search_post) != Post:
-        logging.info(f"The post with id = {postId} does not exist")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The post with id = {postId} does not exist",
-        )
+    # if type(search_post) != Post:
+    #     logging.info(f"The post with id = {postId} does not exist")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f"The post with id = {postId} does not exist",
+    #     )
 
     search_user = await users.getUserByUsername(comment.creator)
 
-    if type(search_user) != User:
-        logging.info(f"The user '{comment.creator}' does not exist")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user '{comment.creator}' does not exist",
-        )
+    # if type(search_user) != User:
+    #     logging.info(f"The user '{comment.creator}' does not exist")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f"The user '{comment.creator}' does not exist",
+    #     )
 
     logging.info(f"Comment is being added to 'comments' collection")
 
@@ -160,7 +160,6 @@ async def addCommentToPost(postId: str, comment: Comment):
         )
 
     try:
-        # search_post = await posts.getPostById(postId)
         search_post.comments.append(post_comment)
         await posts.updatePost(search_post)
         logging.info(f"Comment '{ObjectId(id)}' has been posted in post '{postId}'")
@@ -181,14 +180,17 @@ async def addCommentToPost(postId: str, comment: Comment):
 )
 async def updateCommentFromPost(postId: str, comment: Comment):
     logging.info("PUT /comments/post/{postId}")
-    if not ObjectId.is_valid(comment.id):
+    if (
+        not ObjectId.is_valid(comment.id)
+        or not ObjectId.is_valid(postId)
+        or postId != comment.postId
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The id provided is not valid",
         )
 
     comment_search = await search_comment("_id", ObjectId(comment.id))
-
     if type(comment_search) != Comment:
         logging.info(f"The comment with id = '{comment.id}' does not exist")
         raise HTTPException(
@@ -196,8 +198,15 @@ async def updateCommentFromPost(postId: str, comment: Comment):
             detail=f"The comment with id = '{comment.id}' does not exist",
         )
 
+    post = await posts.search_post("_id", ObjectId(comment.postId))
+    if type(post) != Post:
+        logging.info(f"The post specified does not exist in the database")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The post specified does not exist in the database",
+        )
+
     user = await users.search_user("username", comment.creator)
-    # user = await mongodb_client.users.find_one({"username": comment.creator})
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
@@ -261,12 +270,24 @@ async def deleteCommentFromPost(postId: str, commentId: str):
         )
 
     comment_search = await search_comment("_id", ObjectId(commentId))
-
     if type(comment_search) != Comment:
         logging.info(f"The comment with id = '{commentId}' does not exist")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The comment with id = '{commentId}' does not exist",
+        )
+    if comment_search.postId != postId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This comment does not belong to the specified post",
+        )
+
+    post_search = await posts.search_post("_id", ObjectId(postId))
+    if type(post_search) != Post:
+        logging.info(f"The post with id = '{postId}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The post with id = '{postId}' does not exist",
         )
 
     try:
@@ -332,7 +353,7 @@ async def deleteAllPostComments(postId: str):
     if len(post_comments) == 0:
         logging.info(f"There are no comments in post '{post.id}")
         # raise HTTPException(
-        #     status_code=status.HTTP_404_NOT_FOUND,
+        #     status_code=status.HTTP_204_NOT_FOUND,
         #     detail=f"There are no comments in post '{post.id}",
         # )
     else:

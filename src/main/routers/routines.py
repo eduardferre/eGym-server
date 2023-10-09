@@ -5,6 +5,8 @@ from bson import ObjectId
 
 from db.mongodb.client import mongodb_client
 from db.mongodb.models.routine import Routine
+from db.mongodb.models.exercise import Exercise
+from db.mongodb.models.set import Set
 from db.mongodb.schemas.routine import routines_schema, routine_schema
 from db.mongodb.models.user import User
 import src.main.routers.users as users
@@ -57,7 +59,6 @@ async def getRoutineById(id: str):
 async def getRoutinesByCreator(creator: str):
     logging.info(f"GET /routines/creator/{creator}")
     user = await users.search_user("username", creator)
-
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")
         raise HTTPException(
@@ -91,8 +92,10 @@ async def addRoutine(routine: Routine):
 
     dict_exercises = list()
     for exercise in routine.exercises:
+        exercise.id = ObjectId()
         dict_sets = list()
         for set in exercise.sets:
+            set.id = ObjectId()
             dict_sets.append(dict(set))
         exercise.sets.clear()
         exercise.sets = dict_sets
@@ -125,6 +128,7 @@ async def addRoutine(routine: Routine):
         user_search.routinesLog.append(copy_routine_dict)
         await users.updateUser(user_search)
         logging.info(f"Routine logs of '{user_search.username}' has been updated")
+
     return Routine(**routine_schema(new_routine))
 
 
@@ -139,7 +143,17 @@ async def updateRoutine(routine: Routine):
 
     routine_search = await search_routine("_id", ObjectId(routine.id))
 
-    if routine_search == routine:
+    routine.id = str(routine.id)
+    for exercise in routine.exercises:
+        exercise["id"] = str(exercise["id"])
+        for set in exercise["sets"]:
+            set["id"] = str(set["id"])
+    routine = Routine.parse_raw(routine.json())
+
+    logging.critical(routine)
+    logging.critical(routine_search)
+
+    if routine.__eq__(routine_search):
         raise HTTPException(
             status_code=status.HTTP_204_NO_CONTENT,
             detail=f"The routine '{routine.id}' has not been updated since there are no changes",

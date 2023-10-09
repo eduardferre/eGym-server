@@ -1,4 +1,5 @@
 from __future__ import annotations
+from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
@@ -10,6 +11,19 @@ class Post(BaseModel):
     caption: str
     likes: int
     comments: list[Comment]
+    # date: datetime
+
+    def __eq__(self, other):
+        if isinstance(other, Post):
+            return (
+                self.id == other.id
+                and self.creator == other.creator
+                and self.url == other.url
+                and self.caption == other.caption
+                and self.likes == other.likes
+                and self.comments == other.comments
+            )
+        return False
 
 
 from db.mongodb.models.comment import Comment

@@ -143,7 +143,7 @@ async def updatePost(post: Post):
             detail=f"The post with id = '{post.id}' does not exist",
         )
 
-    if post_search == post:
+    if post.__eq__(post_search):
         logging.info(f"The post '{post.id}' has not been changed so no update required")
         raise HTTPException(
             status_code=status.HTTP_204_NO_CONTENT,

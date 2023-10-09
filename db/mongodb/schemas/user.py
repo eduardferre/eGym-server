@@ -1,3 +1,7 @@
+from db.mongodb.schemas.routine import routines_schema
+from db.mongodb.schemas.post import posts_schema
+
+
 def user_schema(user) -> dict:
     return {
         "id": str(user["_id"]),
@@ -12,7 +16,7 @@ def user_schema(user) -> dict:
         "role": user["role"],
         "followers": user["followers"],
         "postsLog": user["postsLog"],
-        "routinesLog": user["routinesLog"],
+        "routinesLog": routines_schema(user["routinesLog"]),
         "routines": user["routines"],
         "profilePicture": user["profilePicture"],
         "backgroundPicture": user["backgroundPicture"],

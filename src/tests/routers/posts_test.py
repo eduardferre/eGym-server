@@ -25,6 +25,7 @@ post_add = Post(
         "caption": "string",
         "likes": 0,
         "comments": [],
+        # "date": "2023-08-23 15:30:45.123456",
     }
 )
 
@@ -107,7 +108,7 @@ async def test_getPostById_Ok():
 
 @pytest.mark.order(after="users_test.py::test_addUser_Created")
 @pytest.mark.asyncio
-async def test_getPostByCreator_Ok():
+async def test_getPostsByCreator_Ok():
     posts_list = await posts.getPostsByCreator("eduardferre")
     for post in posts_list:
         posts_list[posts_list.index(post)] = Post(**post)
