@@ -14,12 +14,16 @@ class User(BaseModel):
     weight: float  # kg
     physicalActivity: float
     role: str
-    followers: int
+    followers: list[str]
+    following: list[str]
+    # followers: list[str] (usernames) -> Replace the actual 'followers' definition, len(followers)
+    # following: list[str] (usernames) -> New endpoint "follow/unfollow"
     postsLog: list[Post]
     routinesLog: list[Routine]
     routines: list[RoutineTO]
     profilePicture: str
     backgroundPicture: str
+    public: bool  # TODO: Publicity for User, ExerciseTO and RoutineTO should be implemented
 
 
 from db.mongodb.models.post import Post

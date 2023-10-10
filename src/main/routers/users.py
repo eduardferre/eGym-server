@@ -5,6 +5,7 @@ from bson import ObjectId
 from db.mongodb.client import mongodb_client
 from db.mongodb.models.user import User
 from db.mongodb.schemas.user import users_schema, user_schema
+import src.main.routers.usersTO as usersTO
 import src.main.routers.posts as posts
 import src.main.routers.comments as comments
 import src.main.routers.routines as routines
@@ -17,13 +18,96 @@ router = APIRouter(
 )
 
 
+@router.get(
+    "/{attribute}/{value}", response_model=list[User], status_code=status.HTTP_200_OK
+)
+async def getPublicUsers(attribute: str, value: str):
+    logging.info(f"GET /users/{attribute}/{value}")
+    list_users = list()
+    if attribute == "public" and value == "users":
+        list_users = await getUsers()
+    elif attribute == "_id":
+        list_users.append(await getUserById(value))
+    elif attribute == "username":
+        list_users.append(await getUserByUsername(value))
+    else:
+        logging.info("The attribute provided is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The attribute provided is not valid",
+        )
+
+    logging.info("Retrieving user's data taking into account privacy")
+    for i, user in enumerate(list_users):
+        if type(user) != User:
+            user = User(**user)
+
+        if user.public:
+            user.email, user.phone = "", ""
+        else:
+            user.email, user.phone, user.role = "", "", ""
+            user.age, user.height, user.weight, user.physicalActivity = 0, 0, 0, 0
+            user.routines.clear(), user.routinesLog.clear()
+            user.postsLog = list(range(len(user.postsLog)))
+
+        list_users[i] = user
+
+    return list_users
+
+
+@router.put(
+    "/{follower}/{followed}", response_model=list[str], status_code=status.HTTP_200_OK
+)
+async def followUser(follower: str, followed: str):
+    follower_search = await getUserByUsername(follower)
+    followed_search = await getUserByUsername(followed)
+
+    if followed in follower_search.following:
+        logging.info(f"The user '{follower}' is currently following '{followed}'")
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail=f"The user '{follower}' is currently following '{followed}'",
+        )
+
+    follower_search.following.append(followed)
+    followed_search.followers.append(follower)
+
+    follower_response = await updateUser(follower_search)
+    await updateUser(followed_search)
+
+    return follower_response.following
+
+
+@router.put(
+    "/{follower}/{unfollowed}", response_model=list[str], status_code=status.HTTP_200_OK
+)
+async def unfollowUser(follower: str, unfollowed: str):
+    follower_search = await getUserByUsername(follower)
+    unfollowed_search = await getUserByUsername(unfollowed)
+
+    if not unfollowed in follower_search.following:
+        logging.info(f"The user '{follower}' is not following '{unfollowed}'")
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail=f"The user '{follower}' is not following '{unfollowed}'",
+        )
+
+    follower_search.following.remove(unfollowed)
+    unfollowed_search.followers.remove(follower)
+
+    follower_response = await updateUser(follower_search)
+    await updateUser(unfollowed_search)
+
+    return follower_response.following
+
+
 @router.get("/", response_model=list[User], status_code=status.HTTP_200_OK)
 async def getUsers():
     logging.info("GET /users/")
     users_list = await search_users()
 
     if len(users_list) == 0:
-        logging.info("Thre are no users in the database")
+        logging.info("There are no users in the database")
         raise HTTPException(
             status_code=status.HTTP_204_NO_CONTENT,
             detail="There are no users in the database",
@@ -35,6 +119,7 @@ async def getUsers():
 async def getUserById(id: str):
     logging.info(f"GET /users/{id}")
     if not ObjectId.is_valid(id):
+        logging.info(f"The id provided is not valid")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The id provided is not valid",
@@ -78,7 +163,7 @@ async def addUser(user: User):
         )
 
     logging.info(
-        f"The username {user.username} does not exist in the database and is being processed"
+        f"The user {user.username} does not exist in the database and is being processed"
     )
 
     user_dict = dict(user)
@@ -170,6 +255,12 @@ async def updateUser(user: User):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"The user with id = {user.id} has not been updated",
         )
+    # else:
+    #     if user.username != user_search.username:
+    #         userTO = await usersTO.getUserTOByUsername(user_search.username)
+    #         userTO.username = user.username
+    #         await usersTO.updateUserTO(userTO)
+
     return await search_user("_id", ObjectId(user.id))
 
 
@@ -216,6 +307,10 @@ async def deleteUser(id: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"The user with id = {id} has not been deleted",
         )
+    # else:
+    #     userTO = await usersTO.getUserTOByUsername(user_search.username)
+    #     await usersTO.deleteUserTO(userTO.id)
+
     return user_search
 
 

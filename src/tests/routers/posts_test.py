@@ -25,7 +25,7 @@ post_add = Post(
         "caption": "string",
         "likes": 0,
         "comments": [],
-        # "date": "2023-08-23 15:30:45.123456",
+        "creationDate": "2023-08-23 15:30:45.123456",
     }
 )
 
@@ -88,6 +88,7 @@ async def test_addPost_Created():
     post_response = await posts.addPost(post_add)
     global id_test_Ok
     id_test_Ok = post_response.id
+    post_add.creationDate = post_response.creationDate
     assert isinstance(post_response, Post)
 
 

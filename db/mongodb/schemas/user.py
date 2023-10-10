@@ -1,5 +1,4 @@
 from db.mongodb.schemas.routine import routines_schema
-from db.mongodb.schemas.post import posts_schema
 
 
 def user_schema(user) -> dict:
@@ -15,11 +14,13 @@ def user_schema(user) -> dict:
         "physicalActivity": user["physicalActivity"],
         "role": user["role"],
         "followers": user["followers"],
+        "following": user["following"],
         "postsLog": user["postsLog"],
         "routinesLog": routines_schema(user["routinesLog"]),
         "routines": user["routines"],
         "profilePicture": user["profilePicture"],
         "backgroundPicture": user["backgroundPicture"],
+        "public": user["public"],
     }
 
 

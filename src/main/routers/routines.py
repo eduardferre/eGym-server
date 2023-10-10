@@ -150,9 +150,6 @@ async def updateRoutine(routine: Routine):
             set["id"] = str(set["id"])
     routine = Routine.parse_raw(routine.json())
 
-    logging.critical(routine)
-    logging.critical(routine_search)
-
     if routine.__eq__(routine_search):
         raise HTTPException(
             status_code=status.HTTP_204_NO_CONTENT,

@@ -1,3 +1,4 @@
+from datetime import datetime
 from utils.logger import logging
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status
@@ -16,6 +17,8 @@ router = APIRouter(
     tags=["posts"],
     responses={status.HTTP_404_NOT_FOUND: {"message": "Not found"}},
 )
+
+
 
 
 @router.get("/", response_model=list[Post], status_code=status.HTTP_200_OK)
@@ -90,6 +93,7 @@ async def addPost(post: Post):
     logging.info(f"The post is being processed")
 
     post_dic = dict(post)
+    post_dic["creationDate"] = datetime.now()
     user_post = post_dic.copy()
     del post_dic["id"]
 

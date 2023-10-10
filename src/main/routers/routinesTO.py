@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
+from utils.logger import logging
 
 from db.sqlDB.client import sqlserver_client
 from db.sqlDB.models.routineTO import RoutineTO
@@ -17,12 +18,15 @@ router = APIRouter(
 
 @router.get("/", response_model=list[RoutineTO], status_code=status.HTTP_200_OK)
 async def getRoutinesTO():
+    logging.info(f"GET /routinesTO/")
+
     query = f"SELECT * FROM dbo.routines"
     sql_cursor.execute(query)
     routines_list = list()
     routine_response = sql_cursor.fetchall()
 
     if len(routine_response) == 0:
+        logging.info("There are no routines in the database")
         raise HTTPException(
             status_code=status.HTTP_204_NO_CONTENT,
             detail="There are no routines in the database",
@@ -37,12 +41,15 @@ async def getRoutinesTO():
 
 @router.get("/{id}", response_model=RoutineTO, status_code=status.HTTP_200_OK)
 async def getRoutineTOById(id: int):
+    logging.info(f"GET /routinesTO/{id}")
+
     query = f"SELECT * FROM dbo.routines\
                 WHERE id={id}"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
 
     if routine == None:
+        logging.info(f"The routine with id = {id} is not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The routine with id = {id} is not found",
@@ -55,6 +62,8 @@ async def getRoutineTOById(id: int):
     "/creator/{creator}", response_model=list[RoutineTO], status_code=status.HTTP_200_OK
 )
 async def getRoutinesTOByCreator(creator: str):
+    logging.info(f"GET /routinesTO/{creator}")
+
     query = f"SELECT * FROM dbo.routines\
                 WHERE creator='{creator}'"
     routines_list = list()
@@ -62,6 +71,7 @@ async def getRoutinesTOByCreator(creator: str):
     routine_response = sql_cursor.fetchall()
 
     if len(routine_response) == 0:
+        logging.info(f"There are no routines made by {creator}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"There are no routines made by {creator}",
@@ -80,6 +90,8 @@ async def getRoutinesTOByCreator(creator: str):
     status_code=status.HTTP_200_OK,
 )
 async def getRoutinesTOByName(name: str):
+    logging.info(f"GET /routinesTO/{name}")
+
     query = f"SELECT * FROM dbo.routines\
                 WHERE name='{name}'"
     routines_list = list()
@@ -87,6 +99,7 @@ async def getRoutinesTOByName(name: str):
     routine_response = sql_cursor.fetchall()
 
     if len(routine_response) == 0:
+        logging.info(f"There are not any routine named: {name}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"There are not any routine named: {name}",
@@ -101,12 +114,18 @@ async def getRoutinesTOByName(name: str):
 
 @router.post("/", response_model=RoutineTO, status_code=status.HTTP_201_CREATED)
 async def addRoutineTO(routineTO: RoutineTO):
+    logging.info(f"POST /routinesTO/")
+
     query = f"INSERT dbo.routines (creator, name, description)\
                 OUTPUT INSERTED.*\
                 VALUES ('{routineTO.creator}', '{routineTO.name}', '{routineTO.description}')"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
+    logging.info(
+        f"The routine {routineTO.name} has been inserted correctly in the database"
+    )
+
     return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
 
 
@@ -116,11 +135,14 @@ async def addRoutineTO(routineTO: RoutineTO):
     status_code=status.HTTP_201_CREATED,
 )
 async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
+    logging.info(f"POST /routinesTO/{routineId}_{exerciseId}")
+
     query = f"SELECT * FROM dbo.exercises\
                 WHERE id={exerciseId}"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
     if exercise == None:
+        logging.info(f"The exercise with id = {exerciseId} does not exist")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The exercise with id = {exerciseId} does not exist",
@@ -131,6 +153,7 @@ async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     if routine == None:
+        logging.info(f"The routine with id = {routineId} does not exist")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"The routine with id = {routineId} does not exist",
@@ -141,44 +164,64 @@ async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
     sql_cursor.execute(query)
     relation = sql_cursor.fetchone()
     if relation != None:
+        logging.info("The exercise is already in the routine")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="The exercise is already in the routine",
         )
+
+    logging.info("The exercise is being added to the specified routine")
 
     query = f"INSERT dbo.relationRoutinesExercises (routineId, exerciseId)\
                 VALUES ('{routineId}', '{exerciseId}')"
     sql_cursor.execute(query)
     sqlserver_client.commit()
 
+    logging.info(
+        f"The exercise with id = {exerciseId} has been added to routine with id = {routineId}"
+    )
+
     return searchRoutineTO("id", routineId)
 
 
 @router.put("/", response_model=RoutineTO, status_code=status.HTTP_201_CREATED)
-async def updateRoutineTO(routine: RoutineTO):
-    routine_search = searchRoutineTO("id", routine.id)
+async def updateRoutineTO(routineTO: RoutineTO):
+    logging.info(f"PUT /routinesTO/")
+
+    routine_search = searchRoutineTO("id", routineTO.id)
     if type(routine_search) != RoutineTO:
+        logging.info(routine_search["error"])
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=routine_search["error"]
         )
 
+    logging.info("The routine is being updated")
+
     query = f"UPDATE dbo.routines\
-                SET creator = '{routine.creator}', name = '{routine.name}', description = '{routine.description}'\
+                SET creator = '{routineTO.creator}', name = '{routineTO.name}', description = '{routineTO.description}'\
                 OUTPUT INSERTED.*\
-                WHERE id={routine.id}"
+                WHERE id={routineTO.id}"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
+
+    logging.info(f"The routine with id = {routineTO.id} has been updated")
+
     return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
 
 
 @router.delete("/{id}", response_model=RoutineTO, status_code=status.HTTP_200_OK)
 async def deleteRoutineTO(id: int):
+    logging.info(f"DELETE /routinesTO/{id}")
+
     routine_search = searchRoutineTO("id", id)
     if type(routine_search) != RoutineTO:
+        logging.info(routine_search["error"])
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=routine_search["error"]
         )
+
+    logging.info("The routine is being deleted")
 
     query = f"DELETE FROM dbo.relationRoutinesExercises\
                 WHERE routineId={id}"
@@ -190,6 +233,9 @@ async def deleteRoutineTO(id: int):
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
+
+    logging.info(f"The routine with id = {id} has been deleted")
+
     return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
 
 
