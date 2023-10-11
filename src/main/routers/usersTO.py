@@ -1,5 +1,6 @@
 import logging
 import os
+from uuid import uuid4
 from fastapi import APIRouter, HTTPException, status
 
 from db.sqlDB.client import sqlserver_client
@@ -43,11 +44,11 @@ async def getUsersTO():
 
 
 @router.get("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def getUserTOById(id: int):
+async def getUserTOById(id: uuid4):
     logging.info(f"GET /usersTO/{id}")
 
     query = f"SELECT * FROM dbo.users\
-                WHERE id={id}"
+                WHERE id='{id}'"
     sql_cursor.execute(query)
     user = sql_cursor.fetchone()
 
