@@ -1,8 +1,9 @@
 # Other files that must be in local
-environment.py
 .vscode
 .vscode/settings.json
 tests.mongodb.js
+dev-env
+bin
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -79,7 +80,6 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
