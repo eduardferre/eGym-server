@@ -14,3 +14,5 @@ pytest-cov
 httpx
 pymssql
 python-dotenv
+pytest-asyncio
+pytest-order
