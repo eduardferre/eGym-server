@@ -1,11 +1,17 @@
+import uuid
 from fastapi import APIRouter, HTTPException, status
 from utils.logger import logging
 
 from db.sqlDB.client import sqlserver_client
 from db.sqlDB.models.exerciseTO import ExerciseTO
+from db.sqlDB.models.userTO import UserTO
 from db.sqlDB.schemas.exerciseTO import exerciseTO_schema
+from src.main.routers.usersTO import searchUserTO
 
-sql_cursor = sqlserver_client.cursor()
+
+def init_sql_cursor():
+    return sqlserver_client.cursor()
+
 
 router = APIRouter(
     prefix="/exercisesTO",
@@ -17,6 +23,7 @@ router = APIRouter(
 @router.get("/", response_model=list[ExerciseTO], status_code=status.HTTP_200_OK)
 async def getExercisesTO():
     logging.info(f"GET /exercisesTO/")
+    sql_cursor = init_sql_cursor()
 
     query = f"SELECT * FROM dbo.exercises"
     sql_cursor.execute(query)
@@ -32,17 +39,25 @@ async def getExercisesTO():
 
     for exercise in exercise_response:
         exercises_list.append(
-            ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+            ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
         )
     return exercises_list
 
 
 @router.get("/{id}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
-async def getExerciseTOById(id: int):
+async def getExerciseTOById(id: str):
     logging.info(f"GET /exercisesTO/{id}")
+    sql_cursor = init_sql_cursor()
+
+    if not isUUIDValid(id):
+        logging.info(f"The exercise id = {id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The exercise id = {id} is not valid",
+        )
 
     query = f"SELECT * FROM dbo.exercises\
-                WHERE id={id}"
+                WHERE id='{id}'"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
 
@@ -53,7 +68,7 @@ async def getExerciseTOById(id: int):
             detail=f"The exercise with id = {id} is not found",
         )
 
-    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+    return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
 
 
 @router.get(
@@ -63,6 +78,15 @@ async def getExerciseTOById(id: int):
 )
 async def getExercisesTOByCreator(creator: str):
     logging.info(f"GET /exercisesTO/{creator}")
+    sql_cursor = init_sql_cursor()
+
+    user_search = await searchUserTO(sql_cursor, "username", creator)
+    if type(user_search) != UserTO:
+        logging.info(f"The user '{creator}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user '{creator}' does not exist",
+        )
 
     query = f"SELECT * FROM dbo.exercises\
                 WHERE creator='{creator}'"
@@ -71,15 +95,15 @@ async def getExercisesTOByCreator(creator: str):
     exercise_response = sql_cursor.fetchall()
 
     if len(exercise_response) == 0:
-        logging.info(f"The user {creator} has not created any exercises yet")
+        logging.info(f"The user {creator} has not created any exercise yet")
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user {creator} has not created any exercises yet",
+            status_code=status.HTTP_204_NO_CONTENT,
+            detail=f"The user {creator} has not created any exercise yet",
         )
 
     for exercise in exercise_response:
         exercises_list.append(
-            ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+            ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
         )
     return exercises_list
 
@@ -89,6 +113,7 @@ async def getExercisesTOByCreator(creator: str):
 )
 async def getExerciseTOByName(name: str):
     logging.info(f"GET /exercisesTO/{name}")
+    sql_cursor = init_sql_cursor()
 
     query = f"SELECT * FROM dbo.exercises\
                 WHERE name='{name}'"
@@ -102,18 +127,27 @@ async def getExerciseTOByName(name: str):
             detail=f"The exercise {name} is not found in the list of exercises",
         )
 
-    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+    return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
 
 
 @router.post("/", response_model=ExerciseTO, status_code=status.HTTP_201_CREATED)
 async def addExerciseTO(exerciseTO: ExerciseTO):
     logging.info(f"POST /exercisesTO/")
+    sql_cursor = init_sql_cursor()
 
-    if type(searchExerciseTO("id", exerciseTO.id)) == ExerciseTO:
-        logging.info(f"The exercise with id = {exerciseTO.id} already exists")
+    user_search = await searchUserTO(sql_cursor, "username", exerciseTO.creator)
+    if type(user_search) != UserTO:
+        logging.info(f"The user '{exerciseTO.creator}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user '{exerciseTO.creator}' does not exist",
+        )
+
+    if type(await searchExerciseTO(sql_cursor, "name", exerciseTO.name)) == ExerciseTO:
+        logging.info(f"The exercise with name '{exerciseTO.name}' already exists")
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"The exercise with id = {exerciseTO.id} already exists",
+            detail=f"The exercise with name '{exerciseTO.name}' already exists",
         )
 
     logging.info("The exercise does not exist in the database and is being processed")
@@ -128,14 +162,22 @@ async def addExerciseTO(exerciseTO: ExerciseTO):
         f"The exercise {exerciseTO.name} has been inserted correctly in the database"
     )
 
-    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+    return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
 
 
 @router.put("/", response_model=ExerciseTO, status_code=status.HTTP_201_CREATED)
 async def updateExerciseTO(exerciseTO: ExerciseTO):
     logging.info(f"PUT /exercisesTO/")
+    sql_cursor = init_sql_cursor()
 
-    exercise_search = searchExerciseTO("id", exerciseTO.id)
+    if not isUUIDValid(exerciseTO.id):
+        logging.info(f"The exercise id = {exerciseTO.id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The exercise id = {exerciseTO.id} is not valid",
+        )
+
+    exercise_search = await searchExerciseTO(sql_cursor, "id", exerciseTO.id)
     if type(exercise_search) != ExerciseTO:
         logging.info(f"The exercise with id = {exerciseTO.id} does not exist")
         raise HTTPException(
@@ -143,25 +185,41 @@ async def updateExerciseTO(exerciseTO: ExerciseTO):
             detail=f"The exercise with id = {exerciseTO.id} does not exist",
         )
 
+    exercise_search = await searchExerciseTO(sql_cursor, "name", exerciseTO.name)
+    if type(exercise_search) == ExerciseTO:
+        logging.info(f"The exercise with name = {exerciseTO.name} already exists")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"The exercise with name = {exerciseTO.name} already exists",
+        )
+
     logging.info("The exercise is being updated")
 
     query = f"UPDATE dbo.exercises\
                 SET creator = '{exerciseTO.creator}', name = '{exerciseTO.name}', description = '{exerciseTO.description}'\
                 OUTPUT INSERTED.*\
-                WHERE id={exerciseTO.id}"
+                WHERE id='{exerciseTO.id}'"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
     sqlserver_client.commit()
     logging.info(f"The exercise {exerciseTO.name} has been updated correctly")
 
-    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+    return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
 
 
 @router.delete("/{id}", response_model=ExerciseTO, status_code=status.HTTP_200_OK)
-async def deleteExerciseTO(id: int):
+async def deleteExerciseTO(id: str):
     logging.info(f"DELETE /exercisesTO/{id}")
-    exercise_search = searchExerciseTO("id", id)
+    sql_cursor = init_sql_cursor()
 
+    if not isUUIDValid(id):
+        logging.info(f"The exercise id = {id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The exercise id = {id} is not valid",
+        )
+
+    exercise_search = await searchExerciseTO(sql_cursor, "id", id)
     if type(exercise_search) != ExerciseTO:
         logging.info(f"The exercise with id = {id} does not exist")
         raise HTTPException(
@@ -172,32 +230,35 @@ async def deleteExerciseTO(id: int):
     logging.info("The exercise is being deleted")
 
     query = f"DELETE FROM dbo.relationRoutinesExercises\
-                WHERE exerciseId={id}"
+                WHERE exerciseId='{id}'"
     sql_cursor.execute(query)
+
     query = f"DELETE FROM dbo.exercises\
                 OUTPUT DELETED.*\
-                WHERE id={id}"
+                WHERE id='{id}'"
     sql_cursor.execute(query)
     exercise = sql_cursor.fetchone()
+    logging.critical(exercise)
     sqlserver_client.commit()
-    logging.info(f"The exercise {exercise_search.name} has been deleted")
 
-    return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+    logging.info(f"The exercise with id = {id} has been deleted")
+
+    return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
 
 
 # Methods
-def searchExerciseTO(field: str, key):
+async def searchExerciseTO(sql_cursor, field: str, key):
     query = f"SELECT * FROM dbo.exercises\
                 WHERE {field}='{key}'"
     try:
         sql_cursor.execute(query)
         exercise = sql_cursor.fetchone()
-        return ExerciseTO(**exerciseTO_schema(tupleExerciseTOToDict(exercise)))
+        return ExerciseTO(**exerciseTO_schema(await tupleExerciseTOToDict(exercise)))
     except:
         return {"error": f"The exercise with {field} = '{key}' does not exist"}
 
 
-def tupleExerciseTOToDict(exercise: dict):
+async def tupleExerciseTOToDict(exercise: dict):
     exercise_dict = dict(
         {
             "_id": str(exercise[0]),
@@ -207,3 +268,11 @@ def tupleExerciseTOToDict(exercise: dict):
         }
     )
     return exercise_dict
+
+
+def isUUIDValid(id):
+    try:
+        uuid.UUID(str(id))
+        return True
+    except ValueError:
+        return False

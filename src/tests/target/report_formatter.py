@@ -7,6 +7,9 @@ if os.path.exists("formatted_report.txt"):
 if os.path.exists("table_report.txt"):
     os.remove("table_report.txt")
 
+if os.path.exists("report.html"):
+    os.remove("report.html")
+
 # Read the report from a file (or you can modify this to read from any source)
 with open("report_logs.txt", "r") as file:
     lines = file.readlines()
@@ -66,3 +69,28 @@ with open("table_report.txt", "w") as output_table_file:
             output_table_file.write(line)
         else:
             break
+
+with open("formatted_report.txt", "w") as output_file:
+    for count, line in enumerate(formatted_lines):
+        if count < 8:
+            output_file.write(prev_lines[count])
+        elif not "[100%]" in formatted_lines[count - 1]:
+            output_file.write(line)
+        else:
+            break
+
+    for line in post_lines:
+        output_file.write(line)
+
+with open("formatted_report.txt", "r") as file:
+    text = file.read()
+
+    html_text = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>\n<link rel='stylesheet' href='style.css' type='text/css'>\n</head>\n<body class='pyfile'>\n"
+
+    for line in text.split("\n"):
+        html_text += f"<p>{line}</p>\n"
+
+    html_text += "</body>\n</html>"
+
+with open("report.html", "w") as file:
+    file.write(html_text)

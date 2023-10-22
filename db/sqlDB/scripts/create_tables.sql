@@ -45,8 +45,8 @@ FROM sysobjects
 WHERE name='relationRoutinesExercises' and xtype='U')
     CREATE TABLE dbo.relationRoutinesExercises
 (
-    routineId UNIQUEIDENTIFIER,
-    exerciseId UNIQUEIDENTIFIER,
+    routineId UNIQUEIDENTIFIER NOT NULL,
+    exerciseId UNIQUEIDENTIFIER NOT NULL,
 
     FOREIGN KEY (routineId) REFERENCES dbo.routines(id),
     FOREIGN KEY (exerciseId) REFERENCES dbo.exercises(id),

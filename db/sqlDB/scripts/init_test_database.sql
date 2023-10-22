@@ -16,7 +16,7 @@ WHERE name='users' and xtype='U')
     lastName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    birthDate DATE NOT NULL
+    birthDate VARCHAR(255) NOT NULL
 )
 
 IF NOT EXISTS (SELECT *
@@ -46,8 +46,8 @@ FROM sysobjects
 WHERE name='relationRoutinesExercises' and xtype='U')
     CREATE TABLE dbo.relationRoutinesExercises
 (
-    routineId UNIQUEIDENTIFIER,
-    exerciseId UNIQUEIDENTIFIER,
+    routineId UNIQUEIDENTIFIER NOT NULL,
+    exerciseId UNIQUEIDENTIFIER NOT NULL,
     FOREIGN KEY (routineId) REFERENCES dbo.routines(id),
     FOREIGN KEY (exerciseId) REFERENCES dbo.exercises(id),
     UNIQUE (routineId, exerciseId)

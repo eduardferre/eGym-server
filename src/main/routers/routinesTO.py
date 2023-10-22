@@ -1,13 +1,18 @@
+import uuid
 from fastapi import APIRouter, HTTPException, status
 from utils.logger import logging
 
 from db.sqlDB.client import sqlserver_client
 from db.sqlDB.models.routineTO import RoutineTO
+from db.sqlDB.models.userTO import UserTO
 from db.sqlDB.schemas.routineTO import routineTO_schema
 from src.main.routers.exercisesTO import searchExerciseTO
+from src.main.routers.usersTO import searchUserTO
 
-sql_cursor = sqlserver_client.cursor()
-sql_cursor_async = sqlserver_client.cursor()
+
+def init_sql_cursor():
+    return sqlserver_client.cursor()
+
 
 router = APIRouter(
     prefix="/routinesTO",
@@ -19,6 +24,7 @@ router = APIRouter(
 @router.get("/", response_model=list[RoutineTO], status_code=status.HTTP_200_OK)
 async def getRoutinesTO():
     logging.info(f"GET /routinesTO/")
+    sql_cursor = init_sql_cursor()
 
     query = f"SELECT * FROM dbo.routines"
     sql_cursor.execute(query)
@@ -34,17 +40,29 @@ async def getRoutinesTO():
 
     for routine in routine_response:
         routines_list.append(
-            RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+            RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
         )
+
+    logging.info(f"{len(routines_list)} routinesTO have been found in the database")
+
+    sql_cursor.close()
     return routines_list
 
 
 @router.get("/{id}", response_model=RoutineTO, status_code=status.HTTP_200_OK)
-async def getRoutineTOById(id: int):
+async def getRoutineTOById(id: str):
     logging.info(f"GET /routinesTO/{id}")
+    sql_cursor = init_sql_cursor()
+
+    if not isUUIDValid(id):
+        logging.info(f"The id = {id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The id = {id} is not valid",
+        )
 
     query = f"SELECT * FROM dbo.routines\
-                WHERE id={id}"
+                WHERE id='{id}'"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
 
@@ -55,7 +73,8 @@ async def getRoutineTOById(id: int):
             detail=f"The routine with id = {id} is not found",
         )
 
-    return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+    sql_cursor.close()
+    return RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
 
 
 @router.get(
@@ -63,6 +82,15 @@ async def getRoutineTOById(id: int):
 )
 async def getRoutinesTOByCreator(creator: str):
     logging.info(f"GET /routinesTO/{creator}")
+    sql_cursor = init_sql_cursor()
+
+    user_search = await searchUserTO(sql_cursor, "username", creator)
+    if type(user_search) != UserTO:
+        logging.info(f"The user '{creator}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user '{creator}' does not exist",
+        )
 
     query = f"SELECT * FROM dbo.routines\
                 WHERE creator='{creator}'"
@@ -73,14 +101,16 @@ async def getRoutinesTOByCreator(creator: str):
     if len(routine_response) == 0:
         logging.info(f"There are no routines made by {creator}")
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_204_NO_CONTENT,
             detail=f"There are no routines made by {creator}",
         )
 
     for routine in routine_response:
         routines_list.append(
-            RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+            RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
         )
+
+    sql_cursor.close()
     return routines_list
 
 
@@ -91,6 +121,7 @@ async def getRoutinesTOByCreator(creator: str):
 )
 async def getRoutinesTOByName(name: str):
     logging.info(f"GET /routinesTO/{name}")
+    sql_cursor = init_sql_cursor()
 
     query = f"SELECT * FROM dbo.routines\
                 WHERE name='{name}'"
@@ -107,14 +138,25 @@ async def getRoutinesTOByName(name: str):
 
     for routine in routine_response:
         routines_list.append(
-            RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+            RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
         )
+
+    sql_cursor.close()
     return routines_list
 
 
 @router.post("/", response_model=RoutineTO, status_code=status.HTTP_201_CREATED)
 async def addRoutineTO(routineTO: RoutineTO):
     logging.info(f"POST /routinesTO/")
+    sql_cursor = init_sql_cursor()
+
+    user_search = await searchUserTO(sql_cursor, "username", routineTO.creator)
+    if type(user_search) != UserTO:
+        logging.info(f"The user '{routineTO.creator}' does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The user '{routineTO.creator}' does not exist",
+        )
 
     query = f"INSERT dbo.routines (creator, name, description)\
                 OUTPUT INSERTED.*\
@@ -126,7 +168,8 @@ async def addRoutineTO(routineTO: RoutineTO):
         f"The routine {routineTO.name} has been inserted correctly in the database"
     )
 
-    return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+    sql_cursor.close()
+    return RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
 
 
 @router.post(
@@ -134,22 +177,25 @@ async def addRoutineTO(routineTO: RoutineTO):
     response_model=RoutineTO,
     status_code=status.HTTP_201_CREATED,
 )
-async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
+async def addExerciseTOToRoutineTO(routineId: str, exerciseId: str):
     logging.info(f"POST /routinesTO/{routineId}_{exerciseId}")
+    sql_cursor = init_sql_cursor()
 
-    query = f"SELECT * FROM dbo.exercises\
-                WHERE id={exerciseId}"
-    sql_cursor.execute(query)
-    exercise = sql_cursor.fetchone()
-    if exercise == None:
-        logging.info(f"The exercise with id = {exerciseId} does not exist")
+    if not isUUIDValid(routineId):
+        logging.info(f"The routine id = {routineId} is not valid")
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The exercise with id = {exerciseId} does not exist",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The routine id = {routineId} is not valid",
+        )
+    if not isUUIDValid(exerciseId):
+        logging.info(f"The routine id = {exerciseId} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The routine id = {exerciseId} is not valid",
         )
 
     query = f"SELECT * FROM dbo.routines\
-                WHERE id={routineId}"
+                WHERE id='{routineId}'"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     if routine == None:
@@ -159,10 +205,22 @@ async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
             detail=f"The routine with id = {routineId} does not exist",
         )
 
+    query = f"SELECT * FROM dbo.exercises\
+                WHERE id='{exerciseId}'"
+    sql_cursor.execute(query)
+    exercise = sql_cursor.fetchone()
+    if exercise == None:
+        logging.info(f"The exercise with id = {exerciseId} does not exist")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"The exercise with id = {exerciseId} does not exist",
+        )
+
     query = f"SELECT * FROM dbo.relationRoutinesExercises\
-                WHERE routineId={routineId} AND exerciseId={exerciseId}"
+                WHERE routineId='{routineId}' AND exerciseId='{exerciseId}'"
     sql_cursor.execute(query)
     relation = sql_cursor.fetchone()
+    sqlserver_client.commit()
     if relation != None:
         logging.info("The exercise is already in the routine")
         raise HTTPException(
@@ -181,14 +239,24 @@ async def addExerciseTOToRoutineTO(routineId: int, exerciseId: int):
         f"The exercise with id = {exerciseId} has been added to routine with id = {routineId}"
     )
 
-    return searchRoutineTO("id", routineId)
+    routine = await getRoutineTOById(routineId)
+    sql_cursor.close()
+    return routine
 
 
 @router.put("/", response_model=RoutineTO, status_code=status.HTTP_201_CREATED)
 async def updateRoutineTO(routineTO: RoutineTO):
     logging.info(f"PUT /routinesTO/")
+    sql_cursor = init_sql_cursor()
 
-    routine_search = searchRoutineTO("id", routineTO.id)
+    if not isUUIDValid(routineTO.id):
+        logging.info(f"The routine id = {routineTO.id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The routine id = {routineTO.id} is not valid",
+        )
+
+    routine_search = await searchRoutineTO(sql_cursor, "id", routineTO.id)
     if type(routine_search) != RoutineTO:
         logging.info(routine_search["error"])
         raise HTTPException(
@@ -200,21 +268,30 @@ async def updateRoutineTO(routineTO: RoutineTO):
     query = f"UPDATE dbo.routines\
                 SET creator = '{routineTO.creator}', name = '{routineTO.name}', description = '{routineTO.description}'\
                 OUTPUT INSERTED.*\
-                WHERE id={routineTO.id}"
+                WHERE id='{routineTO.id}'"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
 
     logging.info(f"The routine with id = {routineTO.id} has been updated")
 
-    return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+    sql_cursor.close()
+    return RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
 
 
 @router.delete("/{id}", response_model=RoutineTO, status_code=status.HTTP_200_OK)
 async def deleteRoutineTO(id: int):
     logging.info(f"DELETE /routinesTO/{id}")
+    sql_cursor = init_sql_cursor()
 
-    routine_search = searchRoutineTO("id", id)
+    if not isUUIDValid(id):
+        logging.info(f"The routine id = {id} is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"The routine id = {id} is not valid",
+        )
+
+    routine_search = await searchRoutineTO(sql_cursor, "id", id)
     if type(routine_search) != RoutineTO:
         logging.info(routine_search["error"])
         raise HTTPException(
@@ -224,35 +301,36 @@ async def deleteRoutineTO(id: int):
     logging.info("The routine is being deleted")
 
     query = f"DELETE FROM dbo.relationRoutinesExercises\
-                WHERE routineId={id}"
+                WHERE routineId='{id}'"
     sql_cursor.execute(query)
 
     query = f"DELETE FROM dbo.routines\
                 OUTPUT DELETED.*\
-                WHERE id={id}"
+                WHERE id='{id}'"
     sql_cursor.execute(query)
     routine = sql_cursor.fetchone()
     sqlserver_client.commit()
 
     logging.info(f"The routine with id = {id} has been deleted")
 
-    return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+    sql_cursor.close()
+    return RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
 
 
 # Methods
-def searchRoutineTO(field: str, key):
+async def searchRoutineTO(sql_cursor, field: str, key):
     query = f"SELECT * FROM dbo.routines\
                 WHERE {field}='{key}'"
     try:
         sql_cursor.execute(query)
         routine = sql_cursor.fetchone()
-        return RoutineTO(**routineTO_schema(tupleRoutineTOToDict(routine)))
+        return RoutineTO(**routineTO_schema(await tupleRoutineTOToDict(routine)))
     except:
         return {"error": f"The routine with {field} = '{key}' does not exist"}
 
 
-def tupleRoutineTOToDict(routine: dict):
-    exercises_list = searchRoutineExercises(routine[0])
+async def tupleRoutineTOToDict(routine: dict):
+    exercises_list = await searchRoutineExercises(routine[0])
 
     routine_dict = dict(
         {
@@ -267,11 +345,12 @@ def tupleRoutineTOToDict(routine: dict):
     return routine_dict
 
 
-def searchRoutineExercises(
-    routineId: int,
-):  # A way to populate RoutineTO object with ExerciseTO objects
+async def searchRoutineExercises(
+    routineId: str,
+):
+    sql_cursor_async = sqlserver_client.cursor()
     query = f"SELECT exerciseId FROM dbo.relationRoutinesExercises\
-                WHERE routineId={routineId}"
+                WHERE routineId='{routineId}'"
     exercisesId_list = list()
     sql_cursor_async.execute(query)
     exerciseId_response = sql_cursor_async.fetchall()
@@ -282,6 +361,18 @@ def searchRoutineExercises(
     exercises_list = list()
 
     for exerciseId in exercisesId_list:
-        exercises_list.append(searchExerciseTO("id", exerciseId))
+        exercises_list.append(
+            await searchExerciseTO(sql_cursor_async, "id", exerciseId)
+        )
+        
+    sql_cursor_async.close()
 
     return exercises_list
+
+
+def isUUIDValid(id):
+    try:
+        uuid.UUID(str(id))
+        return True
+    except ValueError:
+        return False

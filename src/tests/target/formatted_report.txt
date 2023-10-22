@@ -5,105 +5,162 @@ rootdir: /Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server
 configfile: pyproject.toml
 plugins: emoji-0.2.0, order-1.1.0, cov-4.1.0, asyncio-0.21.1, anyio-3.7.1, ordering-0.6
 asyncio: mode=Mode.AUTO
-collecting ... collected 97 items
-                                                                                               
-src/tests/routers/posts_test.py::test_getPosts_NoContent PASSED ✅                        [  1%]
-src/tests/routers/posts_test.py::test_getPostById_BadRequest PASSED ✅                    [  2%]
-src/tests/routers/posts_test.py::test_getPostById_NotFound PASSED ✅                      [  3%]
-src/tests/routers/posts_test.py::test_getPostByCreator_NotFound PASSED ✅                 [  4%]
-src/tests/routers/routines_test.py::test_getRoutines_NoContent PASSED ✅                  [  5%]
-src/tests/routers/routines_test.py::test_getRoutineById_BadRequest PASSED ✅              [  6%]
-src/tests/routers/routines_test.py::test_getRoutineById_NotFound PASSED ✅                [  7%]
-src/tests/routers/routines_test.py::test_getRoutineByCreator_NotFound PASSED ✅           [  8%]
-src/tests/routers/usersTO_test.py::test_getUsersTO_NoContent PASSED ✅                    [  9%]
-src/tests/routers/usersTO_test.py::test_getUserTOById_NotFound PASSED ✅                  [ 10%]
-src/tests/routers/usersTO_test.py::test_getUserByUsername_NotFound PASSED ✅              [ 11%]
-src/tests/routers/users_test.py::test_addUser_Created PASSED ✅                           [ 12%]
-src/tests/routers/posts_test.py::test_getPostByCreator_NoContent PASSED ✅                [ 13%]
-src/tests/routers/posts_test.py::test_addPost_NotFound PASSED ✅                          [ 14%]
-src/tests/routers/posts_test.py::test_addPost_Created PASSED ✅                           [ 15%]
-src/tests/routers/comments_test.py::test_getComments_NoContent PASSED ✅                  [ 16%]
-src/tests/routers/comments_test.py::test_getCommentById_BadRequest PASSED ✅              [ 17%]
-src/tests/routers/comments_test.py::test_getCommentById_NotFound PASSED ✅                [ 18%]
-src/tests/routers/comments_test.py::test_getCommentsByCreator_NotFound PASSED ✅          [ 19%]
-src/tests/routers/comments_test.py::test_getCommentsByCreator_NoContent PASSED ✅         [ 20%]
-src/tests/routers/comments_test.py::test_getPostComments_BadRequest PASSED ✅             [ 21%]
-src/tests/routers/comments_test.py::test_getPostComments_NotFound PASSED ✅               [ 22%]
-src/tests/routers/comments_test.py::test_getPostComments_NoContent PASSED ✅              [ 23%]
-src/tests/routers/comments_test.py::test_addCommentToPost_PostIdBadRequest PASSED ✅      [ 24%]
-src/tests/routers/comments_test.py::test_addCommentToPost_PostNotFound PASSED ✅          [ 25%]
-src/tests/routers/comments_test.py::test_addCommentToPost_UserNotFound PASSED ✅          [ 26%]
-src/tests/routers/comments_test.py::test_addCommentToPost_Ok PASSED ✅                    [ 27%]
-src/tests/routers/comments_test.py::test_getComments_Ok PASSED ✅                         [ 28%]
-src/tests/routers/comments_test.py::test_getCommentById_Ok PASSED ✅                      [ 29%]
-src/tests/routers/comments_test.py::test_getCommentsByCreator_Ok PASSED ✅                [ 30%]
-src/tests/routers/comments_test.py::test_getPostComments_Ok PASSED ✅                     [ 31%]
-src/tests/routers/comments_test.py::test_udpateCommentFromPost_BadRequest PASSED ✅       [ 32%]
-src/tests/routers/comments_test.py::test_udpateCommentFromPost_CommentNotFound PASSED ✅  [ 34%]
-src/tests/routers/comments_test.py::test_udpateCommentFromPost_PostNotFound PASSED ✅     [ 35%]
-src/tests/routers/comments_test.py::test_udpateCommentFromPost_UserNotFound PASSED ✅     [ 36%]
-src/tests/routers/comments_test.py::test_udpateCommentFromPost_Ok PASSED ✅               [ 37%]
-src/tests/routers/comments_test.py::test_deleteCommentFromPost_BadRequest PASSED ✅       [ 38%]
-src/tests/routers/comments_test.py::test_deleteCommentFromPost_CommentNotFound PASSED ✅  [ 39%]
-src/tests/routers/comments_test.py::test_deleteCommentFromPost_Ok PASSED ✅               [ 40%]
-src/tests/routers/comments_test.py::test_deleteAllPostComments_BadRequest PASSED ✅       [ 41%]
-src/tests/routers/comments_test.py::test_deleteAllPostComments_NotFound PASSED ✅         [ 42%]
-src/tests/routers/comments_test.py::test_deleteAllPostComments_Ok PASSED ✅               [ 43%]
-src/tests/routers/comments_test.py::test_deleteAllPostComments_NoContent PASSED ✅        [ 44%]
-src/tests/routers/posts_test.py::test_getPosts_Ok PASSED ✅                               [ 45%]
-src/tests/routers/posts_test.py::test_getPostById_Ok PASSED ✅                            [ 46%]
-src/tests/routers/posts_test.py::test_getPostsByCreator_Ok PASSED ✅                      [ 47%]
-src/tests/routers/posts_test.py::test_updatePost_BadRequest PASSED ✅                     [ 48%]
-src/tests/routers/posts_test.py::test_updatePost_NotFound PASSED ✅                       [ 49%]
-src/tests/routers/posts_test.py::test_updatePost_NoContent PASSED ✅                      [ 50%]
-src/tests/routers/posts_test.py::test_updatePost_User_NotFound PASSED ✅                  [ 51%]
-src/tests/routers/posts_test.py::test_updatePost_Created PASSED ✅                        [ 52%]
-src/tests/routers/posts_test.py::test_deletePost_BadRequest PASSED ✅                     [ 53%]
-src/tests/routers/posts_test.py::test_deletePost_NotFound PASSED ✅                       [ 54%]
-src/tests/routers/posts_test.py::test_deletePost_Ok PASSED ✅                             [ 55%]
-src/tests/routers/posts_test.py::test_deleteAllCreatorPosts_NotFound PASSED ✅            [ 56%]
-src/tests/routers/posts_test.py::test_deleteAllCreatorPosts_Ok PASSED ✅                  [ 57%]
-src/tests/routers/routines_test.py::test_getRoutineByCreator_NoContent PASSED ✅          [ 58%]
-src/tests/routers/routines_test.py::test_addRoutine_NotFound PASSED ✅                    [ 59%]
-src/tests/routers/routines_test.py::test_addRoutine_Created PASSED ✅                     [ 60%]
-src/tests/routers/routines_test.py::test_getRoutines_Ok PASSED ✅                         [ 61%]
-src/tests/routers/routines_test.py::test_getRoutineById_Ok PASSED ✅                      [ 62%]
-src/tests/routers/routines_test.py::test_getRoutinesByCreator_Ok PASSED ✅                [ 63%]
-src/tests/routers/routines_test.py::test_updateRoutine_BadRequest PASSED ✅               [ 64%]
-src/tests/routers/routines_test.py::test_updateRoutine_NotFound PASSED ✅                 [ 65%]
-src/tests/routers/routines_test.py::test_updateRoutine_NoContent PASSED ✅                [ 67%]
-src/tests/routers/routines_test.py::test_updateRoutine_UserNotFound PASSED ✅             [ 68%]
-src/tests/routers/routines_test.py::test_updateRoutine_Created PASSED ✅                  [ 69%]
-src/tests/routers/routines_test.py::test_deleteRoutine_BadRequest PASSED ✅               [ 70%]
-src/tests/routers/routines_test.py::test_deleteRoutine_NotFound PASSED ✅                 [ 71%]
-src/tests/routers/routines_test.py::test_deleteRoutine_Ok PASSED ✅                       [ 72%]
-src/tests/routers/routines_test.py::test_deleteAllCreatorRoutines_NotFound PASSED ✅      [ 73%]
-src/tests/routers/routines_test.py::test_deleteAllCreatorRoutines_Ok PASSED ✅            [ 74%]
-src/tests/routers/users_test.py::test_getPublicUsers_BadRequest PASSED ✅                 [ 75%]
-src/tests/routers/users_test.py::test_getPublicUsers_All_Ok PASSED ✅                     [ 76%]
-src/tests/routers/users_test.py::test_getPublicUsers_ById_Ok PASSED ✅                    [ 77%]
-src/tests/routers/users_test.py::test_getPublicUsers_ByUsername_Ok PASSED ✅              [ 78%]
-src/tests/routers/users_test.py::test_followUser_Ok PASSED ✅                             [ 79%]
-src/tests/routers/users_test.py::test_followUser_NoContent PASSED ✅                      [ 80%]
-src/tests/routers/users_test.py::test_unfollowUser_Ok PASSED ✅                           [ 81%]
-src/tests/routers/users_test.py::test_unfollowUser_NoContent PASSED ✅                    [ 82%]
-src/tests/routers/users_test.py::test_getUsers_Ok PASSED ✅                               [ 83%]
-src/tests/routers/users_test.py::test_addUser_Conflict PASSED ✅                          [ 84%]
-src/tests/routers/users_test.py::test_getUserById_Ok PASSED ✅                            [ 85%]
-src/tests/routers/users_test.py::test_getUserById_BadRequest PASSED ✅                    [ 86%]
-src/tests/routers/users_test.py::test_getUserById_NotFound PASSED ✅                      [ 87%]
-src/tests/routers/users_test.py::test_getUserByUsername_Ok PASSED ✅                      [ 88%]
-src/tests/routers/users_test.py::test_updateUser_NoContent PASSED ✅                      [ 89%]
-src/tests/routers/users_test.py::test_updateUser_Ok PASSED ✅                             [ 90%]
-src/tests/routers/users_test.py::test_getUserByUsername_NotFound PASSED ✅                [ 91%]
-src/tests/routers/users_test.py::test_updateUser_BadRequest PASSED ✅                     [ 92%]
-src/tests/routers/users_test.py::test_updateUser_NotFound PASSED ✅                       [ 93%]
-src/tests/routers/users_test.py::test_updateUser_Conflict PASSED ✅                       [ 94%]
-src/tests/routers/users_test.py::test_deleteUser_Ok PASSED ✅                             [ 95%]
-src/tests/routers/users_test.py::test_deleteUser_BadRequest PASSED ✅                     [ 96%]
-src/tests/routers/users_test.py::test_deleteUser_NotFound PASSED ✅                       [ 97%]
-src/tests/routers/users_test.py::test_deleteAllUsers_Ok PASSED ✅                         [ 98%]
-src/tests/routers/users_test.py::test_getUsers_NoContent PASSED ✅                        [100%]
+collecting ... collected 154 items
+                                                                                                         
+src/tests/routers/posts_test.py::test_getPosts_NoContent PASSED ✅                                  [  0%]
+src/tests/routers/posts_test.py::test_getPostById_BadRequest PASSED ✅                              [  1%]
+src/tests/routers/posts_test.py::test_getPostById_NotFound PASSED ✅                                [  1%]
+src/tests/routers/posts_test.py::test_getPostByCreator_NotFound PASSED ✅                           [  2%]
+src/tests/routers/routines_test.py::test_getRoutines_NoContent PASSED ✅                            [  3%]
+src/tests/routers/routines_test.py::test_getRoutineById_BadRequest PASSED ✅                        [  3%]
+src/tests/routers/routines_test.py::test_getRoutineById_NotFound PASSED ✅                          [  4%]
+src/tests/routers/routines_test.py::test_getRoutineByCreator_NotFound PASSED ✅                     [  5%]
+src/tests/routers/usersTO_test.py::test_getUsersTO_NoContent PASSED ✅                              [  5%]
+src/tests/routers/usersTO_test.py::test_getUserTOById_BadRequest PASSED ✅                          [  6%]
+src/tests/routers/usersTO_test.py::test_getUserTOById_NotFound PASSED ✅                            [  7%]
+src/tests/routers/usersTO_test.py::test_getUserTOByUsername_NotFound PASSED ✅                      [  7%]
+src/tests/routers/usersTO_test.py::test_addUserTO_Created PASSED ✅                                 [  8%]
+src/tests/routers/exercisesTO_test.py::test_getExercisesTO_NoContent PASSED ✅                      [  9%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTOById_BadRequest PASSED ✅                  [  9%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTOById_NotFound PASSED ✅                    [ 10%]
+src/tests/routers/exercisesTO_test.py::test_getExercisesTOByCreator_NotFound PASSED ✅              [ 11%]
+src/tests/routers/exercisesTO_test.py::test_getExercisesTOByCreator_NoContent PASSED ✅             [ 11%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTOByName_NotFound PASSED ✅                  [ 12%]
+src/tests/routers/exercisesTO_test.py::test_addExerciseTO_NotFoundUserTO PASSED ✅                  [ 12%]
+src/tests/routers/exercisesTO_test.py::test_addExerciseTO_Created PASSED ✅                         [ 13%]
+src/tests/routers/exercisesTO_test.py::test_addExerciseTO_Conflict PASSED ✅                        [ 14%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTO_Ok PASSED ✅                              [ 14%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTOById_Ok PASSED ✅                          [ 15%]
+src/tests/routers/exercisesTO_test.py::test_getExercisesTOByCreator_Ok PASSED ✅                    [ 16%]
+src/tests/routers/exercisesTO_test.py::test_getExerciseTOByName_Ok PASSED ✅                        [ 16%]
+src/tests/routers/exercisesTO_test.py::test_updateExerciseTO_BadRequest PASSED ✅                   [ 17%]
+src/tests/routers/exercisesTO_test.py::test_updateExerciseTO_NotFound PASSED ✅                     [ 18%]
+src/tests/routers/exercisesTO_test.py::test_updateExerciseTO_Conflict PASSED ✅                     [ 18%]
+src/tests/routers/exercisesTO_test.py::test_updateExerciseTO_Ok PASSED ✅                           [ 19%]
+src/tests/routers/exercisesTO_test.py::test_deleteExerciseTO_BadRequest PASSED ✅                   [ 20%]
+src/tests/routers/exercisesTO_test.py::test_deleteExerciseTO_NotFound PASSED ✅                     [ 20%]
+src/tests/routers/exercisesTO_test.py::test_deleteExerciseTO_Ok PASSED ✅                           [ 21%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTO_NoContent PASSED ✅                        [ 22%]
+src/tests/routers/routinesTO_test.py::test_getRoutineTOById_BadRequest PASSED ✅                    [ 22%]
+src/tests/routers/routinesTO_test.py::test_getRoutineTOById_NotFound PASSED ✅                      [ 23%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTOByCreator_NotFound PASSED ✅                [ 24%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTOByCreator_NoContent PASSED ✅               [ 24%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTOByName_NotFound PASSED ✅                   [ 25%]
+src/tests/routers/routinesTO_test.py::test_addRoutineTO_NotFoundUserTO PASSED ✅                    [ 25%]
+src/tests/routers/routinesTO_test.py::test_addRoutineTO_Created PASSED ✅                           [ 26%]
+src/tests/routers/routinesTO_test.py::test_getRoutineTO_Ok PASSED ✅                                [ 27%]
+src/tests/routers/routinesTO_test.py::test_getRoutineTOById_Ok PASSED ✅                            [ 27%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTOByCreator_Ok PASSED ✅                      [ 28%]
+src/tests/routers/routinesTO_test.py::test_getRoutinesTOByName_Ok PASSED ✅                         [ 29%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_BadRequestRoutineId PASSED ✅   [ 29%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_BadRequestExerciseId PASSED ✅  [ 30%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_NotFoundRoutineId PASSED ✅     [ 31%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_NotFoundExerciseId PASSED ✅    [ 31%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_Ok PASSED ✅                    [ 32%]
+src/tests/routers/routinesTO_test.py::test_addExerciseTOToRoutineTO_Conflict PASSED ✅              [ 33%]
+src/tests/routers/routinesTO_test.py::test_updateRoutineTO_BadRequest PASSED ✅                     [ 33%]
+src/tests/routers/routinesTO_test.py::test_updateRoutineTO_NotFound PASSED ✅                       [ 34%]
+src/tests/routers/routinesTO_test.py::test_updateRoutineTO_Ok PASSED ✅                             [ 35%]
+src/tests/routers/routinesTO_test.py::test_deleteRoutineTO_BadRequest PASSED ✅                     [ 35%]
+src/tests/routers/routinesTO_test.py::test_deleteRoutineTO_NotFound PASSED ✅                       [ 36%]
+src/tests/routers/routinesTO_test.py::test_deleteRoutineTO_Ok PASSED ✅                             [ 37%]
+src/tests/routers/usersTO_test.py::test_addUserTO_Conflict PASSED ✅                                [ 37%]
+src/tests/routers/usersTO_test.py::test_getUserTO_Ok PASSED ✅                                      [ 38%]
+src/tests/routers/usersTO_test.py::test_getUserTOById_Ok PASSED ✅                                  [ 38%]
+src/tests/routers/usersTO_test.py::test_getUserTOByUsername_Ok PASSED ✅                            [ 39%]
+src/tests/routers/usersTO_test.py::test_updateUserTO_BadRequest PASSED ✅                           [ 40%]
+src/tests/routers/usersTO_test.py::test_updateUserTO_NotFound PASSED ✅                             [ 40%]
+src/tests/routers/usersTO_test.py::test_updateUserTO_Conflict PASSED ✅                             [ 41%]
+src/tests/routers/usersTO_test.py::test_updateUserTO_Ok PASSED ✅                                   [ 42%]
+src/tests/routers/usersTO_test.py::test_deleteUserTO_BadRequest PASSED ✅                           [ 42%]
+src/tests/routers/usersTO_test.py::test_deleteUserTO_NotFound PASSED ✅                             [ 43%]
+src/tests/routers/usersTO_test.py::test_deleteUserTO_Ok PASSED ✅                                   [ 44%]
+src/tests/routers/users_test.py::test_addUser_Created PASSED ✅                                     [ 44%]
+src/tests/routers/posts_test.py::test_getPostByCreator_NoContent PASSED ✅                          [ 45%]
+src/tests/routers/posts_test.py::test_addPost_NotFound PASSED ✅                                    [ 46%]
+src/tests/routers/posts_test.py::test_addPost_Created PASSED ✅                                     [ 46%]
+src/tests/routers/comments_test.py::test_getComments_NoContent PASSED ✅                            [ 47%]
+src/tests/routers/comments_test.py::test_getCommentById_BadRequest PASSED ✅                        [ 48%]
+src/tests/routers/comments_test.py::test_getCommentById_NotFound PASSED ✅                          [ 48%]
+src/tests/routers/comments_test.py::test_getCommentsByCreator_NotFound PASSED ✅                    [ 49%]
+src/tests/routers/comments_test.py::test_getCommentsByCreator_NoContent PASSED ✅                   [ 50%]
+src/tests/routers/comments_test.py::test_getPostComments_BadRequest PASSED ✅                       [ 50%]
+src/tests/routers/comments_test.py::test_getPostComments_NotFound PASSED ✅                         [ 51%]
+src/tests/routers/comments_test.py::test_getPostComments_NoContent PASSED ✅                        [ 51%]
+src/tests/routers/comments_test.py::test_addCommentToPost_PostIdBadRequest PASSED ✅                [ 52%]
+src/tests/routers/comments_test.py::test_addCommentToPost_PostNotFound PASSED ✅                    [ 53%]
+src/tests/routers/comments_test.py::test_addCommentToPost_UserNotFound PASSED ✅                    [ 53%]
+src/tests/routers/comments_test.py::test_addCommentToPost_Ok PASSED ✅                              [ 54%]
+src/tests/routers/comments_test.py::test_getComments_Ok PASSED ✅                                   [ 55%]
+src/tests/routers/comments_test.py::test_getCommentById_Ok PASSED ✅                                [ 55%]
+src/tests/routers/comments_test.py::test_getCommentsByCreator_Ok PASSED ✅                          [ 56%]
+src/tests/routers/comments_test.py::test_getPostComments_Ok PASSED ✅                               [ 57%]
+src/tests/routers/comments_test.py::test_udpateCommentFromPost_BadRequest PASSED ✅                 [ 57%]
+src/tests/routers/comments_test.py::test_udpateCommentFromPost_CommentNotFound PASSED ✅            [ 58%]
+src/tests/routers/comments_test.py::test_udpateCommentFromPost_PostNotFound PASSED ✅               [ 59%]
+src/tests/routers/comments_test.py::test_udpateCommentFromPost_UserNotFound PASSED ✅               [ 59%]
+src/tests/routers/comments_test.py::test_udpateCommentFromPost_Ok PASSED ✅                         [ 60%]
+src/tests/routers/comments_test.py::test_deleteCommentFromPost_BadRequest PASSED ✅                 [ 61%]
+src/tests/routers/comments_test.py::test_deleteCommentFromPost_CommentNotFound PASSED ✅            [ 61%]
+src/tests/routers/comments_test.py::test_deleteCommentFromPost_Ok PASSED ✅                         [ 62%]
+src/tests/routers/comments_test.py::test_deleteAllPostComments_BadRequest PASSED ✅                 [ 62%]
+src/tests/routers/comments_test.py::test_deleteAllPostComments_NotFound PASSED ✅                   [ 63%]
+src/tests/routers/comments_test.py::test_deleteAllPostComments_Ok PASSED ✅                         [ 64%]
+src/tests/routers/comments_test.py::test_deleteAllPostComments_NoContent PASSED ✅                  [ 64%]
+src/tests/routers/posts_test.py::test_getPosts_Ok PASSED ✅                                         [ 65%]
+src/tests/routers/posts_test.py::test_getPostById_Ok PASSED ✅                                      [ 66%]
+src/tests/routers/posts_test.py::test_getPostsByCreator_Ok PASSED ✅                                [ 66%]
+src/tests/routers/posts_test.py::test_updatePost_BadRequest PASSED ✅                               [ 67%]
+src/tests/routers/posts_test.py::test_updatePost_NotFound PASSED ✅                                 [ 68%]
+src/tests/routers/posts_test.py::test_updatePost_NoContent PASSED ✅                                [ 68%]
+src/tests/routers/posts_test.py::test_updatePost_User_NotFound PASSED ✅                            [ 69%]
+src/tests/routers/posts_test.py::test_updatePost_Created PASSED ✅                                  [ 70%]
+src/tests/routers/posts_test.py::test_deletePost_BadRequest PASSED ✅                               [ 70%]
+src/tests/routers/posts_test.py::test_deletePost_NotFound PASSED ✅                                 [ 71%]
+src/tests/routers/posts_test.py::test_deletePost_Ok PASSED ✅                                       [ 72%]
+src/tests/routers/posts_test.py::test_deleteAllCreatorPosts_NotFound PASSED ✅                      [ 72%]
+src/tests/routers/posts_test.py::test_deleteAllCreatorPosts_Ok PASSED ✅                            [ 73%]
+src/tests/routers/routines_test.py::test_getRoutineByCreator_NoContent PASSED ✅                    [ 74%]
+src/tests/routers/routines_test.py::test_addRoutine_NotFound PASSED ✅                              [ 74%]
+src/tests/routers/routines_test.py::test_addRoutine_Created PASSED ✅                               [ 75%]
+src/tests/routers/routines_test.py::test_getRoutines_Ok PASSED ✅                                   [ 75%]
+src/tests/routers/routines_test.py::test_getRoutineById_Ok PASSED ✅                                [ 76%]
+src/tests/routers/routines_test.py::test_getRoutinesByCreator_Ok PASSED ✅                          [ 77%]
+src/tests/routers/routines_test.py::test_updateRoutine_BadRequest PASSED ✅                         [ 77%]
+src/tests/routers/routines_test.py::test_updateRoutine_NotFound PASSED ✅                           [ 78%]
+src/tests/routers/routines_test.py::test_updateRoutine_NoContent PASSED ✅                          [ 79%]
+src/tests/routers/routines_test.py::test_updateRoutine_UserNotFound PASSED ✅                       [ 79%]
+src/tests/routers/routines_test.py::test_updateRoutine_Created PASSED ✅                            [ 80%]
+src/tests/routers/routines_test.py::test_deleteRoutine_BadRequest PASSED ✅                         [ 81%]
+src/tests/routers/routines_test.py::test_deleteRoutine_NotFound PASSED ✅                           [ 81%]
+src/tests/routers/routines_test.py::test_deleteRoutine_Ok PASSED ✅                                 [ 82%]
+src/tests/routers/routines_test.py::test_deleteAllCreatorRoutines_NotFound PASSED ✅                [ 83%]
+src/tests/routers/routines_test.py::test_deleteAllCreatorRoutines_Ok PASSED ✅                      [ 83%]
+src/tests/routers/users_test.py::test_getPublicUsers_BadRequest PASSED ✅                           [ 84%]
+src/tests/routers/users_test.py::test_getPublicUsers_All_Ok PASSED ✅                               [ 85%]
+src/tests/routers/users_test.py::test_getPublicUsers_ById_Ok PASSED ✅                              [ 85%]
+src/tests/routers/users_test.py::test_getPublicUsers_ByUsername_Ok PASSED ✅                        [ 86%]
+src/tests/routers/users_test.py::test_followUser_Ok PASSED ✅                                       [ 87%]
+src/tests/routers/users_test.py::test_followUser_NoContent PASSED ✅                                [ 87%]
+src/tests/routers/users_test.py::test_unfollowUser_Ok PASSED ✅                                     [ 88%]
+src/tests/routers/users_test.py::test_unfollowUser_NoContent PASSED ✅                              [ 88%]
+src/tests/routers/users_test.py::test_getUsers_Ok PASSED ✅                                         [ 89%]
+src/tests/routers/users_test.py::test_addUser_Conflict PASSED ✅                                    [ 90%]
+src/tests/routers/users_test.py::test_getUserById_Ok PASSED ✅                                      [ 90%]
+src/tests/routers/users_test.py::test_getUserById_BadRequest PASSED ✅                              [ 91%]
+src/tests/routers/users_test.py::test_getUserById_NotFound PASSED ✅                                [ 92%]
+src/tests/routers/users_test.py::test_getUserByUsername_Ok PASSED ✅                                [ 92%]
+src/tests/routers/users_test.py::test_updateUser_NoContent PASSED ✅                                [ 93%]
+src/tests/routers/users_test.py::test_updateUser_Ok PASSED ✅                                       [ 94%]
+src/tests/routers/users_test.py::test_getUserByUsername_NotFound PASSED ✅                          [ 94%]
+src/tests/routers/users_test.py::test_updateUser_BadRequest PASSED ✅                               [ 95%]
+src/tests/routers/users_test.py::test_updateUser_NotFound PASSED ✅                                 [ 96%]
+src/tests/routers/users_test.py::test_updateUser_Conflict PASSED ✅                                 [ 96%]
+src/tests/routers/users_test.py::test_deleteUser_Ok PASSED ✅                                       [ 97%]
+src/tests/routers/users_test.py::test_deleteUser_BadRequest PASSED ✅                               [ 98%]
+src/tests/routers/users_test.py::test_deleteUser_NotFound PASSED ✅                                 [ 98%]
+src/tests/routers/users_test.py::test_deleteAllUsers_Ok PASSED ✅                                   [ 99%]
+src/tests/routers/users_test.py::test_getUsers_NoContent PASSED ✅                                  [100%]
 
 =============================== warnings summary ===============================
 src/tests/routers/routines_test.py::test_updateRoutine_NotFound
@@ -117,48 +174,50 @@ src/tests/routers/routines_test.py::test_updateRoutine_Created
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 
 ---------- coverage: platform darwin, python 3.11.1-final-0 ----------
-Name                                 Stmts   Miss  Cover   Missing
-------------------------------------------------------------------
-conftest.py                             23      5    78%   11, 15, 19, 23, 27
-db/mongodb/client.py                    14      2    86%   15-16
-db/mongodb/models/comment.py             8      0   100%
-db/mongodb/models/exercise.py           12      0   100%
-db/mongodb/models/post.py               18      1    94%   27
-db/mongodb/models/routine.py            18      0   100%
-db/mongodb/models/set.py                 9      0   100%
-db/mongodb/models/user.py               26      0   100%
-db/mongodb/schemas/comment.py            4      0   100%
-db/mongodb/schemas/exercise.py           8      0   100%
-db/mongodb/schemas/post.py               4      0   100%
-db/mongodb/schemas/routine.py            8      0   100%
-db/mongodb/schemas/set.py                7      0   100%
-db/mongodb/schemas/user.py               5      0   100%
-db/sqlDB/client.py                       7      1    86%   8
-db/sqlDB/models/exerciseTO.py            7      0   100%
-db/sqlDB/models/routineTO.py             9      0   100%
-db/sqlDB/models/userTO.py                9      0   100%
-db/sqlDB/schemas/exerciseTO.py           4      2    50%   2, 10
-db/sqlDB/schemas/routineTO.py            4      2    50%   2, 11
-db/sqlDB/schemas/userTO.py               4      2    50%   2, 13
-src/main/main.py                        22      1    95%   44
-src/main/routers/comments.py           200     29    86%   155-157, 166-169, 228-230, 246-251, 287-288, 296-298, 314-322, 371-375
-src/main/routers/exercisesTO.py        107     84    21%   19-37, 42-56, 65-84, 91-105, 110-131, 136-157, 162-185, 190-197, 201-209
-src/main/routers/posts.py              174     18    90%   108-110, 121-124, 183-186, 228-235
-src/main/routers/routines.py           184     10    95%   120-122, 195-198, 237-239
-src/main/routers/routinesTO.py         147    119    19%   21-39, 44-58, 65-84, 93-112, 117-129, 138-184, 189-210, 215-239, 244-251, 255-267, 273-287
-src/main/routers/users.py              198     16    92%   228-229, 252-254, 294-306
-src/main/routers/usersTO.py             99     50    49%   40-43, 62, 81, 86-110, 115-159, 164-198, 203-210, 214-225
-src/tests/__init__.py                    0      0   100%
-src/tests/main_test.py                  13      0   100%
-src/tests/routers/__init__.py            0      0   100%
-src/tests/routers/comments_test.py     256      0   100%
-src/tests/routers/posts_test.py        166      0   100%
-src/tests/routers/routines_test.py     162      0   100%
-src/tests/routers/usersTO_test.py       32      0   100%
-src/tests/routers/users_test.py        181      0   100%
-utils/logger.py                         20      0   100%
-------------------------------------------------------------------
-TOTAL                                 2169    342    84%
+Name                                    Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------
+conftest.py                                23      5    78%   11, 15, 19, 23, 27
+db/mongodb/client.py                       14      2    86%   15-16
+db/mongodb/models/comment.py                8      0   100%
+db/mongodb/models/exercise.py              12      0   100%
+db/mongodb/models/post.py                  18      1    94%   27
+db/mongodb/models/routine.py               18      0   100%
+db/mongodb/models/set.py                    9      0   100%
+db/mongodb/models/user.py                  26      0   100%
+db/mongodb/schemas/comment.py               4      0   100%
+db/mongodb/schemas/exercise.py              8      0   100%
+db/mongodb/schemas/post.py                  4      0   100%
+db/mongodb/schemas/routine.py               8      0   100%
+db/mongodb/schemas/set.py                   7      0   100%
+db/mongodb/schemas/user.py                  5      0   100%
+db/sqlDB/client.py                          7      1    86%   8
+db/sqlDB/models/exerciseTO.py               7      0   100%
+db/sqlDB/models/routineTO.py                9      0   100%
+db/sqlDB/models/userTO.py                  10      0   100%
+db/sqlDB/schemas/exerciseTO.py              4      1    75%   10
+db/sqlDB/schemas/routineTO.py               4      1    75%   11
+db/sqlDB/schemas/userTO.py                  4      1    75%   13
+src/main/main.py                           22      1    95%   44
+src/main/routers/comments.py              200     29    86%   155-157, 166-169, 228-230, 246-251, 287-288, 296-298, 314-322, 371-375
+src/main/routers/exercisesTO.py           146      0   100%
+src/main/routers/posts.py                 174     18    90%   108-110, 121-124, 183-186, 228-235
+src/main/routers/routines.py              184     10    95%   120-122, 195-198, 237-239
+src/main/routers/routinesTO.py            200      0   100%
+src/main/routers/users.py                 219     19    91%   222-224, 235-236, 277-279, 319-331
+src/main/routers/usersTO.py               134      6    96%   118-122, 193-195
+src/tests/__init__.py                       0      0   100%
+src/tests/main_test.py                     13      0   100%
+src/tests/routers/__init__.py               0      0   100%
+src/tests/routers/comments_test.py        256      0   100%
+src/tests/routers/exercisesTO_test.py     163      0   100%
+src/tests/routers/posts_test.py           166      0   100%
+src/tests/routers/routinesTO_test.py      196      0   100%
+src/tests/routers/routines_test.py        162      0   100%
+src/tests/routers/usersTO_test.py         122      0   100%
+src/tests/routers/users_test.py           181      0   100%
+utils/logger.py                            20      0   100%
+---------------------------------------------------------------------
+TOTAL                                    2767     95    97%
 Coverage HTML written to dir ./src/tests/target/reports
 
-======================== 97 passed, 4 warnings in 3.83s ========================
+======================= 154 passed, 4 warnings in 3.85s ========================

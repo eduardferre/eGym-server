@@ -216,8 +216,15 @@ async def updateUser(user: User):
         else:
             posts_list = list()
             for post in user.postsLog:
+                comments_list = list()
                 post.creator = user.username
+                for comment in dict(post)["comments"]:
+                    comment_dict = dict(comment)
+                    comment["creator"] = user.username
+                    comments_list.append(comment_dict)
+
                 post_dict = dict(post)
+                post_dict["comments"] = comments_list
                 await mongodb_client.posts.find_one_and_replace(
                     {"_id": ObjectId(post.id)}, post_dict
                 )
@@ -232,14 +239,32 @@ async def updateUser(user: User):
     else:
         posts_list = list()
         for post in user.postsLog:
+            comments_list = list()
+            for comment in dict(post)["comments"]:
+                comment_dict = dict(comment)
+                comments_list.append(comment_dict)
+
             post_dict = dict(post)
+            post_dict["comments"] = comments_list
             posts_list.append(post_dict)
 
         user_dict["postsLog"] = posts_list
 
         routines_list = list()
         for routine in user.routinesLog:
+            exercises_list = list()
+            for exercise in dict(routine)["exercises"]:
+                sets_list = list()
+                for set in dict(exercise)["sets"]:
+                    set_dict = dict(set)
+                    sets_list.append(set_dict)
+
+                exercise_dict = dict(exercise)
+                exercise_dict["sets"] = sets_list
+                exercises_list.append(exercise_dict)
+
             routine_dict = dict(routine)
+            routine_dict["exercises"] = exercises_list
             routines_list.append(routine_dict)
 
         user_dict["routinesLog"] = routines_list
