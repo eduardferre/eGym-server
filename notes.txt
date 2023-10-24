@@ -1,0 +1,4 @@
+# https://mkjwk.org/
+  # <--- secret key: openssl rand -hex 64
+  # <--- algorithm Elliptic Curve Digital Signature Algorithm #! What about --> EdDSA: Edward's Curves
+  # <--- From website, use kid provided

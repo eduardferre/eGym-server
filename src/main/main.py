@@ -33,12 +33,6 @@ app.include_router(comments.router)
 app.include_router(routines.router)
 
 
-# # Router: root
-# @app.get("/")
-# async def root():
-#     return "Welcome to eGym!"
-
-
 if __name__ == "__main__":
     # Initialization
     uvicorn.run(app, host="localhost", port=8000)

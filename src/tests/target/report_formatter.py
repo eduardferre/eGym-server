@@ -1,4 +1,8 @@
 import os
+import openai
+import re
+
+openai.api_key = "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"
 
 # Remove the existing formatted_report.txt file if it exists
 if os.path.exists("formatted_report.txt"):
@@ -9,6 +13,32 @@ if os.path.exists("table_report.txt"):
 
 if os.path.exists("report.html"):
     os.remove("report.html")
+
+if os.path.exists("table_git.txt"):
+    os.remove("table_git.txt")
+
+
+def ask_chat_gpt(content: str):
+    conversation = [
+        {
+            "role": "system",
+            "content": "You are my description test completion assistant. Your responses should be only the description, without any confirmation. The description should be similar to 'Test getting posts (204 - No Content)', so, the structure is 'description (HTTP_Code - HTTP_Status)'.",
+        }
+    ]
+
+    conversation.append({"role": "user", "content": content})
+
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        messages=conversation,
+        max_tokens=100,
+        api_key=openai.api_key,
+    )
+
+    chatgpt_response = response.choices[0].message["content"].strip()
+
+    return chatgpt_response
+
 
 # Read the report from a file (or you can modify this to read from any source)
 with open("report_logs.txt", "r") as file:
@@ -62,13 +92,17 @@ with open("formatted_report.txt", "w") as output_file:
         output_file.write(line)
 
 with open("table_report.txt", "w") as output_table_file:
+    number = 0
     for count, line in enumerate(formatted_lines):
-        if count < 8:
+        if count < 9:
             None
         elif not "[100%]" in formatted_lines[count - 1]:
-            output_table_file.write(line)
+            number += 1
+            output_table_file.write(str(number) + "      " + line)
         else:
             break
+
+    output_table_file.write(f"\n\nThere are {number} tests\n\n")
 
 with open("formatted_report.txt", "w") as output_file:
     for count, line in enumerate(formatted_lines):
@@ -94,3 +128,35 @@ with open("formatted_report.txt", "r") as file:
 
 with open("report.html", "w") as file:
     file.write(html_text)
+
+
+def write_table():
+    with open("table_report.txt", "r") as file:
+        test_number = 0
+
+        file_lines = file.readlines()
+        table_text = "| # | Test Name | Description | Status |\n|---|-----------|-------------|--------|\n"
+
+        for line in file_lines:
+            if line == "\n":
+                break
+            test_number += 1
+            test_name_pattern = r"_test\.py::(.*?) PASSED"
+            test_name = str(re.findall(test_name_pattern, line))
+            test_name = test_name.replace("['", "`").replace("']", "`")
+            # test_description = ask_chat_gpt(
+            #     f"Give me a description for this test: {test_name}"
+            # )
+            test_description = "Test description"
+            test_status = "✅" if "PASSED" in line else "❌"
+            table_text += f"| {test_number} | {test_name} | {test_description} | {test_status} |\n"
+
+        return table_text
+
+
+def create_table():
+    with open("table_git.txt", "w") as table:
+        table.write(write_table())
+
+
+create_table()

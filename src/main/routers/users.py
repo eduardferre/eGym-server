@@ -59,6 +59,8 @@ async def getPublicUsers(attribute: str, value: str):
     "/{follower}/{followed}", response_model=list[str], status_code=status.HTTP_200_OK
 )
 async def followUser(follower: str, followed: str):
+    logging.info(f"GET /users/{follower}/{followed}")
+
     follower_search = await getUserByUsername(follower)
     followed_search = await getUserByUsername(followed)
 
