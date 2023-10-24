@@ -1,8 +1,5 @@
 import os
 import pymssql
-from dotenv import load_dotenv
-
-load_dotenv()
 
 if os.getenv("TEST_ENABLED") == "FALSE":
     sqlserver_client = pymssql.connect(

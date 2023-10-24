@@ -9,12 +9,7 @@ sys.path.append(parent_dir)
 sys.path.append("/Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server/src")
 sys.path.append("/Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server")
 
-os.environ["TEST_ENABLED"] = "TRUE"
-
-import pytest
-
-from fastapi import status
 from fastapi.testclient import TestClient
 from main.main import app
 
-client = TestClient(app)  # uvicorn main:app --reload
+client = TestClient(app)

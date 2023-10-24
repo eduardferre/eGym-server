@@ -80,6 +80,7 @@ async def getRoutinesByCreator(creator: str):
 @router.post("/", response_model=Routine, status_code=status.HTTP_201_CREATED)
 async def addRoutine(routine: Routine):
     logging.info("POST /routines/")
+    
     user = await users.search_user("username", routine.creator)
     if type(user) != User:
         logging.info(f"The user specified does not exist in the database")

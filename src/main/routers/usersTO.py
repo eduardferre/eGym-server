@@ -1,13 +1,20 @@
 import logging
 import uuid
+
 from fastapi import APIRouter, HTTPException, status
 
 from db.sqlDB.client import sqlserver_client
 from db.sqlDB.models.userTO import UserTO
-from db.sqlDB.schemas.userTO import userTO_schema, usersTO_schema
+from db.sqlDB.schemas.userTO import userTO_schema
+
+from dotenv import load_dotenv
+
+load_dotenv(),
+
 
 def init_sql_cursor():
     return sqlserver_client.cursor()
+
 
 router = APIRouter(
     prefix="/usersTO",
