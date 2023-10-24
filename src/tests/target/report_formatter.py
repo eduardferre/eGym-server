@@ -2,7 +2,7 @@ import os
 import openai
 import re
 
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Remove the existing formatted_report.txt file if it exists
 if os.path.exists("formatted_report.txt"):
