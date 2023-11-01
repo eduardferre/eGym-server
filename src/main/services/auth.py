@@ -2,22 +2,24 @@ import os
 import logging
 import base64
 import json
+import jwt
 
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
-from jose import jwt, ExpiredSignatureError, JWTError
+
+from jwt.algorithms import ECAlgorithm
 
 
 def load_ES256_from_jwk_env():
     load_dotenv(override=True)
-    algorithm = os.getenv("JWT_ALGORITHM")
+    algorithm = ECAlgorithm("ES256")
     key = os.getenv("ES256_KEY")
     encode_key = base64.b64decode(key)
     json_key = json.loads(encode_key)
-    ES256_key = json_key["keys"][0]
+    ES256_key = algorithm.from_jwk(json_key.get("keys")[0])
     return ES256_key
 
 
@@ -33,7 +35,7 @@ class Auth:
 
     def encode_token(self, username):
         payload = {
-            "exp": datetime.utcnow() + timedelta(days=0, minutes=30),
+            "exp": datetime.utcnow() + timedelta(days=0, minutes=30, seconds=0),
             "iat": datetime.utcnow(),
             "scope": "access_token",
             "sub": username,
@@ -51,12 +53,12 @@ class Auth:
             pub_key = load_ES256_from_jwk_env().public_key()
             decoded = jwt.decode(token, pub_key, algorithms=os.getenv("JWT_ALGORITHM"))
             return decoded
-        except ExpiredSignatureError:
+        except jwt.ExpiredSignatureError:
             logging.info("The token has expired")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="The token has expired"
             )
-        except JWTError:
+        except jwt.InvalidTokenError:
             logging.info("The token is invalid")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="The token is invalid"
@@ -94,13 +96,13 @@ class Auth:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid scope for token",
             )
-        except ExpiredSignatureError:
+        except jwt.ExpiredSignatureError:
             logging.info("The token has expired")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="The refresh token has expired",
             )
-        except JWTError:
+        except jwt.InvalidTokenError:
             logging.info("The token is invalid")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

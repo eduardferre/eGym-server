@@ -1,7 +1,10 @@
-import logging
 import uuid
+import src.main.services.auth as auth_handler_class
 
-from fastapi import APIRouter, HTTPException, status
+from utils.logger import logging
+
+from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi.security import OAuth2PasswordBearer
 
 from db.sqlDB.client import sqlserver_client
 from db.sqlDB.models.userTO import UserTO
@@ -9,11 +12,19 @@ from db.sqlDB.schemas.userTO import userTO_schema
 
 from dotenv import load_dotenv
 
+
 load_dotenv(),
+
+oauth2_scheme = OAuth2PasswordBearer("/transactions/login")
+auth_handler = auth_handler_class.Auth()
 
 
 def init_sql_cursor():
     return sqlserver_client.cursor()
+
+
+def token_validation(token: str):
+    return auth_handler.decode_token(token)
 
 
 router = APIRouter(
@@ -24,62 +35,63 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[UserTO], status_code=status.HTTP_200_OK)
-async def getUsersTO():
-    logging.info(f"GET /usersTO/")
-    sql_cursor = init_sql_cursor()
+async def getUsersTO(token: str = Depends(oauth2_scheme)):
+    if token_validation(token) != None:
+        logging.info(f"GET /usersTO/")
+        sql_cursor = init_sql_cursor()
 
-    query = f"SELECT * FROM dbo.users"
-    sql_cursor.execute(query)
-    users_list = list()
-    user = sql_cursor.fetchone()
-
-    if user == None:
-        logging.info("There are no users in the database")
-        raise HTTPException(
-            status_code=status.HTTP_204_NO_CONTENT,
-            detail="There are no users in the database",
-        )
-
-    while user:
-        users_list.append(UserTO(**userTO_schema(await tupleUserTOToDict(user))))
+        query = f"SELECT * FROM dbo.users"
+        sql_cursor.execute(query)
+        users_list = list()
         user = sql_cursor.fetchone()
 
-    logging.info(f"{len(users_list)} usersTO have been found in the database")
+        if user == None:
+            logging.info("There are no users in the database")
+            raise HTTPException(
+                status_code=status.HTTP_204_NO_CONTENT,
+                detail="There are no users in the database",
+            )
 
-    sql_cursor.close()
-    return users_list
+        while user:
+            users_list.append(UserTO(**userTO_schema(await tupleUserTOToDict(user))))
+            user = sql_cursor.fetchone()
+
+        logging.info(f"{len(users_list)} usersTO have been found in the database")
+
+        sql_cursor.close()
+        return users_list
 
 
 @router.get("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def getUserTOById(id: str):
-    logging.info(f"GET /usersTO/{id}")
-    sql_cursor = init_sql_cursor()
+async def getUserTOById(id: str, token: str = Depends(oauth2_scheme)):
+    if token_validation(token) != None:
+        logging.info(f"GET /usersTO/{id}")
+        sql_cursor = init_sql_cursor()
 
-    if not isUUIDValid(id):
-        logging.info(f"The id = {id} is not valid")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"The id = {id} is not valid",
-        )
+        if not isUUIDValid(id):
+            logging.info(f"The id = {id} is not valid")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"The id = {id} is not valid",
+            )
 
-    query = f"SELECT * FROM dbo.users\
-                WHERE id='{id}'"
-    sql_cursor.execute(query)
-    user = sql_cursor.fetchone()
+        query = f"SELECT * FROM dbo.users\
+                    WHERE id='{id}'"
+        sql_cursor.execute(query)
+        user = sql_cursor.fetchone()
 
-    if user == None:
-        logging.info(f"The user with id = {id} is not found")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user with id = {id} is not found",
-        )
+        if user == None:
+            logging.info(f"The user with id = {id} is not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"The user with id = {id} is not found",
+            )
 
-    sql_cursor.close()
-    return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
+        sql_cursor.close()
+        return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
 
 
-@router.get("/{username}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def getUserTOByUsername(username: str):
+async def getUserTOByUsernameRequest(username: str):
     logging.info(f"GET /usersTO/{username}")
     sql_cursor = init_sql_cursor()
 
@@ -99,9 +111,17 @@ async def getUserTOByUsername(username: str):
     return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
 
 
-@router.post("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
+@router.get(
+    "/username/{username}", response_model=UserTO, status_code=status.HTTP_200_OK
+)
+async def getUserTOByUsername(username: str, token: str = Depends(oauth2_scheme)):
+    if token_validation(token) != None:
+        return await getUserTOByUsernameRequest(username)
+
+
+# @router.post("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
 async def addUserTO(userTO: UserTO):
-    logging.info(f"POST /usersTO/")
+    # logging.info(f"POST /usersTO/")
     sql_cursor = init_sql_cursor()
 
     if type(await searchUserTO(sql_cursor, "username", userTO.username)) == UserTO:
@@ -140,124 +160,126 @@ async def addUserTO(userTO: UserTO):
 
 
 @router.put("/", response_model=UserTO, status_code=status.HTTP_201_CREATED)
-async def updateUserTO(userTO: UserTO):
-    logging.info(f"PUT /usersTO/")
-    sql_cursor = init_sql_cursor()
+async def updateUserTO(userTO: UserTO, token: str = Depends(oauth2_scheme)):
+    if token_validation(token) != None:
+        logging.info(f"PUT /usersTO/")
+        sql_cursor = init_sql_cursor()
 
-    if not isUUIDValid(userTO.id):
-        logging.info(f"The id = {userTO.id} is not valid")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"The id = {userTO.id} is not valid",
+        if not isUUIDValid(userTO.id):
+            logging.info(f"The id = {userTO.id} is not valid")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"The id = {userTO.id} is not valid",
+            )
+
+        user_search = await searchUserTO(sql_cursor, "id", userTO.id)
+        if type(user_search) != UserTO:
+            logging.info(f"The user with id = {userTO.id} is not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"The user with id = {userTO.id} is not found",
+            )
+
+        if type(await searchUserTO(sql_cursor, "username", userTO.username)) == UserTO:
+            logging.info(f"The user {userTO.username} already exists")
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"The user {userTO.username} already exists",
+            )
+
+        # if user.username != user_search.username:
+        #     if type(await searchUserTO(sql_cursor, "username", user.username)) == UserTO:
+        #         logging.info(f"The username '{user.username}' is already used")
+        #         raise HTTPException(
+        #             status_code=status.HTTP_409_CONFLICT,
+        #             detail=f"The username '{user.username} is already used",
+        #         )
+
+        logging.info(f"The user {userTO.username} is being updated")
+
+        try:
+            query = f"UPDATE dbo.users\
+                        SET username = '{userTO.username}', firstName = '{userTO.firstname}', lastName = '{userTO.lastname}', email = '{userTO.email}', password = '{userTO.password}', birthDate = '{userTO.birthDate}'\
+                        OUTPUT INSERTED.*\
+                        WHERE id='{userTO.id}'"
+            sql_cursor.execute(query)
+            user = sql_cursor.fetchone()
+            sqlserver_client.commit()
+
+            # if user.username != user_search.username:
+            #     list_exercisesTO = exercisesTO.getExercisesTOByCreator(user_search.username)
+            #     for exerciseTO in list_exercisesTO:
+            #         exerciseTO = ExerciseTO(**exerciseTO)
+            #         exerciseTO.creator = user.username
+            #         await exercisesTO.updateExerciseTO(exerciseTO)
+
+            #     list_routinesTO = routinesTO.getRoutinesTOByCreator(user_search.username)
+            #     for routineTO in list_routinesTO:
+            #         routineTO = RoutineTO(**routineTO)
+            #         routineTO.creator = user.username
+            #         await routinesTO.updateRoutineTO(routineTO)
+        except:
+            logging.info(f"The user {userTO.username} has not been updated correctly")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"The user {userTO.username} has not been updated correctly",
+            )
+
+        logging.info(
+            f"The user {userTO.username} has been updated, as well as the exercises and routines that belong to him/her"
         )
 
-    user_search = await searchUserTO(sql_cursor, "id", userTO.id)
-    if type(user_search) != UserTO:
-        logging.info(f"The user with id = {userTO.id} is not found")
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"The user with id = {userTO.id} is not found",
-        )
+        sql_cursor.close()
+        return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
 
-    if type(await searchUserTO(sql_cursor, "username", userTO.username)) == UserTO:
-        logging.info(f"The user {userTO.username} already exists")
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"The user {userTO.username} already exists",
-        )
 
-    # if user.username != user_search.username:
-    #     if type(await searchUserTO(sql_cursor, "username", user.username)) == UserTO:
-    #         logging.info(f"The username '{user.username}' is already used")
-    #         raise HTTPException(
-    #             status_code=status.HTTP_409_CONFLICT,
-    #             detail=f"The username '{user.username} is already used",
-    #         )
+@router.delete("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
+async def deleteUserTO(id: int, token: str = Depends(oauth2_scheme)):
+    if token_validation(token) != None:
+        logging.info(f"DELETE /usersTO/{id}")
+        sql_cursor = init_sql_cursor()
 
-    logging.info(f"The user {userTO.username} is being updated")
+        if not isUUIDValid(id):
+            logging.info(f"The id = {id} is not valid")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"The id = {id} is not valid",
+            )
 
-    try:
-        query = f"UPDATE dbo.users\
-                    SET username = '{userTO.username}', firstName = '{userTO.firstname}', lastName = '{userTO.lastname}', email = '{userTO.email}', password = '{userTO.password}', birthDate = '{userTO.birthDate}'\
-                    OUTPUT INSERTED.*\
-                    WHERE id='{userTO.id}'"
+        user_search = await searchUserTO(sql_cursor, "id", id)
+        if type(user_search) != UserTO:
+            logging.info(user_search["error"])
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=user_search["error"]
+            )
+
+        logging.info(f"The user with id = {id} is being deleted")
+
+        query = f"DELETE FROM dbo.users\
+                    OUTPUT DELETED.*\
+                    WHERE id='{id}'"
         sql_cursor.execute(query)
         user = sql_cursor.fetchone()
         sqlserver_client.commit()
 
-        # if user.username != user_search.username:
-        #     list_exercisesTO = exercisesTO.getExercisesTOByCreator(user_search.username)
-        #     for exerciseTO in list_exercisesTO:
-        #         exerciseTO = ExerciseTO(**exerciseTO)
-        #         exerciseTO.creator = user.username
-        #         await exercisesTO.updateExerciseTO(exerciseTO)
+        # list_exercisesTO = exercisesTO.getExercisesTOByCreator(user_search.username)
+        # for exerciseTO in list_exercisesTO:
+        #     exerciseTO = ExerciseTO(**exerciseTO)
+        #     exerciseTO.creator = "unknown"
+        #     await exercisesTO.updateExerciseTO(exerciseTO)
 
-        #     list_routinesTO = routinesTO.getRoutinesTOByCreator(user_search.username)
-        #     for routineTO in list_routinesTO:
-        #         routineTO = RoutineTO(**routineTO)
-        #         routineTO.creator = user.username
-        #         await routinesTO.updateRoutineTO(routineTO)
-    except:
-        logging.info(f"The user {userTO.username} has not been updated correctly")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"The user {userTO.username} has not been updated correctly",
+        # list_routinesTO = routinesTO.getRoutinesTOByCreator(user_search.username)
+        # for routineTO in list_routinesTO:
+        #     routineTO = RoutineTO(**routineTO)
+        #     routineTO.creator = "unknown"
+        #     await routinesTO.updateRoutineTO(routineTO)
+
+        logging.info(
+            f"The user with id = {id} has been deleted and all the exercises and routines that belong to him/her are updated to: creator='unknown'"
         )
 
-    logging.info(
-        f"The user {userTO.username} has been updated, as well as the exercises and routines that belong to him/her"
-    )
-
-    sql_cursor.close()
-    return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
-
-
-@router.delete("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def deleteUserTO(id: int):
-    logging.info(f"DELETE /usersTO/{id}")
-    sql_cursor = init_sql_cursor()
-
-    if not isUUIDValid(id):
-        logging.info(f"The id = {id} is not valid")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"The id = {id} is not valid",
-        )
-
-    user_search = await searchUserTO(sql_cursor, "id", id)
-    if type(user_search) != UserTO:
-        logging.info(user_search["error"])
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=user_search["error"]
-        )
-
-    logging.info(f"The user with id = {id} is being deleted")
-
-    query = f"DELETE FROM dbo.users\
-                OUTPUT DELETED.*\
-                WHERE id='{id}'"
-    sql_cursor.execute(query)
-    user = sql_cursor.fetchone()
-    sqlserver_client.commit()
-
-    # list_exercisesTO = exercisesTO.getExercisesTOByCreator(user_search.username)
-    # for exerciseTO in list_exercisesTO:
-    #     exerciseTO = ExerciseTO(**exerciseTO)
-    #     exerciseTO.creator = "unknown"
-    #     await exercisesTO.updateExerciseTO(exerciseTO)
-
-    # list_routinesTO = routinesTO.getRoutinesTOByCreator(user_search.username)
-    # for routineTO in list_routinesTO:
-    #     routineTO = RoutineTO(**routineTO)
-    #     routineTO.creator = "unknown"
-    #     await routinesTO.updateRoutineTO(routineTO)
-
-    logging.info(
-        f"The user with id = {id} has been deleted and all the exercises and routines that belong to him/her are updated to: creator='unknown'"
-    )
-
-    sql_cursor.close()
-    return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
+        sql_cursor.close()
+        return UserTO(**userTO_schema(await tupleUserTOToDict(user)))
 
 
 # Methods
