@@ -4,6 +4,8 @@
 tests.mongodb.js
 dev-env
 bin
+Local.session.sql
+Test.session.sql
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

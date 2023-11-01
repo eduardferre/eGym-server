@@ -11,6 +11,7 @@ sys.path.append("/Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server")
 import uvicorn
 from utils.logger import logging
 from fastapi import FastAPI
+from src.main.routers import transactions
 from src.main.routers import usersTO, exercisesTO, routinesTO
 from src.main.routers import users, posts, comments, routines
 
@@ -23,6 +24,8 @@ logging.info("Started!")
 app = FastAPI()  # uvicorn main:app --reload
 
 # Routers
+app.include_router(transactions.router)
+
 app.include_router(usersTO.router)
 app.include_router(exercisesTO.router)
 app.include_router(routinesTO.router)

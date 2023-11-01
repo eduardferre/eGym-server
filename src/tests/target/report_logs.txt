@@ -174,50 +174,43 @@ src/tests/routers/routines_test.py::test_updateRoutine_Created
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 
 ---------- coverage: platform darwin, python 3.11.6-final-0 ----------
-Name                                    Stmts   Miss  Cover   Missing
----------------------------------------------------------------------
-conftest.py                                23      5    78%   11, 15, 19, 23, 27
-db/mongodb/client.py                       12      2    83%   12-13
-db/mongodb/models/comment.py                8      0   100%
-db/mongodb/models/exercise.py              12      0   100%
-db/mongodb/models/post.py                  18      1    94%   27
-db/mongodb/models/routine.py               18      0   100%
-db/mongodb/models/set.py                    9      0   100%
-db/mongodb/models/user.py                  26      0   100%
-db/mongodb/schemas/comment.py               4      0   100%
-db/mongodb/schemas/exercise.py              8      0   100%
-db/mongodb/schemas/post.py                  4      0   100%
-db/mongodb/schemas/routine.py               8      0   100%
-db/mongodb/schemas/set.py                   7      0   100%
-db/mongodb/schemas/user.py                  5      0   100%
-db/sqlDB/client.py                          5      1    80%   5
-db/sqlDB/models/exerciseTO.py               7      0   100%
-db/sqlDB/models/routineTO.py                9      0   100%
-db/sqlDB/models/userTO.py                  10      0   100%
-db/sqlDB/schemas/exerciseTO.py              4      1    75%   10
-db/sqlDB/schemas/routineTO.py               4      1    75%   11
-db/sqlDB/schemas/userTO.py                  4      1    75%   13
-src/main/main.py                           22      1    95%   38
-src/main/routers/comments.py              200     29    86%   155-157, 166-169, 228-230, 246-251, 287-288, 296-298, 314-322, 371-375
-src/main/routers/exercisesTO.py           146      0   100%
-src/main/routers/posts.py                 174     18    90%   108-110, 121-124, 183-186, 228-235
-src/main/routers/routines.py              184     10    95%   121-123, 196-199, 238-240
-src/main/routers/routinesTO.py            200      0   100%
-src/main/routers/users.py                 220     19    91%   224-226, 237-238, 279-281, 321-333
-src/main/routers/usersTO.py               136      6    96%   125-129, 200-202
-src/tests/__init__.py                       0      0   100%
-src/tests/main_test.py                     10      0   100%
-src/tests/routers/__init__.py               0      0   100%
-src/tests/routers/comments_test.py        256      0   100%
-src/tests/routers/exercisesTO_test.py     163      0   100%
-src/tests/routers/posts_test.py           166      0   100%
-src/tests/routers/routinesTO_test.py      196      0   100%
-src/tests/routers/routines_test.py        162      0   100%
-src/tests/routers/usersTO_test.py         122      0   100%
-src/tests/routers/users_test.py           181      0   100%
-utils/logger.py                            20      0   100%
----------------------------------------------------------------------
-TOTAL                                    2763     95    97%
+Name                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+db/mongodb/client.py                  12      2    83%   12-13
+db/mongodb/models/comment.py           8      0   100%
+db/mongodb/models/exercise.py         12      0   100%
+db/mongodb/models/post.py             18      1    94%   27
+db/mongodb/models/routine.py          18      0   100%
+db/mongodb/models/set.py               9      0   100%
+db/mongodb/models/user.py             26      0   100%
+db/mongodb/schemas/comment.py          4      0   100%
+db/mongodb/schemas/exercise.py         8      0   100%
+db/mongodb/schemas/post.py             4      0   100%
+db/mongodb/schemas/routine.py          8      0   100%
+db/mongodb/schemas/set.py              7      0   100%
+db/mongodb/schemas/user.py             5      0   100%
+db/sqlDB/client.py                     5      1    80%   5
+db/sqlDB/models/exerciseTO.py          7      0   100%
+db/sqlDB/models/routineTO.py           9      0   100%
+db/sqlDB/models/userTO.py             10      0   100%
+db/sqlDB/schemas/exerciseTO.py         4      1    75%   10
+db/sqlDB/schemas/routineTO.py          4      1    75%   11
+db/sqlDB/schemas/userTO.py             4      1    75%   13
+src/main/__init__.py                   0      0   100%
+src/main/main.py                      22      1    95%   38
+src/main/routers/__init__.py           0      0   100%
+src/main/routers/comments.py         200     29    86%   155-157, 166-169, 228-230, 246-251, 287-288, 296-298, 314-322, 371-375
+src/main/routers/exercisesTO.py      146      0   100%
+src/main/routers/posts.py            174     18    90%   108-110, 121-124, 183-186, 228-235
+src/main/routers/routines.py         184     10    95%   121-123, 196-199, 238-240
+src/main/routers/routinesTO.py       200      0   100%
+src/main/routers/transactions.py      31     31     0%   1-53
+src/main/routers/users.py            220     19    91%   224-226, 237-238, 279-281, 321-333
+src/main/routers/usersTO.py          136      6    96%   125-129, 200-202
+src/main/services/__init__.py          0      0   100%
+src/main/services/auth.py             63     63     0%   1-120
+----------------------------------------------------------------
+TOTAL                               1558    184    88%
 Coverage HTML written to dir ./src/tests/target/reports
 
-======================= 154 passed, 4 warnings in 3.91s ========================
+======================= 154 passed, 4 warnings in 3.89s ========================
