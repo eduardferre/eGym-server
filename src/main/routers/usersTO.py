@@ -13,7 +13,7 @@ from db.sqlDB.schemas.userTO import userTO_schema
 from dotenv import load_dotenv
 
 
-load_dotenv(),
+load_dotenv()
 
 oauth2_scheme = OAuth2PasswordBearer("/transactions/login")
 auth_handler = auth_handler_class.Auth()

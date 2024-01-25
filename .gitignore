@@ -7,6 +7,9 @@ bin
 Local.session.sql
 Test.session.sql
 
+# Certificates and Keys
+*.pem
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

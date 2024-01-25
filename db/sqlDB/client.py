@@ -1,5 +1,6 @@
 import os
 import pymssql
+import logging
 
 if os.getenv("TEST_ENABLED") == "FALSE":
     sqlserver_client = pymssql.connect(

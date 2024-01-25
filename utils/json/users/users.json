@@ -18,5 +18,28 @@
     "profilePicture": "https://blablabla",
     "backgroundPicture": "https://blablabla",
     "public": true
+  },
+  {
+    "username": "eduardferre",
+    "password": "edu",
+    "firstname": "Eduard",
+    "lastname": "Ferre Sanchez",
+    "fullname": "Eduard Ferre Sanchez",
+    "email": "eduard@gmail.com",
+    "phone": "string",
+    "birthDate": "2000-04-07",
+    "age": 0,
+    "height": 0,
+    "weight": 0,
+    "physicalActivity": 0,
+    "role": "string",
+    "followers": [],
+    "following": [],
+    "postsLog": [],
+    "routinesLog": [],
+    "routines": [],
+    "profilePicture": "https://blablabla",
+    "backgroundPicture": "https://blablabla",
+    "public": true
   }
 ]

@@ -1,4 +1,4 @@
-USE TestDB
+USE LocalDB
 GO
 
 IF NOT EXISTS (SELECT *
