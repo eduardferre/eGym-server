@@ -9,12 +9,12 @@ from pymongo.server_api import ServerApi
 
 # LOCAL DB
 if os.getenv("TEST_ENABLED") == "FALSE":
-    logging.info("Local eGym database running")
+    logging.info("MONGODB: Local eGym database running")
     mongodb_client = AsyncIOMotorClient(
         "mongodb://localhost:27017/", server_api=ServerApi("1")
     ).egym
 else:
-    logging.info("Test eGym database running")
+    logging.info("MONGODB: Test eGym database running")
     mongodb_client = AsyncIOMotorClient(
         "mongodb://localhost:27017/", server_api=ServerApi("1")
     ).egymTest

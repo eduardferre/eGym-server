@@ -234,7 +234,7 @@ async def updateUserTO(userTO: UserTO, token: str = Depends(oauth2_scheme)):
 
 
 @router.delete("/{id}", response_model=UserTO, status_code=status.HTTP_200_OK)
-async def deleteUserTO(id: int, token: str = Depends(oauth2_scheme)):
+async def deleteUserTO(id: uuid.UUID, token: str = Depends(oauth2_scheme)):
     if token_validation(token) != None:
         logging.info(f"DELETE /usersTO/{id}")
         sql_cursor = init_sql_cursor()

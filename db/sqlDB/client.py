@@ -3,6 +3,7 @@ import pymssql
 import logging
 
 if os.getenv("TEST_ENABLED") == "FALSE":
+    logging.info("SQLSERVER: Local eGym database running")
     sqlserver_client = pymssql.connect(
         server="localhost",
         user=os.getenv("SQL_USER"),
@@ -10,6 +11,7 @@ if os.getenv("TEST_ENABLED") == "FALSE":
         database="LocalDB",
     )
 else:
+    logging.info("SQLSERVER: Local eGym database running")
     sqlserver_client = pymssql.connect(
         server="localhost",
         user=os.getenv("SQL_USER"),
