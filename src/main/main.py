@@ -10,8 +10,9 @@ sys.path.append("/Users/eduardfer/Desktop/TFG TELEMÀTICA/eGym-server")
 
 import uvicorn
 from utils.logger import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from src.main.routers import transactions
+from src.main.services import logger_middleware
 from src.main.routers import usersTO, exercisesTO, routinesTO
 from src.main.routers import users, posts, comments, routines
 
@@ -22,6 +23,17 @@ logging.info("Started!")
 # Documentation with Redocly: http://localhost:8000/redoc
 
 app = FastAPI()  # uvicorn main:app --reload
+
+
+@app.middleware("http")
+async def modify_request_response_middleware(request: Request, call_next):
+    logging.info(f"{request.method} {request.url}")
+    logging.info(request.path_params)
+    response = await call_next(request)
+    logging.info(response)
+    logging.info(response.status_code)
+    return response
+
 
 # Routers
 app.include_router(transactions.router)
