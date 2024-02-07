@@ -16,8 +16,6 @@ class User(BaseModel):
     role: str
     followers: list[str]
     following: list[str]
-    # followers: list[str] (usernames) -> Replace the actual 'followers' definition, len(followers)
-    # following: list[str] (usernames) -> New endpoint "follow/unfollow"
     postsLog: list[Post]
     routinesLog: list[Routine]
     routines: list[RoutineTO]

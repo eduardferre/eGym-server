@@ -52,9 +52,9 @@ if __name__ == "__main__":
     # Initialization
     uvicorn.run(
         "main:app",
-        host="192.168.1.14",
+        host="192.168.1.142",
         port=8000,
-        reload=True
+        reload=True,
         # ssl_keyfile="./key.pem",
         # ssl_certfile="./cert.pem",
     )

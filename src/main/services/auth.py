@@ -35,7 +35,7 @@ class Auth:
 
     def encode_token(self, username):
         payload = {
-            "exp": datetime.utcnow() + timedelta(days=0, minutes=30, seconds=0),
+            "exp": datetime.utcnow() + timedelta(days=1, minutes=30, seconds=0),
             "iat": datetime.utcnow(),
             "scope": "access_token",
             "sub": username,
