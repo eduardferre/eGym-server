@@ -6,7 +6,7 @@ def post_schema(post) -> dict:
         "caption": post["caption"],
         "likes": post["likes"],
         "comments": post["comments"],
-        "creationDate": post["creationDate"],
+        "creationDate": str(post["creationDate"]),
     }
 
 

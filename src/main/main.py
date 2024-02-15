@@ -25,14 +25,14 @@ logging.info("Started!")
 app = FastAPI()  # uvicorn main:app --reload
 
 
-@app.middleware("http")
-async def modify_request_response_middleware(request: Request, call_next):
-    logging.info(f"{request.method} {request.url}")
-    logging.info(request.path_params)
-    response = await call_next(request)
-    logging.info(response)
-    logging.info(response.status_code)
-    return response
+# @app.middleware("http")
+# async def modify_request_response_middleware(request: Request, call_next):
+#     logging.info(f"{request.method} {request.url}")
+#     logging.info(request.path_params)
+#     response = await call_next(request)
+#     logging.info(response)
+#     logging.info(response.status_code)
+#     return response
 
 
 # Routers
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     # Initialization
     uvicorn.run(
         "main:app",
-        host="192.168.1.142",
+        host="192.168.1.143",
         port=8000,
         reload=True,
         # ssl_keyfile="./key.pem",

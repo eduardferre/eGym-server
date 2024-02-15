@@ -24,6 +24,7 @@ auth_handler = Auth()
 
 
 async def authenticate_user(username, password):
+
     logging.info(f"The user {username} is being authenticate")
     try:
         user_auth = await usersTO.getUserTOByUsernameRequest(username)

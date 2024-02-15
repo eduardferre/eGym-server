@@ -30,7 +30,9 @@ router = APIRouter(
 
 
 @router.get(
-    "/{attribute}/{value}", response_model=list[User], status_code=status.HTTP_200_OK
+    "/public/{attribute}/{value}",
+    response_model=list[User],
+    status_code=status.HTTP_200_OK,
 )
 async def getPublicUsers(
     attribute: str, value: str, token: str = Depends(oauth2_scheme)
